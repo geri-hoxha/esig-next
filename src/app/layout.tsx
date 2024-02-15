@@ -1,6 +1,17 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Inter as FontSans } from "next/font/google";
+
+import { cn } from "../lib/utils";
+import Navbar from "@/components/esig/Navbar";
+import Footer from "@/components/esig/Footer";
+import Sidemenu from "@/components/esig/Sidemenu";
+
+export const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +25,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          "h-screen bg-background font-sans antialiased d-flex",
+          fontSans.variable
+        )}
+      >
+        <div className="flex flex-col h-full">
+          <Navbar />
+          <div className="flex h-full">
+            <Sidemenu />
+            <main className="w-full h-full">{children}</main>
+          </div>
+          <Footer />
+        </div>
+      </body>
     </html>
   );
 }
