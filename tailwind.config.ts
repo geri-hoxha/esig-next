@@ -23,6 +23,7 @@ const config = {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       colors: {
+        esig: '#005CA9',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -82,3 +83,4 @@ const config = {
 } satisfies Config
 
 export default config
+//https://loading.io/
