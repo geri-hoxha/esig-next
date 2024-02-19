@@ -4,11 +4,13 @@ const { fontFamily } = require("tailwindcss/defaultTheme")
 const config = {
   darkMode: ["class"],
   content: [
+    './public/**/*.html',
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
 	],
+  mode: 'jit',
   prefix: "",
   theme: {
     container: {
@@ -19,6 +21,9 @@ const config = {
       },
     },
     extend: {
+      transitionProperty: {
+        'height': 'height'
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },

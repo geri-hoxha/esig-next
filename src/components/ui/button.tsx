@@ -52,7 +52,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading ? <div className="flex items-center"><Loader2 className="mr-3 h-4 w-4 animate-spin" />{props.children}</div>
-          : <>{!!icon && <div className="mr-3 h-4 w-4 -mt-2">{icon}</div>}{props.children}</>}
+          : <>{!!icon && <div className="mr-3 h-4 w-4 -mt-1">{icon}</div>}{props.children}</>}
       </Comp>
     )
   }

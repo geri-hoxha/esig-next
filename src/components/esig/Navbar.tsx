@@ -1,28 +1,31 @@
 import Currencies from "./Currencies";
 import Image from "next/image";
 import Translation from "./Translation";
-import { Separator } from "@/components/ui/separator"
-import User from "./User";
+import { Separator } from "@/components/ui/separator";
+import UserActions from "./UserActions";
 import Balance from "./Balance";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input"
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="px-2.5 py-3 bg-slate-100 flex items-center border-gray-300 border-b shadow-lg z-50">
-      <div className="pl-20 pr-28">
+    <nav className="px-4 py-3 bg-white flex items-center border-gray-200 border-b z-50">
+      <div className="min-w-52">
         <Image
-          src="esig_black_text.svg"
+          src="/esig_black_text.svg"
           alt="Logo"
-          width={100}
-          height={44}
+          width={'0'}
+          height={'0'}
+          style={{ width: 80, height: 35 }}
           priority
         />
       </div>
       <Currencies />
-      <div className="ml-auto mr-4 flex items-center">
-        <Balance />
+      <div className="ml-auto flex items-center gap-x-7">
+        <Input icon={<Search size={15} />} className="bg-gray-50 h-9 text-gray-900 rounded-lg border-gray-300" />
         <Translation />
-        <Separator orientation="vertical" className="mx-4 h-7" />
-        <User />
+        <UserActions />
+        <Balance />
       </div>
     </nav>
   );

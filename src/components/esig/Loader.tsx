@@ -8,10 +8,10 @@ const Loader: React.FC<IProps> = ({ text = 'Process is running...' }) => {
     return (
         <div className="flex items-center">
             <Image
-                src="loader.svg"
+                src="/loader.svg"
                 alt="loader"
-                width={40}
-                height={40}
+                width={'0'}
+                height={'0'}
                 style={{ width: 40, height: 80 }}
                 priority
             />

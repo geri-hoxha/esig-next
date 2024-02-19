@@ -7,6 +7,7 @@ import { cn } from "../lib/utils";
 import Navbar from "@/components/esig/Navbar";
 import Footer from "@/components/esig/Footer";
 import Sidemenu from "@/components/esig/Sidemenu";
+import EnvironmentBar from "@/components/esig/EnvironmentBar";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -35,10 +36,11 @@ export default function RootLayout({
         )}
       >
         <div className="flex flex-col h-full w-full">
+          <EnvironmentBar />
           <Navbar />
           <div className="flex items-center w-full h-full">
             <Sidemenu />
-            <div className="flex flex-col h-full w-full">
+            <div className="flex flex-col h-full w-full bg-gray-50">
               <main className="w-full h-full p-7">{children}</main>
               <Footer />
             </div>

@@ -17,7 +17,7 @@ export default async function Currencies() {
   const currencies = await getData();
 
   return (
-    <div className="flex items-center gap-14">
+    <div className="flex items-center gap-8">
       {currencies.map((currency: BshCurrency, index: number) => {
         return (
           <div key={index} className="flex items-center">
@@ -29,7 +29,7 @@ export default async function Currencies() {
               style={{ width: 27, height: 20 }}
               priority
             />
-            <span className="px-1 text-gray-600 font-bold	text-xl">
+            <span className="px-1 text-gray-600 font-bold	text-sm">
               {currency.currencyCode}
             </span>
             <TrendingUp
@@ -37,7 +37,7 @@ export default async function Currencies() {
               size={24}
               strokeWidth={2}
             />
-            <span className="px-2 text-gray-600 font-bold	text-xl">
+            <span className="px-2 text-gray-600 font-bold	text-sm">
               {currency.currencyRate.toFixed(2)}
             </span>
             <span
