@@ -1,35 +1,23 @@
-"use client";
-
-import axiosInstance from "@/axios";
+import request from "@/request";
 import { BshCurrency } from "@/types";
 import { TrendingUp } from "lucide-react";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
 
-const token =
-  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpLWG5uUl90YkYtXzlPcHRFOHppaCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJnZXJpLmhveGhhQHVuaXFhLmFsIiwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5lc2lnLmFsLyIsInN1YiI6ImF1dGgwfDY1MzkwMGY3MTJkMGRhMTdmYTZmNTA1ZSIsImF1ZCI6WyJhcGkuZXNpZy5hbCIsImh0dHBzOi8vZXNpZy5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzA4MDgyMzU0LCJleHAiOjE3MDgxNjg3NTQsImF6cCI6InU5UzhabDVoSjcyeURZd3NoaDY2S2JpWEJFVWY3bTkwIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImFnZW5jeTpyZWFkIiwiYXV0aDA6cmVhZCIsImJsb2NrZWQtb2JqZWN0czpyZWFkIiwiYnJhbmNoOnJlYWQiLCJjbGllbnRzOnJlYWQiLCJjb25maWd1cmF0aW9uczpyZWFkIiwiZmluYW5jZTpyZWFkIiwiaGVhbHRoL2RlcGFydG1lbnQtc2FsZXM6Y2FuY2VsIiwiaGVhbHRoL3JlcG9ydHM6Y2FuY2VsIiwiaGVhbHRoL3JlcG9ydHM6Y3JlYXRlIiwiaGVhbHRoL3JlcG9ydHM6cmVhZCIsImhlYWx0aC9yZXBvcnRzOnJlYWQtYWdlbmN5IiwiaGVhbHRoL3JlcG9ydHM6cmVhZC1icmFuY2giLCJoZWFsdGgvcmVwb3J0czp1cGRhdGUiLCJoZWFsdGgvc2FsZXM6YWRqdXN0LXByZW1pdW0iLCJoZWFsdGgvc2FsZXM6YnJhbmNoLXJlYWRBbGwiLCJoZWFsdGgvc2FsZXM6Y2FuY2VsIiwiaGVhbHRoL3NhbGVzOmNyZWF0ZSIsImhlYWx0aC9zYWxlczpjcmVhdGUtYW50aXR1bW9yIiwiaGVhbHRoL3NhbGVzOmNyZWF0ZS1oZWFsdGgtcGx1cyIsImhlYWx0aC9zYWxlczpjcmVhdGUtaGVhbHRoLXRyYXZlbCIsImhlYWx0aC9zYWxlczpjcmVhdGUtaGVhbHRoLXRyYXZlbC1lbWJhc3N5IiwiaGVhbHRoL3NhbGVzOmNyZWF0ZS1wcml2YXRlLWhlYWx0aCIsImhlYWx0aC9zYWxlczpyZWFkIiwiaGVhbHRoL3NhbGVzOnJlYWQtYWdlbmN5IiwiaGVhbHRoL3NhbGVzOnJlYWRBbGwiLCJoZWFsdGgvc2FsZXM6cmVhZC1icmFuY2giLCJoZWFsdGgvc2FsZXM6dXBkYXRlIiwiaG9zcGl0YWxzOnJlYWQiLCJpbnN1cmVyczpyZWFkIiwiaW50ZXJtZWRpYXJpZXM6cmVhZCIsImludm9pY2U6cmVhZCIsImludm9pY2U6cmVhZEFsbCIsImludm9pY2U6dW5saW1pdGVkVGltZS11cGRhdGUiLCJtYXJpbmUvcmVwb3J0czpjYW5jZWwiLCJtYXJpbmUvcmVwb3J0czpjcmVhdGUiLCJtYXJpbmUvcmVwb3J0czpyZWFkIiwibWFyaW5lL3JlcG9ydHM6cmVhZC1hZ2VuY3kiLCJtYXJpbmUvcmVwb3J0czpyZWFkLWJyYW5jaCIsIm1hcmluZS9yZXBvcnRzOnVwZGF0ZSIsIm1hcmluZS9zYWxlczpjYW5jZWwiLCJtYXJpbmUvc2FsZXM6Y3JlYXRlIiwibWFyaW5lL3NhbGVzOnJlYWQiLCJtYXJpbmUvc2FsZXM6cmVhZC1hZ2VuY3kiLCJtYXJpbmUvc2FsZXM6cmVhZC1icmFuY2giLCJtYXJpbmUvc2FsZXM6dXBkYXRlIiwibW90b3IvZGVwYXJ0bWVudC1zYWxlczpjYW5jZWwiLCJtb3Rvci9yZXBvcnRzOmNhbmNlbCIsIm1vdG9yL3JlcG9ydHM6Y3JlYXRlIiwibW90b3IvcmVwb3J0czpyZWFkIiwibW90b3IvcmVwb3J0czpyZWFkLWFnZW5jeSIsIm1vdG9yL3JlcG9ydHM6cmVhZC1icmFuY2giLCJtb3Rvci9yZXBvcnRzOnVwZGF0ZSIsIm1vdG9yL3NhbGVzOmJyYW5jaC1yZWFkQWxsIiwibW90b3Ivc2FsZXM6Y2FuY2VsIiwibW90b3Ivc2FsZXM6Y3JlYXRlIiwibW90b3Ivc2FsZXM6Y3JlYXRlLWJvcmRlciIsIm1vdG9yL3NhbGVzOmNyZWF0ZS1jYXNjbyIsIm1vdG9yL3NhbGVzOmNyZWF0ZS1taW5pY2FzY28iLCJtb3Rvci9zYWxlczpjcmVhdGUtcGFzc2VuZ2VyIiwibW90b3Ivc2FsZXM6Y3JlYXRlLXRwbCIsIm1vdG9yL3NhbGVzOnJlYWQiLCJtb3Rvci9zYWxlczpyZWFkLWFnZW5jeSIsIm1vdG9yL3NhbGVzOnJlYWRBbGwiLCJtb3Rvci9zYWxlczpyZWFkLWJyYW5jaCIsIm1vdG9yL3NhbGVzOnVwZGF0ZSIsInByb2R1Y3RzOnJlYWQiLCJwcm9kdWN0LXRlbXBsYXRlOnJlYWRBbGwiLCJwcm9wZXJ0eS9jb25maWd1cmF0aW9uczpiYW5rIiwicHJvcGVydHkvZGVwYXJ0bWVudC1zYWxlczpjYW5jZWwiLCJwcm9wZXJ0eS9yZXBvcnRzOmNhbmNlbCIsInByb3BlcnR5L3JlcG9ydHM6Y3JlYXRlIiwicHJvcGVydHkvcmVwb3J0czpyZWFkIiwicHJvcGVydHkvcmVwb3J0czpyZWFkLWFnZW5jeSIsInByb3BlcnR5L3JlcG9ydHM6cmVhZC1icmFuY2giLCJwcm9wZXJ0eS9yZXBvcnRzOnVwZGF0ZSIsInByb3BlcnR5L3NhbGVzOmNhbmNlbCIsInByb3BlcnR5L3NhbGVzOmNyZWF0ZSIsInByb3BlcnR5L3NhbGVzOmNyZWF0ZS1idWlsZGVybGlhYmlsaXR5NjUwIiwicHJvcGVydHkvc2FsZXM6Y3JlYXRlLWJ1aWxkZXJsaWFiaWxpdHk2OTMiLCJwcm9wZXJ0eS9zYWxlczpjcmVhdGUtZmlyZSIsInByb3BlcnR5L3NhbGVzOnJlYWQiLCJwcm9wZXJ0eS9zYWxlczpyZWFkLWFnZW5jeSIsInByb3BlcnR5L3NhbGVzOnJlYWRBbGwiLCJwcm9wZXJ0eS9zYWxlczpyZWFkLWJyYW5jaCIsInByb3BlcnR5L3NhbGVzOnVwZGF0ZSIsInVuZGVyd3JpdGVyczpyZWFkIl19.U84Rimk-4Lpl5o8df_Vk8HddvbD_NTJXKUQlp7sj8Vts-IXP8pBKx8B2YI4ImCTYKoqvZmwI3yjhvmcBHMr7LV-smtFIPSVA-vVGVKLAH8uWnpqYY3SYG-D1mO1Hm0oCU6iXhKqy5zZfHsyaxEfIIJB5hVsNsKuX70inUFnEhEuY4CyOrLlEKh2wxleblPVnPMO6dxpZh4pkakPw_B5XaPTToEBRFRZZ0K-HHfg_LrTNkdV9HEhf1TpN4HI_UfldflfD_mcIi3MVFbG3zFJsiDdTkGaNvAYyE-bvsBWl6HHqQ1SBICJC4BFSyQCPJrV4xuTBKCISgAGXuZpf2C5B-g";
+export const token =
+  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpLWG5uUl90YkYtXzlPcHRFOHppaCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJnZXJpLmhveGhhQHVuaXFhLmFsIiwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5lc2lnLmFsLyIsInN1YiI6ImF1dGgwfDY1MzkwMGY3MTJkMGRhMTdmYTZmNTA1ZSIsImF1ZCI6WyJhcGkuZXNpZy5hbCIsImh0dHBzOi8vZXNpZy5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzA4Mjk0MjAyLCJleHAiOjE3MDgzODA2MDIsImF6cCI6InU5UzhabDVoSjcyeURZd3NoaDY2S2JpWEJFVWY3bTkwIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImFnZW5jeTpyZWFkIiwiYXV0aDA6cmVhZCIsImJsb2NrZWQtb2JqZWN0czpyZWFkIiwiYnJhbmNoOnJlYWQiLCJjbGllbnRzOnJlYWQiLCJjb25maWd1cmF0aW9uczpyZWFkIiwiZmluYW5jZTpyZWFkIiwiaGVhbHRoL2RlcGFydG1lbnQtc2FsZXM6Y2FuY2VsIiwiaGVhbHRoL3JlcG9ydHM6Y2FuY2VsIiwiaGVhbHRoL3JlcG9ydHM6Y3JlYXRlIiwiaGVhbHRoL3JlcG9ydHM6cmVhZCIsImhlYWx0aC9yZXBvcnRzOnJlYWQtYWdlbmN5IiwiaGVhbHRoL3JlcG9ydHM6cmVhZC1icmFuY2giLCJoZWFsdGgvcmVwb3J0czp1cGRhdGUiLCJoZWFsdGgvc2FsZXM6YWRqdXN0LXByZW1pdW0iLCJoZWFsdGgvc2FsZXM6YnJhbmNoLXJlYWRBbGwiLCJoZWFsdGgvc2FsZXM6Y2FuY2VsIiwiaGVhbHRoL3NhbGVzOmNyZWF0ZSIsImhlYWx0aC9zYWxlczpjcmVhdGUtYW50aXR1bW9yIiwiaGVhbHRoL3NhbGVzOmNyZWF0ZS1oZWFsdGgtcGx1cyIsImhlYWx0aC9zYWxlczpjcmVhdGUtaGVhbHRoLXRyYXZlbCIsImhlYWx0aC9zYWxlczpjcmVhdGUtaGVhbHRoLXRyYXZlbC1lbWJhc3N5IiwiaGVhbHRoL3NhbGVzOmNyZWF0ZS1wcml2YXRlLWhlYWx0aCIsImhlYWx0aC9zYWxlczpyZWFkIiwiaGVhbHRoL3NhbGVzOnJlYWQtYWdlbmN5IiwiaGVhbHRoL3NhbGVzOnJlYWRBbGwiLCJoZWFsdGgvc2FsZXM6cmVhZC1icmFuY2giLCJoZWFsdGgvc2FsZXM6dXBkYXRlIiwiaG9zcGl0YWxzOnJlYWQiLCJpbnN1cmVyczpyZWFkIiwiaW50ZXJtZWRpYXJpZXM6cmVhZCIsImludm9pY2U6cmVhZCIsImludm9pY2U6cmVhZEFsbCIsImludm9pY2U6dW5saW1pdGVkVGltZS11cGRhdGUiLCJtYXJpbmUvcmVwb3J0czpjYW5jZWwiLCJtYXJpbmUvcmVwb3J0czpjcmVhdGUiLCJtYXJpbmUvcmVwb3J0czpyZWFkIiwibWFyaW5lL3JlcG9ydHM6cmVhZC1hZ2VuY3kiLCJtYXJpbmUvcmVwb3J0czpyZWFkLWJyYW5jaCIsIm1hcmluZS9yZXBvcnRzOnVwZGF0ZSIsIm1hcmluZS9zYWxlczpjYW5jZWwiLCJtYXJpbmUvc2FsZXM6Y3JlYXRlIiwibWFyaW5lL3NhbGVzOnJlYWQiLCJtYXJpbmUvc2FsZXM6cmVhZC1hZ2VuY3kiLCJtYXJpbmUvc2FsZXM6cmVhZC1icmFuY2giLCJtYXJpbmUvc2FsZXM6dXBkYXRlIiwibW90b3IvZGVwYXJ0bWVudC1zYWxlczpjYW5jZWwiLCJtb3Rvci9yZXBvcnRzOmNhbmNlbCIsIm1vdG9yL3JlcG9ydHM6Y3JlYXRlIiwibW90b3IvcmVwb3J0czpyZWFkIiwibW90b3IvcmVwb3J0czpyZWFkLWFnZW5jeSIsIm1vdG9yL3JlcG9ydHM6cmVhZC1icmFuY2giLCJtb3Rvci9yZXBvcnRzOnVwZGF0ZSIsIm1vdG9yL3NhbGVzOmJyYW5jaC1yZWFkQWxsIiwibW90b3Ivc2FsZXM6Y2FuY2VsIiwibW90b3Ivc2FsZXM6Y3JlYXRlIiwibW90b3Ivc2FsZXM6Y3JlYXRlLWJvcmRlciIsIm1vdG9yL3NhbGVzOmNyZWF0ZS1jYXNjbyIsIm1vdG9yL3NhbGVzOmNyZWF0ZS1taW5pY2FzY28iLCJtb3Rvci9zYWxlczpjcmVhdGUtcGFzc2VuZ2VyIiwibW90b3Ivc2FsZXM6Y3JlYXRlLXRwbCIsIm1vdG9yL3NhbGVzOnJlYWQiLCJtb3Rvci9zYWxlczpyZWFkLWFnZW5jeSIsIm1vdG9yL3NhbGVzOnJlYWRBbGwiLCJtb3Rvci9zYWxlczpyZWFkLWJyYW5jaCIsIm1vdG9yL3NhbGVzOnVwZGF0ZSIsInByb2R1Y3RzOnJlYWQiLCJwcm9kdWN0LXRlbXBsYXRlOnJlYWRBbGwiLCJwcm9wZXJ0eS9jb25maWd1cmF0aW9uczpiYW5rIiwicHJvcGVydHkvZGVwYXJ0bWVudC1zYWxlczpjYW5jZWwiLCJwcm9wZXJ0eS9yZXBvcnRzOmNhbmNlbCIsInByb3BlcnR5L3JlcG9ydHM6Y3JlYXRlIiwicHJvcGVydHkvcmVwb3J0czpyZWFkIiwicHJvcGVydHkvcmVwb3J0czpyZWFkLWFnZW5jeSIsInByb3BlcnR5L3JlcG9ydHM6cmVhZC1icmFuY2giLCJwcm9wZXJ0eS9yZXBvcnRzOnVwZGF0ZSIsInByb3BlcnR5L3NhbGVzOmNhbmNlbCIsInByb3BlcnR5L3NhbGVzOmNyZWF0ZSIsInByb3BlcnR5L3NhbGVzOmNyZWF0ZS1idWlsZGVybGlhYmlsaXR5NjUwIiwicHJvcGVydHkvc2FsZXM6Y3JlYXRlLWJ1aWxkZXJsaWFiaWxpdHk2OTMiLCJwcm9wZXJ0eS9zYWxlczpjcmVhdGUtZmlyZSIsInByb3BlcnR5L3NhbGVzOnJlYWQiLCJwcm9wZXJ0eS9zYWxlczpyZWFkLWFnZW5jeSIsInByb3BlcnR5L3NhbGVzOnJlYWRBbGwiLCJwcm9wZXJ0eS9zYWxlczpyZWFkLWJyYW5jaCIsInByb3BlcnR5L3NhbGVzOnVwZGF0ZSIsInVuZGVyd3JpdGVyczpyZWFkIl19.C-IKklR7elW8vRGK5n9rCKfdXUCLHR62_ulDZj4otlPjGGMyDV_m_HA9FfmHa90SmehB8gkawnK-JiFSoyIIUL0Qk5LaLipiT7ur9QNDFzK6T5dR6D8heGNLzwD4YlS9iV5rt9TJkj9v5VX3iKUAQqmTsyhQ46nHVfFOR2a8T5ltmSLi1NesESVJwN4P1PU6Xu6Veqq-JwwmVfWsX6kqLtzf_nudEH_2kXxKwB_e5jHdBLmZxK-6PlCcor4mVtKxH3KHpjdiJ4NjqJH2dCpRmgIAar_zAJ57Cc-MuJL-3hJsDMaD6BJti5ebkbdAMkj5awON4sOQFD6ZKMzyqyG_tg";
 
-const Currencies: React.FC = () => {
-  const [currencies, setCurrencies] = useState<BshCurrency[]>([]);
+async function getData() {
+  const response = await request('/currency/rates', token);
 
-  useEffect(() => {
-    localStorage.setItem("token", token);
+  return response.data?.splice(0, 3);
+}
 
-    getCurrencies();
-  }, []);
 
-  const getCurrencies = async () => {
-    try {
-      const response = await axiosInstance.get("/currency/rates");
-
-      setCurrencies(response.data.slice(0, 3));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+export default async function Currencies() {
+  const currencies = await getData();
 
   return (
-    <div className="flex items-center ml-28 gap-14">
+    <div className="flex items-center gap-14">
       {currencies.map((currency: BshCurrency, index: number) => {
         return (
           <div key={index} className="flex items-center">
@@ -41,7 +29,7 @@ const Currencies: React.FC = () => {
               style={{ width: 27, height: 20 }}
               priority
             />
-            <span className="px-2 text-gray-600 font-bold	text-sm">
+            <span className="px-1 text-gray-600 font-bold	text-xl">
               {currency.currencyCode}
             </span>
             <TrendingUp
@@ -49,13 +37,12 @@ const Currencies: React.FC = () => {
               size={24}
               strokeWidth={2}
             />
-            <span className="px-2 text-gray-600 font-bold	text-sm">
+            <span className="px-2 text-gray-600 font-bold	text-xl">
               {currency.currencyRate.toFixed(2)}
             </span>
             <span
-              className={`font-bold ${
-                currency.changeInRate >= 0 ? `text-[#52c41a]` : `text-[#f5222d]`
-              }`}
+              className={`font-bold ${currency.changeInRate >= 0 ? `text-[#52c41a]` : `text-[#f5222d]`
+                }`}
             >
               {((currency.changeInRate / currency.currencyRate) * 100).toFixed(
                 2
@@ -68,5 +55,3 @@ const Currencies: React.FC = () => {
     </div>
   );
 };
-
-export default Currencies;

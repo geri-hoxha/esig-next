@@ -12,16 +12,14 @@ import {
 const Translation: React.FC = () => {
   return (
     <div>
-      <Languages className="mr-4 cursor-pointer" />
       <Select>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select language" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Languages</SelectLabel>
-            <SelectItem value="AL">Albanian</SelectItem>
-            <SelectItem value="EN">English</SelectItem>
+            <SelectItem className='cursor-pointer' value="AL">Albanian</SelectItem>
+            <SelectItem className='cursor-pointer' value="EN">English</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
