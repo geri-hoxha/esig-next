@@ -5,7 +5,6 @@ import {
   CircleDollarSign,
   Database,
   Gauge,
-  Handshake,
   Landmark,
   PhoneCall,
   ScrollText,
