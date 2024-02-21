@@ -11,7 +11,7 @@ import {
   Settings,
 } from "lucide-react";
 import MenuLink from "./MenuItem";
-import { Separator } from "../ui/separator";
+import { Separator } from "../../ui/separator";
 import { Badge } from "@/components/ui/badge";
 
 const getIconProps = (isSelected: boolean) => {

@@ -7,7 +7,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Image from "next/image";
-import { Separator } from "../ui/separator";
+import { Separator } from "../../ui/separator";
 
 const Translation: React.FC = () => {
   return (

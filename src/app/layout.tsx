@@ -7,7 +7,7 @@ import { cn } from "../lib/utils";
 import Navbar from "@/components/esig/Navbar";
 import Footer from "@/components/esig/Footer";
 import Sidemenu from "@/components/esig/Sidemenu";
-import EnvironmentBar from "@/components/esig/EnvironmentBar";
+import EnvironmentBar from "@/components/esig/Navbar/EnvironmentBar";
 import Breadcrumb from "@/components/esig/Breadcrumb";
 
 export const fontSans = FontSans({
@@ -41,7 +41,7 @@ export default function RootLayout({
           <div className="flex items-center w-full h-full">
             <Sidemenu />
             <div className="flex flex-col h-full w-full bg-gray-50">
-              <main className="w-full h-full px-7">
+              <main className="w-full h-full px-7 py-5">
                 <Breadcrumb />
                 {children}
               </main>
