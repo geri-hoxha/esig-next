@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 const Navbar: React.FC = () => {
   return (
     <nav className="px-4 py-3 bg-white flex items-center border-gray-200 border-b z-50">
-      <div className="min-w-52">
+      <div className="min-w-24 lg:min-w-52">
         <Image
           src="/esig_black_text.svg"
           alt="Logo"

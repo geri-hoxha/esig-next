@@ -17,7 +17,7 @@ export default async function Currencies() {
   const currencies = await getData();
 
   return (
-    <div className="flex items-center gap-8">
+    <div className="hidden lg:flex items-center gap-8">
       {currencies.map((currency: BshCurrency, index: number) => {
         return (
           <div key={index} className="flex items-center">
