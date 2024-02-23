@@ -9,6 +9,7 @@ import Footer from "@/components/esig/Footer";
 import Sidemenu from "@/components/esig/Sidemenu";
 import EnvironmentBar from "@/components/esig/Navbar/EnvironmentBar";
 import Breadcrumb from "@/components/esig/Breadcrumb";
+import PageTitle from "@/components/esig/PageTitle";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({
             <div className="flex flex-col h-full w-full bg-gray-50">
               <main className="w-full h-full px-7 py-5">
                 <Breadcrumb />
+                <PageTitle />
                 {children}
               </main>
               <Footer />

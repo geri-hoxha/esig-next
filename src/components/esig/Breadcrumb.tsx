@@ -15,19 +15,23 @@ const Breadcrumb = () => {
 
   const homepageIsActive = pathNames.length === 0;
 
+  const alreadyOnHome = paths.includes("/dashboard")
+
   return (
     <div className="mb-5">
       <ul className="flex items-center text-sm text-[#00000073]">
-        <li
-          className={`${listClasses} ${
-            homepageIsActive ? "text-[#000000d9] group" : ""
-          }`}
-        >
-          <Link href={"/"} className="group-hover:cursor-text">
-            Kryefaqja
-          </Link>
-        </li>
-        {homepageIsActive ? null : separator}
+        {alreadyOnHome ? null : (
+          <li
+            className={`${listClasses} ${
+              homepageIsActive ? "text-[#000000d9] group" : ""
+            }`}
+          >
+            <Link href={"/"} className="group-hover:cursor-text">
+              Kryefaqja
+            </Link>
+          </li>
+        ) }
+        {homepageIsActive || alreadyOnHome ? null : separator}
         {pathNames.map((link, index) => {
           let href = `/${pathNames.slice(0, index + 1).join("/")}`;
           let itemClasses =

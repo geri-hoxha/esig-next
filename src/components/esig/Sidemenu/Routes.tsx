@@ -18,12 +18,11 @@ export interface IRoute {
 const getIconProps = (isSelected: boolean) => {
     return {
         size: 20,
-        className: `group-hover:text-black transition duration-75 ${isSelected ? "text-black" : "text-gray-600"
-            }`,
+        className: `group-hover:text-black transition duration-75 ${isSelected ? "text-black" : "text-gray-600"}`,
     };
 };
 
-const routes: IRoute[] = [
+export const routes: IRoute[] = [
     {
         text: 'Dashboard',
         icon: (isSelected) => <Gauge {...getIconProps(isSelected)} />,

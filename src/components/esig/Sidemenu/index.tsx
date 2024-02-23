@@ -8,7 +8,7 @@ const Sidemenu = () => {
         <Routes />
       </div>
       <div className="w-full flex items-center justify-center text-center pb-2 text-xs text-gray-500 font-semibold">
-        <PhoneCall size={15} className="mr-2" /> Support: 067 58 35 032
+        <PhoneCall size={15} className="mr-2" /> Support: 04 22 333 08 ext 186
       </div>
     </aside>
   );
