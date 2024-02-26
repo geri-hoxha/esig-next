@@ -9,9 +9,9 @@ const Breadcrumb = () => {
 
   const pathNames = paths.split("/").filter((path) => path);
 
-  const separator = <span className="text-[#00000073] pr-2"> / </span>;
+  const separator = <span className="text-esig-secondary pr-2"> / </span>;
 
-  const listClasses = "hover:text-[#000000d9] pr-2";
+  const listClasses = "hover:text-esig-primary pr-2";
 
   const homepageIsActive = pathNames.length === 0;
 
@@ -19,11 +19,11 @@ const Breadcrumb = () => {
 
   return (
     <div className="mb-5">
-      <ul className="flex items-center text-sm text-[#00000073]">
+      <ul className="flex items-center text-sm text-esig-secondary">
         {alreadyOnHome ? null : (
           <li
             className={`${listClasses} ${
-              homepageIsActive ? "text-[#000000d9] group" : ""
+              homepageIsActive ? "text-esig-primary group" : ""
             }`}
           >
             <Link href={"/"} className="group-hover:cursor-text">
@@ -36,7 +36,7 @@ const Breadcrumb = () => {
           let href = `/${pathNames.slice(0, index + 1).join("/")}`;
           let itemClasses =
             paths === href || homepageIsActive
-              ? `${listClasses} text-[#000000d9] group`
+              ? `${listClasses} text-esig-primary group`
               : listClasses;
           let itemLink = link[0].toUpperCase() + link.slice(1, link.length);
           return (

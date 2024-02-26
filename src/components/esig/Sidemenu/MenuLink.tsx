@@ -86,7 +86,7 @@ const MenuLink: React.FC<IProps> = ({ route }) => {
                             className="flex items-center w-full justify-between pt-2 cursor-pointer "
                             href={href}
                         >
-                            <div className={`${isChildrenSelected ? "bg-gray-100 border-esig" : "border-transparent"} border-r-2 px-7 flex items-center justify-between p-2 text-sm font-medium text-gray-900 rounded-none  hover:bg-gray-100 group w-full`}>
+                            <div className={`${isChildrenSelected ? "bg-esig-surface-20 border-esig" : "border-transparent"} border-r-2 px-7 flex items-center justify-between p-2 text-sm font-medium text-gray-900 rounded-none  hover:bg-esig-surface-20 group w-full`}>
                                 <span>{item.text}</span>
                                 <div>{item.notifications}</div>
 

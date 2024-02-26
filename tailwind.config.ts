@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss"
-const { fontFamily } = require("tailwindcss/defaultTheme")
 
 const config = {
   darkMode: ["class"],
@@ -25,10 +24,59 @@ const config = {
         'height': 'height'
       },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
+        primary: "Galano",
       },
       colors: {
-        esig: '#005CA9',
+        esig: {
+          DEFAULT: "hsl(var(--esig))",
+          white: "hsl(var(--esig-white))",
+          black: "hsl(var(--esig-black))",
+          flaxflower: "hsl(var(--esig-flaxflower))",
+          sapphire: "hsl(var(--esig-sapphire))",
+          fluorite: "hsl(var(--esig-fluorite))",
+          nightshade: "hsl(var(--esig-nightshade))",
+          midblue: "hsl(var(--esig-midblue))",
+          anthracite: "hsl(var(--esig-anthracite))",
+          primary: "hsl(var(--esig-primary))",
+          secondary: "hsl(var(--esig-secondary))",
+          surface: {
+            '40': "hsl(var(--esig-surface-blue-40))",
+            '30': "hsl(var(--esig-surface-blue-30))",
+            '20': "hsl(var(--esig-surface-blue-20))",
+            '10': "hsl(var(--esig-surface-blue-10))"
+          },
+          products: {
+            home: "hsl(var(--esig-product-home))",
+            travelLeisure: "hsl(var(--esig-product-travelLeisure))",
+            car: "hsl(var(--esig-product-car))",
+            accident: "hsl(var(--esig-product-accident))",
+            health: "hsl(var(--esig-product-health))",
+            legal: "hsl(var(--esig-product-legal))",
+            care: "hsl(var(--esig-product-care))",
+            pensionsAssets: "hsl(var(--esig-product-pensionsAssets))",
+            incomeProtectionRiskHedging: "hsl(var(--esig-product-incomeProtectionRiskHedging))",
+            art: "hsl(var(--esig-product-art))",
+            entrepreneurs: "hsl(var(--esig-product-entrepreneurs))",
+            operations: "hsl(var(--esig-product-operations))",
+          },
+          success: "hsl(var(--esig-success))",
+          warning: "hsl(var(--esig-warning))",
+          error: "hsl(var(--esig-error))",
+          virtualization: {
+            'blue-100': "hsl(var(--esig-virtualization-blue-100))",
+            'blue-90': "hsl(var(--esig-virtualization-blue-90))",
+            'blue-80': "hsl(var(--esig-virtualization-blue-80))",
+            'blue-70': "hsl(var(--esig-virtualization-blue-70))",
+            'blue-60': "hsl(var(--esig-virtualization-blue-60))",
+            'black-100': "hsl(var(--esig-virtualization-black-100))",
+            'black-50': "hsl(var(--esig-virtualization-black-50))",
+            'black-10': "hsl(var(--esig-virtualization-black-10))",
+            'purple-100': "hsl(var(--esig-virtualization-purple-100))",
+            'purple-50': "hsl(var(--esig-virtualization-purple-50))",
+            'green-100': "hsl(var(--esig-virtualization-green-100))",
+            'green-50': "hsl(var(--esig-virtualization-green-50))",
+          },
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

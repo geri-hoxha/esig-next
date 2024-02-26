@@ -1,22 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { Inter as FontSans } from "next/font/google";
-
-import { cn } from "../lib/utils";
 import Navbar from "@/components/esig/Navbar";
 import Footer from "@/components/esig/Footer";
 import Sidemenu from "@/components/esig/Sidemenu";
 import EnvironmentBar from "@/components/esig/Navbar/EnvironmentBar";
 import Breadcrumb from "@/components/esig/Breadcrumb";
 import PageTitle from "@/components/esig/PageTitle";
-
-export const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ESIG",
@@ -30,12 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          "h-screen bg-background font-sans antialiased d-flex",
-          fontSans.variable
-        )}
-      >
+      <body className={'h-screen bg-background antialiased d-flex font-primary'}>
         <div className="flex flex-col h-full w-full">
           <EnvironmentBar />
           <Navbar />

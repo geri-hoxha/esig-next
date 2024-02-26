@@ -6,7 +6,7 @@ export default async function request(endpoint: string, token: string) {
             Authorization: `Bearer ${token}`
         },
         next: {
-            
+            revalidate: 1
         }
     });
     

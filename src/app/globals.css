@@ -1,71 +1,102 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
+    /* colors */
+    --esig: 207.34, 100%, 33.14%;
+    --esig-white: 0, 0%, 100%;
+    --esig-black: 0, 0%, 0%;
+    --esig-flaxflower: 216.49, 39.27%, 51.57%;
+    --esig-sapphire: 209.62, 65.83%, 52.94%;
+    --esig-fluorite: 183.67, 66.52%, 43.33%;
+    --esig-nightshade: 0, 0%, 10.59%;
+    --esig-midblue: 201.62, 100%, 38.63%;
+    --esig-anthracite: 60, 0.84%, 23.33%;
+
+    /* typography */
+    --esig-primary: 0, 0%, 10.59%;
+    --esig-secondary: 209.14, 15.28%, 44.9%;
+
+    /* surface */
+    --esig-surface-blue-40: 225.52, 49.15%, 88.43%;
+    --esig-surface-blue-30: 216, 62.5%, 90.59%;
+    --esig-surface-blue-20: 224, 51.72%, 94.31%;
+    --esig-surface-blue-10: 218.57, 58.33%, 95.29%;
+
+    /* products */
+    --esig-product-home: 40.32, 100%, 48.43%;
+    --esig-product-travelLeisure: 25.38, 98.32%, 46.67%;
+    --esig-product-car: 356.04, 100%, 44.51%;
+    --esig-product-accident: 183.33, 100%, 28.24%;
+    --esig-product-health: 145.86, 100%, 22.75%;
+    --esig-product-legal: 309.39, 71.43%, 31.57%;
+    --esig-product-care: 198.3, 100%, 27.65%;
+    --esig-product-pensionsAssets: 195.62, 100%, 42.94%;
+    --esig-product-incomeProtectionRiskHedging: 204.36, 71.63%, 72.35%;
+    --esig-product-art: 336, 100%, 26.47%;
+    --esig-product-entrepreneurs: 60.39, 100%, 30%;
+    --esig-product-operations: 3.1, 90.64%, 33.53%;
+
+    --esig-success: 157.97, 96.34%, 32.16%;
+    --esig-warning: 37.43, 91.3%, 54.9%;
+    --esig-error: 343.64, 76.95%, 47.65%;
+
+    /* data virtualization */
+    --esig-virtualization-blue-100: 208, 100%, 20.59%;
+    --esig-virtualization-blue-90: 207.34, 100%, 33.14%;
+    --esig-virtualization-blue-80: 201.11, 100%, 39.02%;
+    --esig-virtualization-blue-70: 219.45, 47.1%, 69.61%;
+    --esig-virtualization-blue-60: 211.54, 60%, 74.51%;
+
+    --esig-virtualization-black-100: 60, 0.84%, 23.33%;
+    --esig-virtualization-black-50: 0, 0.45%, 43.73%;
+    --esig-virtualization-black-10: 0, 0%, 85.49%;
+
+    --esig-virtualization-purple-100: 270.68, 56.41%, 30.59%;
+    --esig-virtualization-purple-50: 262.17, 24.47%, 63.14%;
+
+    --esig-virtualization-green-100: 178.71, 100%, 27.45%;
+    --esig-virtualization-green-50: 166.25, 39.67%, 47.45%;
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
- 
+
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
- 
+
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
- 
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
- 
+
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
- 
+
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
- 
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
- 
+
     --radius: 0.5rem;
   }
- 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
- 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
- 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
- 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
- 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
- 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
- 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
- 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
 }
- 
+
+@font-face {
+  font-family: Galano;
+  src: url("../assets/Galano/Galano-Regular.otf") format("opentype");
+}
+
 @layer base {
   * {
     @apply border-border;

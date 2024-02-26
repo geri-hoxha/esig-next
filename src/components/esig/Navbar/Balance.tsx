@@ -31,6 +31,6 @@ export default function Balance() {
     }
 
     return (
-        <Button size={'sm'} icon={<CircleDollarSign size={20} />} loading={loading} onClick={onClick} className="w-full md:w-40 bg-esig rounded-lg"><span className="hidden md:flex">Check balance</span></Button>
+        <Button size={'sm'} icon={<CircleDollarSign size={20} />} loading={loading} onClick={onClick} className="w-full md:w-40 rounded-lg"><span className="hidden md:flex">Check balance</span></Button>
     )
 }

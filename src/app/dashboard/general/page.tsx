@@ -1,4 +1,3 @@
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -38,7 +37,7 @@ const cards: ICard[] = [
 
 export default function Dashboard() {
   return (
-    <Card className="bg-gradient-to-r pb-2 from-slate-200 to-sky-200/70 ">
+    <Card className="  pb-2 bg-esig-surface-30 ">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
@@ -50,7 +49,7 @@ export default function Dashboard() {
                 />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-              <span className="text-xl">Pershendetje Geri Hoxha</span>
+              <span className="text-xl">Geri Hoxha</span>
             </CardTitle>
             <CardDescription className="pt-3">
               Mirë se erdhe në ESIG! Më poshtë do të gjeni ndihmë se si të
@@ -68,9 +67,9 @@ export default function Dashboard() {
         </div>
       </CardHeader>
       <CardContent className="flex flex-col md:flex-row items-center justify-between gap-x-5">
-        {cards.map((card) => {
+        {cards.map((card, index) => {
           return (
-            <Card className="w-100 md:w-1/3 ">
+            <Card key={index} className="w-100 md:w-1/3 ">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-x-3 text-base">
                   {" "}
@@ -82,7 +81,7 @@ export default function Dashboard() {
                 <span className="text-sm">{card.description}</span>
               </CardContent>
               <CardFooter className="flex pl-2 pb-2.5">
-                <Button variant="link" className="text-esig">
+                <Button variant="link" className="text-esig-sapphire">
                   Lexo me shume <ExternalLink className="pl-1.5" />
                 </Button>
               </CardFooter>
