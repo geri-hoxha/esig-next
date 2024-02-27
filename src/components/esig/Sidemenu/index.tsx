@@ -1,11 +1,22 @@
 import { PhoneCall } from "lucide-react";
-import Routes from "./Routes";
+import Routes, { IRoute } from "./Routes";
+import { routes as defaultRoutes } from "./Routes";
 
-const Sidemenu = () => {
+interface IProps {
+  routes?: IRoute[];
+  className?: string;
+}
+
+const Sidemenu: React.FC<IProps> = ({
+  className = "",
+  routes = defaultRoutes,
+}) => {
   return (
-    <aside className="min-w-64 justify-between hidden md:flex flex-col h-full border-gray-200 border-r">
+    <aside
+      className={`min-w-64 justify-between flex-col h-full border-gray-200 border-r bg-white ${className}`}
+    >
       <div className="flex flex-col space-y-2 p-4">
-        <Routes />
+        <Routes routes={routes} />
       </div>
       <div className="w-full flex items-center justify-center text-center pb-2 text-xs text-gray-500 font-semibold">
         <PhoneCall size={15} className="mr-2" /> Support: 04 22 333 08 ext 186

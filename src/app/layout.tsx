@@ -19,14 +19,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={'h-screen bg-background antialiased d-flex font-primary'}>
-        <div className="flex flex-col h-full w-full">
+      <body
+        className={"h-screen bg-background antialiased d-flex font-primary "}
+      >
+        <div className="flex flex-col h-full w-full relative">
           <EnvironmentBar />
           <Navbar />
           <div className="flex items-center w-full h-full">
-            <Sidemenu />
+            <Sidemenu className="hidden md:flex" />
             <div className="flex flex-col h-full w-full bg-gray-50">
-              <main className="w-full h-full px-7 py-5">
+              <main className="w-full h-full px-4 md:px-7  py-2 md:py-5">
                 <Breadcrumb />
                 <PageTitle />
                 {children}

@@ -27,10 +27,10 @@ export default function Balance() {
     }
 
     if (balance.length !== 0) {
-        return <Button className="w-full md:w-40 mr-3" variant="outline"><span className="font-bold text-lg rounded-lg">{balance[0]}€ / {balance[1]}L</span></Button>
+        return <Button className="w-40 mr-3 px-2" variant="outline"><span className="font-bold text-xs md:text-lg rounded-lg">{balance[0]}€ / {balance[1]}L</span></Button>
     }
 
     return (
-        <Button size={'sm'} icon={<CircleDollarSign size={20} />} loading={loading} onClick={onClick} className="w-full md:w-40 rounded-lg"><span className="hidden md:flex">Check balance</span></Button>
+        <Button size={'sm'} icon={<CircleDollarSign size={20} />} loading={loading} onClick={onClick} className="w-full md:w-40 rounded-lg"><span className="text-xs md:text-base">Check balance</span></Button>
     )
 }

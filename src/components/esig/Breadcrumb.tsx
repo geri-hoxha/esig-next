@@ -18,7 +18,7 @@ const Breadcrumb = () => {
   const alreadyOnHome = paths.includes("/dashboard")
 
   return (
-    <div className="mb-5">
+    <div className="mb-3">
       <ul className="flex items-center text-sm text-esig-secondary">
         {alreadyOnHome ? null : (
           <li
