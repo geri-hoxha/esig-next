@@ -6,11 +6,13 @@ import { Input } from "@/components/ui/input";
 import React, { Suspense } from "react";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetOverlay,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import DrawerContent from "./DrawerContent";
+import { Button } from "@/components/ui/button";
 
 const Currencies = React.lazy(() => import("./Currencies"));
 
@@ -46,7 +48,10 @@ const Navbar: React.FC = () => {
               </SheetTrigger>
               <SheetContent className="px-0 mt-[84px] h-auto" side="left">
                 <DrawerContent />
-              </SheetContent>
+        </SheetContent>
+
+
+
               <SheetOverlay className="mt-[84px] bg-gray-900/40"></SheetOverlay>
             </Sheet>
           </div>

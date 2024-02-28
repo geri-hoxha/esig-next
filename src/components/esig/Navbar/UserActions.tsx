@@ -19,23 +19,22 @@ export default function UserActions() {
           icon={<UserCog size={20} />}
           className="w-full md:w-40 rounded-lg bg-esig-fluorite"
         >
-          <span className="text-xs md:text-base">User settings</span>
+          <span className="text-sm md:text-base">User settings</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-min	 space-y-2 mt-4">
         <Button icon={<LockKeyhole size={15} />} className="h-7" size={"sm"}>
-          <span className="text-xs">Ndrysho fjalekalimin</span>
+          <span className="text-sm md:text-base">Ndrysho fjalekalimin</span>
         </Button>
         <Button
           icon={<LogOut size={15} />}
           size={"sm"}
-          className="w-full h-7"
+          className="w-full h-7 text-sm md:text-base"
           variant={"destructive"}
         >
           Log out
         </Button>
         <Separator className="my-2" />
-
         <div className="flex items-center w-full gap-x-3">
           <Button
             icon={

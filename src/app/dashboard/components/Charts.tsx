@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import { AgChartsReact } from "ag-charts-react";
 import { AgChartOptions } from "ag-charts-community";
@@ -27,8 +27,7 @@ const ChartExample = () => {
     series: [{ type: "bar", xKey: "month", yKey: "iceCreamSales" }],
   });
 
-
-  const [options, setOptions] = useState({
+  const [options, setOptions] = useState<AgChartOptions>({
     data: getData(),
     title: {
       text: "Raporti shitje/deme",
@@ -49,10 +48,14 @@ const ChartExample = () => {
   });
 
   return (
-     <div className="grid grid-cols-2 gap-x-4 mt-3">
-      <div><AgChartsReact options={chartOptions} /></div>
-      <div><AgChartsReact options={options} /></div>
-     </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+      <div>
+        <AgChartsReact options={chartOptions} />
+      </div>
+      <div>
+        <AgChartsReact options={options} />
+      </div>
+    </div>
   );
 };
 

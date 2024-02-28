@@ -1,5 +1,5 @@
-import Index from "../page";
+import General from "../general/page";
 
-export default async  function Dashboard() {
-    return <Index />
+export default async function Analytic() {
+  return <General />;
 }

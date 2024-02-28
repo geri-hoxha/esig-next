@@ -1,19 +1,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ExternalLink } from "lucide-react";
 import Image from "next/image";
-import ChartExample from "./components/Charts";
+import ChartExample from "../components/Charts";
+import DashboardCard from "../components/DashboardCard";
 
-interface ICard {
+export interface ICard {
   title: string;
   description: string;
 }
@@ -36,13 +33,13 @@ const cards: ICard[] = [
   },
 ];
 
-export default function Dashboard() {
+export default function General() {
   return (
     <div className="flex flex-col">
       <Card className=" p-0 bg-esig-surface-30 mb-2">
-        <CardHeader>
-          <div className="  grid grid-cols-6 gap-x-4">
-            <div className="flex flex-col col-span-4">
+        <CardHeader className="p-4 md:p-6 pb-0 md:pb-0">
+          <div className="grid grid-cols-6 gap-x-4">
+            <div className="flex flex-col col-span-6 md:col-span-4">
               <CardTitle className="flex items-center gap-x-2">
                 <Avatar>
                   <AvatarImage
@@ -53,7 +50,7 @@ export default function Dashboard() {
                 </Avatar>
                 <span className="text-xl">Geri Hoxha</span>
               </CardTitle>
-              <CardDescription className="pt-3">
+              <CardDescription className="pt-3 text-center md:text-left">
                 Mirë se erdhe në ESIG! Më poshtë do të gjeni ndihmë se si të
                 përdorni programin për të përfituar sa më shumë prej tij.
               </CardDescription>
@@ -65,30 +62,13 @@ export default function Dashboard() {
               height={"0"}
               style={{ width: 150, height: 80, marginLeft: "40px" }}
               priority
+              className="hidden md:block"
             />
           </div>
         </CardHeader>
-        <CardContent className="flex flex-col md:flex-row items-center justify-between gap-x-5">
+        <CardContent className="flex flex-col md:flex-row items-center justify-between p-4 md:p-6 gap-y-3 md:gap-y-0 gap-x-5">
           {cards.map((card, index) => {
-            return (
-              <Card key={index} className="w-100 md:w-1/3">
-                <CardHeader className="pt-3 pb-2">
-                  <CardTitle className="flex items-center gap-x-3 text-base">
-                    {" "}
-                    <Badge className="w-8 h-8 text-base rounded-md">1</Badge>
-                    {card.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="flex pb-0">
-                  <span className="text-sm">{card.description}</span>
-                </CardContent>
-                <CardFooter className="flex pl-2 pb-2">
-                  <Button variant="link" className="text-esig-sapphire w-auto">
-                    Lexo me shume <ExternalLink className="pl-1.5" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            );
+            return <DashboardCard key={index} card={card} index={index} />;
           })}
         </CardContent>
       </Card>

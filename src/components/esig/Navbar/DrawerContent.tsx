@@ -6,6 +6,8 @@ import Sidemenu from "../Sidemenu";
 import { ChangeEvent, useState } from "react";
 import debounce from "@/lib/debounce";
 import { routes as defaultRoutes } from "../Sidemenu/Routes";
+import { SheetClose, SheetFooter } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 const DrawerContent = () => {
   const [routes, setRoutes] = useState(defaultRoutes);
@@ -25,7 +27,7 @@ const DrawerContent = () => {
   }, 400);
 
   return (
-    <>
+    <div className="flex flex-col h-full">
       <div className="w-full px-4 pt-4">
         <Input
           icon={<Search size={15} />}
@@ -33,8 +35,12 @@ const DrawerContent = () => {
           onChange={onChange}
         />
       </div>
-      <Sidemenu className="flex" routes={routes} />
-    </>
+      <Sidemenu className="flex h-full" routes={routes} />
+
+
+
+
+    </div>
   );
 };
 

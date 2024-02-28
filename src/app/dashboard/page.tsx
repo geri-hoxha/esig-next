@@ -1,5 +1,5 @@
-import Index from "../page";
+import General from "./general/page";
 
 export default function Dashboard() {
-    return <Index />
+    return <General />
 }

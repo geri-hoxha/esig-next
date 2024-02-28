@@ -7,6 +7,20 @@ import EnvironmentBar from "@/components/esig/Navbar/EnvironmentBar";
 import Breadcrumb from "@/components/esig/Breadcrumb";
 import PageTitle from "@/components/esig/PageTitle";
 
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+
 export const metadata: Metadata = {
   title: "ESIG",
   description: "Esig - Sigal core system",
@@ -19,19 +33,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={"h-screen bg-background antialiased d-flex font-primary "}
-      >
-        <div className="flex flex-col h-full w-full relative">
+      <body>
+        <div className="min-h-screen h-full relative w-full bg-gray-50 bg-background antialiased flex flex-col font-primary">
           <EnvironmentBar />
           <Navbar />
-          <div className="flex items-center w-full h-full">
+          <div className="flex w-full h-full grow">
             <Sidemenu className="hidden md:flex" />
-            <div className="flex flex-col h-full w-full bg-gray-50">
+            <div className="flex flex-col h-auto w-full ">
               <main className="w-full h-full px-4 md:px-7  py-2 md:py-5">
                 <Breadcrumb />
                 <PageTitle />
                 {children}
+
+            
               </main>
               <Footer />
             </div>
