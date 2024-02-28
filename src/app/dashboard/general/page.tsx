@@ -50,7 +50,7 @@ export default function General() {
                 </Avatar>
                 <span className="text-xl">Geri Hoxha</span>
               </CardTitle>
-              <CardDescription className="pt-3 text-center md:text-left">
+              <CardDescription className="pt-3">
                 Mirë se erdhe në ESIG! Më poshtë do të gjeni ndihmë se si të
                 përdorni programin për të përfituar sa më shumë prej tij.
               </CardDescription>
