@@ -48,10 +48,7 @@ const Navbar: React.FC = () => {
               </SheetTrigger>
               <SheetContent className="px-0 mt-[84px] h-auto" side="left">
                 <DrawerContent />
-        </SheetContent>
-
-
-
+              </SheetContent>
               <SheetOverlay className="mt-[84px] bg-gray-900/40"></SheetOverlay>
             </Sheet>
           </div>
