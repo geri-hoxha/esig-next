@@ -1,3 +1,5 @@
+'use client'
+
 import { Separator } from "@/components/ui/separator";
 import CurrencyType from "./components/CurrenyType";
 import DistributionChannel from "./components/DistributionChannel";
@@ -7,10 +9,11 @@ import PaymentType from "./components/PaymentType";
 import Serial from "./components/Serial";
 import StartDate from "./components/StartDate";
 import PolicyUsers from "./components/PolicyUsers";
+import { SaleProvider } from "@/context/SaleContext";
 
 export default function Sale() {
   return (
-    <>
+    <SaleProvider>
       <div className="grid grid-cols-4 gap-6 mt-6">
         <Serial />
         <StartDate />
@@ -24,6 +27,6 @@ export default function Sale() {
       <div className="grid grid-cols-3 gap-6 mt-6">
         <PolicyUsers />
       </div>
-    </>
+    </SaleProvider>
   );
 }
