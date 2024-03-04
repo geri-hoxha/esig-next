@@ -2,6 +2,7 @@ import React, {
   Dispatch,
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useReducer,
   useState,
@@ -37,8 +38,16 @@ interface IContext {
 }
 
 const defaultLimits = {
-  min : 0,
-  max: 0
+  min: 0,
+  max: 0,
+};
+
+const defaultRules = {
+  policyUsers: defaultLimits,
+  beneficiaries: defaultLimits,
+  policyHolders: defaultLimits,
+  insurers: defaultLimits,
+  invoiceRecipients: defaultLimits,
 };
 
 const saleContext: IContext = {
@@ -51,13 +60,7 @@ const saleContext: IContext = {
   },
   dispatch: () => {},
   setLoading: () => {},
-  rules: {
-    policyUsers: defaultLimits,
-    beneficiaries: defaultLimits,
-    policyHolders: defaultLimits,
-    insurers: defaultLimits,
-    invoiceRecipients: defaultLimits,
-  },
+  rules: defaultRules,
   setRules: () => {},
 };
 
@@ -81,13 +84,19 @@ const SaleProvider = ({ children }: { children: ReactNode }) => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const _setRules = (arg: Partial<IRule>) => {
-    setRules({...rules, ...arg})
-  }
+  const _setRules = useCallback(
+    (arg: Partial<IRule>) => {
+      return setRules({ ...rules, ...arg });
+    },
+    [rules]
+  );
+  
   // todo: create a form instance
 
   return (
-    <SaleContext.Provider value={{ data, dispatch, setLoading, rules, setRules: _setRules }}>
+    <SaleContext.Provider
+      value={{ data, dispatch, setLoading, rules, setRules: _setRules }}
+    >
       {/* todo: add a loader wrapper */}
       {children}
     </SaleContext.Provider>
@@ -96,6 +105,6 @@ const SaleProvider = ({ children }: { children: ReactNode }) => {
 
 const useSale = () => useContext(SaleContext);
 
-export { SaleProvider, useSale };
+export { SaleProvider, useSale, defaultRules };
 
-export type { ISaleContext, IContext };
+export type { ISaleContext, IContext, ParticipantsLimits, IRule };

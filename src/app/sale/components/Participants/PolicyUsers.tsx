@@ -57,25 +57,11 @@ const fakeData = [
 ];
 
 export default function PolicyUsers() {
-  
-  const { dispatch, setRules }: IContext = useSale();
+  const { dispatch }: IContext = useSale();
 
   useEffect(() => {
     dispatch({ type: SET, payload: { key: "policyUsers", item: fakeData } });
-
-    setRules({
-      policyUsers: {
-        min: 1,
-        max: 3
-      }
-    })
-
   }, []);
- 
-  return (
-    <Participants
-      title="Policy Users"
-      contextProperty={"policyUsers"}
-    />
-  );
+
+  return <Participants title="Policy Users" contextProperty={"policyUsers"} />;
 }

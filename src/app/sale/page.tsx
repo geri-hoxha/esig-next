@@ -1,17 +1,15 @@
-'use client'
+"use client";
 
 import { Separator } from "@/components/ui/separator";
-import CurrencyType from "./components/CurrenyType";
-import DistributionChannel from "./components/DistributionChannel";
-import EndDate from "./components/EndDate";
-import IssueDate from "./components/IssuedDate";
-import PaymentType from "./components/PaymentType";
-import Serial from "./components/Serial";
-import StartDate from "./components/StartDate";
-import PolicyUsers from "./components/PolicyUsers";
-import { IContext, SaleProvider, useSale } from "@/context/SaleContext";
-import { useEffect } from "react";
-import Beneficiaries from "./components/Beneficiaries";
+import CurrencyType from "./components/Fields/CurrenyType";
+import DistributionChannel from "./components/Fields/DistributionChannel";
+import EndDate from "./components/Fields/EndDate";
+import IssueDate from "./components/Fields/IssuedDate";
+import PaymentType from "./components/Fields/PaymentType";
+import Serial from "./components/Fields/Serial";
+import StartDate from "./components/Fields/StartDate";
+import { SaleProvider } from "@/context/SaleContext";
+import TemplateRenderer from "./components/Participants/TemplateRenderer";
 
 export default function Sale() {
   return (
@@ -26,10 +24,7 @@ export default function Sale() {
         <CurrencyType />
       </div>
       <Separator className="mt-6" />
-      <div className="grid grid-cols-3 gap-6 mt-6">
-        <PolicyUsers />
-        <Beneficiaries />
-      </div>
+      <TemplateRenderer />
     </SaleProvider>
   );
 }

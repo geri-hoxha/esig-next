@@ -6,13 +6,11 @@ import { Input } from "@/components/ui/input";
 import React, { Suspense } from "react";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetOverlay,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import DrawerContent from "./DrawerContent";
-import { Button } from "@/components/ui/button";
 
 const Currencies = React.lazy(() => import("./Currencies"));
 
