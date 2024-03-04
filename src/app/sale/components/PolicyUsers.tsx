@@ -58,18 +58,23 @@ const fakeData = [
 
 export default function PolicyUsers() {
   
-  const { dispatch }: IContext = useSale();
+  const { dispatch, setRules }: IContext = useSale();
 
   useEffect(() => {
     dispatch({ type: SET, payload: { key: "policyUsers", item: fakeData } });
-  }, []);
 
+    setRules({
+      policyUsers: {
+        min: 1,
+        max: 3
+      }
+    })
+
+  }, []);
+ 
   return (
     <Participants
       title="Policy Users"
-      customRenderer={(participant) => {
-        return <div className="ml-3">20%</div>;
-      }}
       contextProperty={"policyUsers"}
     />
   );

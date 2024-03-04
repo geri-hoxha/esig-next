@@ -6,6 +6,8 @@ import Sidemenu from "@/components/esig/Sidemenu";
 import EnvironmentBar from "@/components/esig/Navbar/EnvironmentBar";
 import Breadcrumb from "@/components/esig/Breadcrumb";
 import PageTitle from "@/components/esig/PageTitle";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "ESIG",
@@ -21,20 +23,24 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <div className="min-h-screen h-full relative w-full bg-gray-50 bg-background antialiased flex flex-col font-primary">
-          <EnvironmentBar />
-          <Navbar />
-          <div className="flex w-full h-full grow">
-            <Sidemenu className="hidden md:flex" />
-            <div className="flex flex-col h-auto w-full ">
-              <main className="w-full h-full px-4 md:px-7  py-2 md:py-5">
-                <Breadcrumb />
-                <PageTitle />
-                {children}
-              </main>
-              <Footer />
+          <TooltipProvider delayDuration={300}>
+
+            <EnvironmentBar />
+            <Navbar />
+            <div className="flex w-full h-full grow">
+              <Sidemenu className="hidden md:flex" />
+              <div className="flex flex-col h-auto w-full ">
+                <main className="w-full h-full px-4 md:px-7  py-2 md:py-5">
+                  <Breadcrumb />
+                  <PageTitle />
+                  {children}
+                </main>
+                <Footer />
+              </div>
             </div>
-          </div>
+          </TooltipProvider>
         </div>
+        <Toaster />
       </body>
     </html>
   );

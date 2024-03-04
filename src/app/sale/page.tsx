@@ -9,7 +9,9 @@ import PaymentType from "./components/PaymentType";
 import Serial from "./components/Serial";
 import StartDate from "./components/StartDate";
 import PolicyUsers from "./components/PolicyUsers";
-import { SaleProvider } from "@/context/SaleContext";
+import { IContext, SaleProvider, useSale } from "@/context/SaleContext";
+import { useEffect } from "react";
+import Beneficiaries from "./components/Beneficiaries";
 
 export default function Sale() {
   return (
@@ -26,6 +28,7 @@ export default function Sale() {
       <Separator className="mt-6" />
       <div className="grid grid-cols-3 gap-6 mt-6">
         <PolicyUsers />
+        <Beneficiaries />
       </div>
     </SaleProvider>
   );
