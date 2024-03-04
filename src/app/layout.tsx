@@ -20,6 +20,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "ESIG",
@@ -35,22 +37,24 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <div className="min-h-screen h-full relative w-full bg-gray-50 bg-background antialiased flex flex-col font-primary">
-          <EnvironmentBar />
-          <Navbar />
-          <div className="flex w-full h-full grow">
-            <Sidemenu className="hidden md:flex" />
-            <div className="flex flex-col h-auto w-full ">
-              <main className="w-full h-full px-4 md:px-7  py-2 md:py-5">
-                <Breadcrumb />
-                <PageTitle />
-                {children}
+          <TooltipProvider delayDuration={300}>
 
-            
-              </main>
-              <Footer />
+            <EnvironmentBar />
+            <Navbar />
+            <div className="flex w-full h-full grow">
+              <Sidemenu className="hidden md:flex" />
+              <div className="flex flex-col h-auto w-full ">
+                <main className="w-full h-full px-4 md:px-7  py-2 md:py-5">
+                  <Breadcrumb />
+                  <PageTitle />
+                  {children}
+                </main>
+                <Footer />
+              </div>
             </div>
-          </div>
+          </TooltipProvider>
         </div>
+        <Toaster />
       </body>
     </html>
   );

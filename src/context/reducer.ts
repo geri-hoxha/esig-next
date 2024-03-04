@@ -15,7 +15,7 @@ interface IAction<T> {
     type: ActionTypes;
     payload: {
         key: keyof T;
-        identifier?: { key: string, value: string };
+        identifier?: { key?: string, value: string };
         item?: any;
     };
 }
@@ -34,7 +34,7 @@ function reducer<T>(state: T, action: IAction<T>): T {
 
     const { type, payload } = action;
 
-    const { key, item, identifier = { key: 'id', value: '' } } = payload;
+    const { key, item, identifier = {key: 'id', value: ''} } = payload;
 
     const selectedArray = state[key] as Array<any>
 
@@ -44,10 +44,10 @@ function reducer<T>(state: T, action: IAction<T>): T {
             return { ...state, [key]: [...selectedArray, item] };
 
         case UPDATE:
-            return { ...state, [key]: [item, ...selectedArray.filter((item) => item[identifier.key] !== identifier.value)] };
+            return { ...state, [key]: [item, ...selectedArray.filter((item) => item[identifier.key ?? 'id'] !== identifier.value)] };
 
         case DELETE:
-            return { ...state, [key]: [...selectedArray.filter((item) => item[identifier.key] !== identifier.value)] };
+            return { ...state, [key]: [...selectedArray.filter((item) => item[identifier.key ?? 'id'] !== identifier.value)] };
 
         case MASS_UPDATE:
             return { ...state, ...item };
