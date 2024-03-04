@@ -7,20 +7,6 @@ import EnvironmentBar from "@/components/esig/Navbar/EnvironmentBar";
 import Breadcrumb from "@/components/esig/Breadcrumb";
 import PageTitle from "@/components/esig/PageTitle";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-
 export const metadata: Metadata = {
   title: "ESIG",
   description: "Esig - Sigal core system",
@@ -44,8 +30,6 @@ export default function RootLayout({
                 <Breadcrumb />
                 <PageTitle />
                 {children}
-
-            
               </main>
               <Footer />
             </div>
