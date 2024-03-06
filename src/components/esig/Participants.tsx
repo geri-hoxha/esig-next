@@ -1,7 +1,7 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChangeEvent, RefObject, useEffect, useRef, useState } from "react";
+import { ReactNode } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import {
@@ -23,29 +23,23 @@ import Modal from "./Modal";
 import CustomerModal from "./CustomerModal";
 import { useToast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
-import { Input } from "../ui/input";
-import { toCurrencyStandardFormatCurrency } from "@/lib/helpers";
 
 interface IProps {
   title: string;
-  contextProperty: keyof ISaleContext;
-  percentage?: {
-    headerName: string;
-    field: string;
-  };
+  contextProperty: keyof ISaleContext; // key on context
+  headerName?: string; // extra property
+  children?: (participant:any) => ReactNode; // custom render of the column
+  haveLeader?: boolean
 }
 
 const Participants: React.FC<IProps> = ({
   title,
   contextProperty,
-  percentage = undefined,
+  headerName,
+  children,
+  haveLeader = false
 }) => {
   const { data, rules, dispatch }: IContext = useSale();
-
-  const [editing, setEditing] = useState<{
-    id: string;
-    percentage?: string;
-  } | null>(null);
 
   const { toast } = useToast();
 
@@ -53,56 +47,7 @@ const Participants: React.FC<IProps> = ({
 
   const participants = data[contextProperty];
 
-  const inputPercentageRef: RefObject<HTMLInputElement> = useRef(null);
 
-  const updateParticipantPercentage = () => {
-    if (editing === null || !percentage) return;
-
-    const updatedParticipants = participants.map((participant) => {
-      if (participant.id === editing.id) {
-        return {
-          ...participant,
-          [percentage.field]: editing.percentage,
-        };
-      }
-      return participant;
-    });
-
-    dispatch({
-      type: SET,
-      payload: { key: contextProperty, item: updatedParticipants },
-    });
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (
-        editing !== null &&
-        inputPercentageRef.current &&
-        !inputPercentageRef.current.contains(event.target)
-      ) {
-        setEditing(null);
-        if (Number(editing.percentage)) {
-          if (Number(editing.percentage) > 100) {
-            return toast({
-              variant: "destructive",
-              title: `Perqindja nuk mund te jete me e madhe se 100%`,
-            });
-          }
-
-          updateParticipantPercentage();
-        }
-      }
-    };
-
-    // Attach the event listener when the component mounts
-    document.addEventListener("click", handleClickOutside);
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [editing]);
 
   const addParticipantHandler = () => {};
 
@@ -140,44 +85,6 @@ const Participants: React.FC<IProps> = ({
   };
 
   const viewParticipantDetailsHandler = (id: string) => {};
-
-  const editPercentageHandler = (participant: any) => {
-    setEditing({
-      id: participant.id,
-      percentage: participant[percentage?.field ?? ""] ?? 0,
-    });
-    // delay focus since input is not yet mounted
-    setTimeout(() => {
-      inputPercentageRef.current?.focus();
-    }, 200);
-  };
-
-  const onPercentageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setEditing({
-      id: editing?.id ?? "",
-      percentage: event.target.value,
-    });
-  };
-
-  const handlePercentageEnter = (event: any) => {
-    if (event.key !== "Enter") return;
-
-    const value = Number(event.target.value);
-
-    if (typeof value === "number") {
-      if (value > 100) {
-        return toast({
-          variant: "destructive",
-          title: `Perqindja nuk mund te jete me e madhe se 100%`,
-        });
-      }
-      updateParticipantPercentage();
-    }
-
-    setEditing(null);
-  };
-
-  const haveColumns = !!percentage?.headerName;
 
   return (
     <Card className="w-full">
@@ -238,12 +145,12 @@ const Participants: React.FC<IProps> = ({
         <div className="flex flex-col relative w-full">
           <div className="sticky top-0 border left-0 bg-gray-50 rounded-t-md py-2  grid grid-cols-10">
             <div
-              className={`${haveColumns ? "col-span-4" : "col-span-7"} pl-4`}
+              className={`${headerName ? "col-span-4" : "col-span-7"} pl-4`}
             >
               Name
             </div>
-            {haveColumns ? (
-              <div className="col-span-3 pl-6">{percentage.headerName}</div>
+            {headerName ? (
+              <div className="col-span-3 pl-6">{headerName}</div>
             ) : null}
             <div className="col-span-3 pl-4">Veprimet</div>
           </div>
@@ -256,14 +163,14 @@ const Participants: React.FC<IProps> = ({
                 >
                   <div
                     className={`truncate mr-5 ${
-                      haveColumns ? "col-span-5" : "col-span-7"
-                    } pl-2 border-r relative flex items-center border-l-2 border-l-transparent group-hover:border-l-esig`}
+                      headerName ? "col-span-5" : "col-span-7"
+                    } pl-2 relative flex items-center border-l-2 border-l-transparent group-hover:border-l-esig`}
                   >
                     <div className="my-1.5 text-sm flex items-center gap-x-1">
                       <span className={`w-3`}>{index + 1}.</span>{" "}
                       {participant.displayName}
                     </div>
-                    {index === 0 ? (
+                    {index === 0 && haveLeader ? (
                       <Tooltip>
                         <TooltipTrigger>
                           <Badge className="w-9 h-4 my-1.5 ml-1.5">
@@ -276,45 +183,7 @@ const Participants: React.FC<IProps> = ({
                       </Tooltip>
                     ) : null}
                   </div>
-
-                  {haveColumns ? (
-                    <div className="col-span-2 px-2 border-r -ml-5">
-                      <div className="my-1.5 flex items-center h-4 pt-2">
-                        {editing?.id === participant.id ? (
-                          <Input
-                            onKeyDown={handlePercentageEnter}
-                            onChange={onPercentageChange}
-                            className="h-6"
-                            ref={inputPercentageRef}
-                            value={editing?.percentage}
-                            onFocus={(event) => event.target.select()}
-                          />
-                        ) : (
-                          <div
-                            className="flex items-center  gap-x-1"
-                            onClick={() => editPercentageHandler(participant)}
-                          >
-                            <Image
-                              className="cursor-pointer border-b-2 border-transparent hover:border-black"
-                              src="/svg/edit.svg"
-                              alt="edit"
-                              width={"0"}
-                              height={"0"}
-                              style={{ width: 20, height: 20 }}
-                              priority
-                            />
-                            <span>
-                              {toCurrencyStandardFormatCurrency(
-                                participant[percentage.field]
-                              )}{" "}
-                              %
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ) : null}
-
+                  {children?.(participant)}
                   <div className="col-span-3 pl-2 flex items-center justify-center gap-1.5 my-1.5 pr-3">
                     <Modal
                       title="Modali i klienteve"

@@ -5,6 +5,9 @@ import { useEffect, useMemo } from "react";
 import PolicyUsers from "./PolicyUsers";
 import Beneficiaries from "./Beneficiaries";
 import LimitsAsker from "./LimitsAsker";
+import PolicyHolders from "./PolicyHolders";
+import Insurers from "./Insurers";
+import InvoiceRecipients from "./InvoiceRecipients";
 
 const TemplateRenderer: React.FC = () => {
   const { data, rules } = useSale();
@@ -34,6 +37,11 @@ const TemplateRenderer: React.FC = () => {
       <div className="grid grid-cols-3 gap-6 mt-6">
         <PolicyUsers />
         <Beneficiaries />
+        <PolicyHolders />
+      </div>
+      <div className="grid grid-cols-2 gap-6 mt-6">
+        <Insurers />
+        <InvoiceRecipients />
       </div>
       <LimitsAsker />
     </>
