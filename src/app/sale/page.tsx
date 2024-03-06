@@ -23,7 +23,7 @@ export default function Sale() {
         <PaymentType />
         <CurrencyType />
       </div>
-      <Separator className="mt-6" />
+      <Separator className="my-6" />
       <TemplateRenderer />
     </SaleProvider>
   );

@@ -56,11 +56,11 @@ const LimitsAsker: React.FC = () => {
   const form = useForm<FormValues>({
     defaultValues: {
       fields: [
-        { name: "policyUsers", min: "", max: "" },
-        { name: "beneficiaries", min: "", max: "" },
-        { name: "policyHolders", min: "", max: "" },
-        { name: "insurers", min: "", max: "" },
-        { name: "invoiceRecipients", min: "", max: "" },
+        { name: "policyUsers", min: "1", max: "1" },
+        { name: "beneficiaries", min: "1", max: "1" },
+        { name: "policyHolders", min: "1", max: "1" },
+        { name: "insurers", min: "1", max: "1" },
+        { name: "invoiceRecipients", min: "1", max: "1" },
       ],
     },
   });

@@ -28,8 +28,8 @@ interface IProps {
   title: string;
   contextProperty: keyof ISaleContext; // key on context
   headerName?: string; // extra property
-  children?: (participant:any) => ReactNode; // custom render of the column
-  haveLeader?: boolean
+  children?: (participant: any) => ReactNode; // custom render of the column
+  haveLeader?: boolean;
 }
 
 const Participants: React.FC<IProps> = ({
@@ -37,7 +37,7 @@ const Participants: React.FC<IProps> = ({
   contextProperty,
   headerName,
   children,
-  haveLeader = false
+  haveLeader = false,
 }) => {
   const { data, rules, dispatch }: IContext = useSale();
 
@@ -46,8 +46,6 @@ const Participants: React.FC<IProps> = ({
   const participantRules = rules[contextProperty];
 
   const participants = data[contextProperty];
-
-
 
   const addParticipantHandler = () => {};
 
@@ -86,6 +84,134 @@ const Participants: React.FC<IProps> = ({
 
   const viewParticipantDetailsHandler = (id: string) => {};
 
+  if (participants.length === 0) {
+    const theOnlyParticipant = participants.at(0);
+
+    return (
+      <Card className="w-full bg-white h-full">
+        <CardHeader className="px-4 pt-5 pb-0">
+          <CardTitle className="mb-1 flex items-center justify-between text-lg leading-none font-bold">
+            {title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-3">
+          <div
+            className={`flex items-center cursor-pointer group rounded-lg h-12  ${
+              !!theOnlyParticipant
+                ? "border pl-4"
+                : "border border-dashed bg-white border-esig"
+            }`}
+          >
+            {theOnlyParticipant ? (
+              <>
+                <div className={`truncate flex items-center border-r h-full`}>
+                  <div className="font-bold text-lg flex items-center pr-3">
+                    {theOnlyParticipant.displayName}
+                  </div>
+                  {haveLeader ? (
+                    <Badge className="w-9 h-4">
+                      <span className="text-[10px]">Lider</span>
+                    </Badge>
+                  ) : null}
+                </div>
+                <div className="ml-3 flex items-center mt-1">
+                  <span className="mr-5">{headerName}:</span>
+                  <div className="-mt-2">{children?.(theOnlyParticipant)}</div>
+                </div>
+                <div
+                  className="h-full ml-auto px-3 flex items-center mt-1"
+                  onClick={() =>
+                    removeParticipantHandler(theOnlyParticipant.id)
+                  }
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 100 100"
+                    className="w-6 h-6 stroke-esig-error"
+                  >
+                    <circle
+                      cx="49.9"
+                      cy="48.9"
+                      r="45.8"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeMiterlimit="10"
+                      strokeWidth="10"
+                    />
+                    <path
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeMiterlimit="10"
+                      strokeWidth="10"
+                      d="M74.9 48.9h-50"
+                    />
+                  </svg>
+                </div>
+                <div className=" bg-esig text-white h-full rounded-r-md">
+                  <Modal
+                    title="Modali i klienteve"
+                    description="Ketu mund te modikoni klientin e perzgjedhur."
+                    body={<CustomerModal />}
+                  >
+                    <div
+                      onClick={() =>
+                        viewParticipantDetailsHandler(theOnlyParticipant.id)
+                      }
+                      className="  mt-1.5 px-2 text-5xl leading-3"
+                    >
+                      ...
+                    </div>
+                  </Modal>
+                </div>
+              </>
+            ) : (
+              <Modal
+                title="Modali i klienteve"
+                description="Ketu mund te modikoni klientin e perzgjedhur."
+                body={<CustomerModal />}
+              >
+                <Button
+                  className="border-none bg-white hover:bg-white  group-hover:bg-esig-surface-30 h-full"
+                  onClick={addParticipantHandler}
+                >
+                  <div className="flex items-center text-esig  gap-x-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 100 100"
+                      className="h-5 w-5 stroke-esig"
+                    >
+                      <circle
+                        cx="50.6"
+                        cy="50.7"
+                        r="45.5"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeMiterlimit="10"
+                        strokeWidth="10"
+                      />
+                      <path
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeMiterlimit="10"
+                        strokeWidth="10"
+                        d="M50.6 25.9v49.6M75.3 50.7H25.8"
+                      />
+                    </svg>
+                    <span className="mt-1 text-base">Shto pjesemarres</span>
+                  </div>
+                </Button>
+              </Modal>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="w-full">
       <CardHeader className="px-4 pt-5 pb-0">
@@ -93,7 +219,7 @@ const Participants: React.FC<IProps> = ({
           <div className="flex items-center justify-between">
             <div className="text-lg leading-none font-bold flex items-center">
               <Image
-                src="/svg/users_group.svg"
+                src="/svg/user.svg"
                 alt="users_group"
                 width={"0"}
                 height={"0"}
@@ -143,18 +269,16 @@ const Participants: React.FC<IProps> = ({
       </CardHeader>
       <CardContent className="p-4 pt-3">
         <div className="flex flex-col relative w-full">
-          <div className="sticky top-0 border left-0 bg-gray-50 rounded-t-md py-2  grid grid-cols-10">
-            <div
-              className={`${headerName ? "col-span-4" : "col-span-7"} pl-4`}
-            >
+          {/* <div className="sticky top-0 border left-0 bg-gray-50 rounded-t-md py-2  grid grid-cols-10">
+            <div className={`${headerName ? "col-span-4" : "col-span-7"} pl-4`}>
               Name
             </div>
             {headerName ? (
               <div className="col-span-3 pl-6">{headerName}</div>
             ) : null}
             <div className="col-span-3 pl-4">Veprimet</div>
-          </div>
-          <ScrollArea className="h-48 rounded-b-md border border-t-0 flex flex-col">
+          </div> */}
+          <ScrollArea className="h-28 flex flex-col">
             {participants.map((participant, index) => {
               return (
                 <div
@@ -162,13 +286,13 @@ const Participants: React.FC<IProps> = ({
                   className="grid grid-cols-10 cursor-pointer group hover:bg-esig-surface-30"
                 >
                   <div
-                    className={`truncate mr-5 ${
-                      headerName ? "col-span-5" : "col-span-7"
+                    className={`mr-5 ${
+                      headerName ? "col-span-4" : "col-span-7"
                     } pl-2 relative flex items-center border-l-2 border-l-transparent group-hover:border-l-esig`}
                   >
-                    <div className="my-1.5 text-sm flex items-center gap-x-1">
+                    <div className="my-1.5 text-sm flex items-center gap-x-1 ">
                       <span className={`w-3`}>{index + 1}.</span>{" "}
-                      {participant.displayName}
+                      <span className="truncate w-20">{participant.displayName}</span>
                     </div>
                     {index === 0 && haveLeader ? (
                       <Tooltip>
@@ -184,7 +308,7 @@ const Participants: React.FC<IProps> = ({
                     ) : null}
                   </div>
                   {children?.(participant)}
-                  <div className="col-span-3 pl-2 flex items-center justify-center gap-1.5 my-1.5 pr-3">
+                  <div className="col-span-3 pl-2 flex items-center justify-center gap-1.5 my-1.5">
                     <Modal
                       title="Modali i klienteve"
                       description="Ketu mund te modikoni klientin e perzgjedhur."
@@ -195,8 +319,8 @@ const Participants: React.FC<IProps> = ({
                         onClick={() =>
                           viewParticipantDetailsHandler(participant.id)
                         }
-                        variant={"secondary"}
-                        className="h-6 w-12 text-xs transition-all duration-300   hover:!bg-esig hover:!text-white group-hover:bg-white"
+                        variant={"outline"}
+                        className="h-6 w-13 border border-dashed border-gray-600 text-xs transition-all duration-300   hover:!bg-esig hover:!text-white group-hover:bg-white"
                       >
                         Details
                       </Button>

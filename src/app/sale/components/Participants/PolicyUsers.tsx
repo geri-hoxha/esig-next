@@ -10,26 +10,6 @@ const fakeData = [
   {
     id: "1",
     displayName: "Agim Molla",
-  },
-  {
-    id: "2",
-    displayName: "Filan Fisteku",
-  },
-  {
-    id: "3",
-    displayName: "Fiqiri Bobi",
-  },
-  {
-    id: "4",
-    displayName: "Agim Molla",
-  },
-  {
-    id: "5",
-    displayName: "Filan Fisteku",
-  },
-  {
-    id: "6",
-    displayName: "Fiqiri Bobi",
   }
 ];
 

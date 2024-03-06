@@ -138,7 +138,7 @@ export default function Beneficiaries() {
     >
       {(participant) => {
         return (
-          <div className="col-span-2 px-2 -ml-5">
+          <div className="col-span-3 px-2 -ml-5">
             <div className="my-1.5 flex items-center h-4 pt-2">
               {editing?.id === participant.id ? (
                 <Input
