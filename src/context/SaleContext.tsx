@@ -9,6 +9,15 @@ import React, {
 } from "react";
 import { IAction, reducer } from "./reducer";
 
+interface IParticipantsComponent {
+  policyUsers: ReactNode;
+  beneficiaries: ReactNode;
+  policyHolders: ReactNode;
+  insurers: ReactNode;
+  invoiceRecipients: ReactNode;
+
+}
+
 interface ISaleContext {
   policyUsers: any[];
   beneficiaries: any[];
@@ -107,4 +116,4 @@ const useSale = () => useContext(SaleContext);
 
 export { SaleProvider, useSale, defaultRules };
 
-export type { ISaleContext, IContext, ParticipantsLimits, IRule };
+export type { ISaleContext, IContext, ParticipantsLimits, IRule, IParticipantsComponent };
