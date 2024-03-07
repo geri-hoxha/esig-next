@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import {
-  Select,
+  Select as Select_,
   SelectContent,
   SelectGroup,
   SelectItem,
@@ -16,11 +16,11 @@ interface ISelect extends IProps {
   options: IOptions[];
 }
 
-export default function Select_({ label, placeholder, options }: ISelect) {
+export default function Select({ label, placeholder, options }: ISelect) {
   return (
     <div className="flex flex-col gap-y-2">
       <Label>{label}</Label>
-      <Select>
+      <Select_>
         <SelectTrigger className="w-full">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
@@ -29,7 +29,7 @@ export default function Select_({ label, placeholder, options }: ISelect) {
             <SelectItem key={option.key} value={option.key}>{option.value}</SelectItem>
           ))}
         </SelectContent>
-      </Select>
+      </Select_>
     </div>
   );
 }

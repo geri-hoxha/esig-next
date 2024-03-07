@@ -107,3 +107,11 @@
   }
 }
  
+
+.dotted-spaced {
+  height: 21px;
+  background-image: linear-gradient(to right, #555555 10%, rgba(255, 255, 255, 0.548) 0%);
+  background-position: top;
+  background-size: 9px 1.5px ;
+  background-repeat: repeat-x;
+}

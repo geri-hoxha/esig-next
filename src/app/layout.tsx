@@ -30,7 +30,7 @@ export default function RootLayout({
             <div className="flex w-full h-full grow">
               <Sidemenu className="hidden md:flex" />
               <div className="flex flex-col h-auto w-full ">
-                <main className="w-full h-full px-4 md:px-7  py-2 md:py-5">
+                <main className="w-full h-full px-4 py-4">
                   <Breadcrumb />
                   {/* <PageTitle /> */}
                   {children}

@@ -1,5 +1,5 @@
-import Select from "@/components/esig/Fields/Select";
 import { IOptions } from "@/components/esig/Fields/type";
+import Base from "./Base";
 
 export default function CurrencyType() {
   const options: IOptions[] = [
@@ -17,11 +17,5 @@ export default function CurrencyType() {
     },
   ];
 
-  return (
-    <Select
-      label="Currency Type"
-      placeholder="Currency Type"
-      options={options}
-    />
-  );
+  return <Base name="currencyType" label="Currency Type" options={options} />;
 }

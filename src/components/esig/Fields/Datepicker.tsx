@@ -12,15 +12,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
-import { IProps } from "./type";
+import dayjs from "dayjs";
 
-export default function Datepicker({ label, placeholder }: IProps) {
+export default function Datepicker({ placeholder }: { placeholder?: string }) {
   const [date, setDate] = React.useState<Date>();
 
   return (
-    <div className="flex flex-col gap-y-2">
-      <Label>{label}</Label>
+    <div className="flex flex-col gap-y-2 w-1/3">
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -32,7 +30,11 @@ export default function Datepicker({ label, placeholder }: IProps) {
           >
             <span className="flex items-center">
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "PPP") : <span>{placeholder}</span>}
+              {date ? (
+                dayjs(date).format("DD/MM/YYYY")
+              ) : (
+                <span>{placeholder}</span>
+              )}
             </span>
           </Button>
         </PopoverTrigger>

@@ -1,5 +1,5 @@
-import Select from "@/components/esig/Fields/Select";
 import { IOptions } from "@/components/esig/Fields/type";
+import Base from "./Base";
 
 export default function PaymentType() {
   const options: IOptions[] = [
@@ -13,11 +13,5 @@ export default function PaymentType() {
     },
   ];
 
-  return (
-    <Select
-      label="Payment Type"
-      placeholder="Payment Type"
-      options={options}
-    />
-  );
+  return <Base name="paymentType" label="Payment Type" options={options} />;
 }

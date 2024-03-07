@@ -1,6 +1,5 @@
-import Datepicker from "@/components/esig/Fields/Datepicker";
+import Base from "./Base";
 
 export default function IssueDate() {
-    return <Datepicker label="Issue Date" placeholder="Issue Date" />;
-  }
-  
+  return <Base name="issueDate" type="date" label="Issue Date" />;
+}

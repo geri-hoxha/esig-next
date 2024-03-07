@@ -1,6 +1,7 @@
-import Datepicker from "@/components/esig/Fields/Datepicker";
+import Base from "./Base";
 
 export default function EndDate() {
-    return <Datepicker label="End Date" placeholder="End Date" />;
-  }
-  
+  return (
+    <Base name="endDate" type="date" label="End Date"  />
+  );
+}

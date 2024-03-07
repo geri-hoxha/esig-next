@@ -53,7 +53,12 @@ export const routes: IRoute[] = [
   {
     text: "Sale",
     icon: (isSelected) => <CircleDollarSign {...getIconProps(isSelected)} />,
-    href: "/sale",
+    items: [
+      {
+        text: "Property",
+        href: "/sale/property",
+      },
+    ],
   },
   {
     text: "List of policies",
@@ -107,10 +112,7 @@ export default function Routes({ routes }: { routes: IRoute[] }) {
       {routes.map((route, index) => {
         return (
           <Fragment key={index}>
-
- 
-                      <MenuLink route={route} />
- 
+            <MenuLink route={route} />
           </Fragment>
         );
       })}

@@ -1,5 +1,5 @@
-import Select from "@/components/esig/Fields/Select";
 import { IOptions } from "@/components/esig/Fields/type";
+import Base from "./Base";
 
 export default function DistributionChannel() {
   const options: IOptions[] = [
@@ -17,11 +17,5 @@ export default function DistributionChannel() {
     },
   ];
 
-  return (
-    <Select
-      label="Distribution Channel"
-      placeholder="Distribution Channel"
-      options={options}
-    />
-  );
+  return <Base name="distributionChannel" label="Distribution Channel" options={options} />;
 }

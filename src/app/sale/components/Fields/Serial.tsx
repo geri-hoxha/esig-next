@@ -1,5 +1,5 @@
-import { Number } from "@/components/esig/Fields/Number";
+import Base from "./Base";
 
 export default function Serial() {
-    return <Number label="Serial" placeholder="Serial" />
+  return <Base label="Seriali" name="serial" type="number" />;
 }
