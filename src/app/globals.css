@@ -106,12 +106,12 @@
     @apply bg-background text-foreground;
   }
 }
- 
-
-.dotted-spaced {
-  height: 21px;
-  background-image: linear-gradient(to right, #555555 10%, rgba(255, 255, 255, 0.548) 0%);
-  background-position: top;
-  background-size: 9px 1.5px ;
-  background-repeat: repeat-x;
+.dot{
+  border-bottom: dotted 2px gray;
+  width: 100px;
+  float: left;
+  position: relative;
+  display: block;
+  height: 12px;
+  margin: 0 5px 0 5px;
 }

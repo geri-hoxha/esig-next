@@ -1,6 +1,5 @@
 'use client'
 import { token } from "@/components/esig/Navbar/Currencies";
-import PdfViewer from "@/components/esig/PdfViewer";
 import request from "@/request";
 import { useEffect, useState } from "react";
 
@@ -24,15 +23,15 @@ const Preview: React.FC = () => {
 
     console.log(response)
 
- 
-      console.log(response)
-    setPdf(response);
+    const url: string = URL.createObjectURL(await response.blob());
+
+      
+    setPdf(url +'#toolbar=0&navpanes=0'  );
   };
 
   return (
-    <div className="bg-esig-surface-20 rounded-3xl p-2 w-full h-full">
-          {/* <PdfViewer url={pdf} /> */}
-
+    <div className="bg-esig-surface-20 rounded-3xl w-full h-full p-10">
+      <iframe src={pdf} allowFullScreen  className="w-full h-full" />
     </div>
   );
 };

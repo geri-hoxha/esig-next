@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <div className="min-h-screen h-full relative w-full bg-gray-50 bg-background antialiased flex flex-col font-primary">
+        <div className="min-h-screen full relative w-full bg-white bg-background antialiased flex flex-col font-primary">
           <TooltipProvider delayDuration={300}>
 
             <EnvironmentBar />

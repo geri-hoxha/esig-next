@@ -58,6 +58,10 @@ export const routes: IRoute[] = [
         text: "Property",
         href: "/sale/property",
       },
+      {
+        text: "Sale v3",
+        href: "/sale/v3",
+      },
     ],
   },
   {

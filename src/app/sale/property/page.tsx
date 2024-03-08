@@ -11,49 +11,75 @@ import CurrencyType from "../components/Fields_v2/CurrenyType";
 import Section from "../components/Section";
 import RetroactiveDate from "../components/Fields_v2/RetroactiveDate";
 import Preview from "../components/Preview";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function PropertySale() {
   return (
     <SaleProvider>
-      <div className="grid grid-cols-7 gap-4 h-full">
+     <div>
+     <div className="grid grid-cols-7 gap-4 h-full">
         <div className="col-span-4">
-          
-          <Section
-            title="Te pergjithshme"
-            items={[
-              {
-                title: "Kryesore",
-                children: (
-                  <div className="grid grid-cols-1 gap-y-3 pl-3">
-                    <Serial />
-                    <Serial />
-                    <Serial />
-                    <Serial />
+          <div className="h-full overflow-y-scroll">
+            <Section
+              title="Te pergjithshme"
+              items={[
+                {
+                  title: "Kryesore",
+                  children: (
+                    <div className="grid grid-cols-1 gap-y-3 pl-3">
+                      <Serial />
+                      <Serial />
+                      <Serial />
+                      <Serial />
 
-                    {/* <PaymentType />
+                      {/* <PaymentType />
                     <CurrencyType />
                     <DistributionChannel /> */}
-                  </div>
-                ),
-              },
-              {
-                title: "Datat",
-                children: (
-                  <div className="grid grid-cols-1 gap-y-3 pl-3">
-                    <StartDate />
-                    <IssueDate />
-                    <EndDate />
-                    <RetroactiveDate />
-                  </div>
-                ),
-              },
-            ]}
-          />
+                    </div>
+                  ),
+                },
+                {
+                  title: "Datat",
+                  children: (
+                    <div className="grid grid-cols-1 gap-y-3 pl-3">
+                      <StartDate />
+                      <IssueDate />
+                      <EndDate />
+                      <RetroactiveDate />
+                    </div>
+                  ),
+                },
+                {
+                  title: "Datat",
+                  children: (
+                    <div className="grid grid-cols-1 gap-y-3 pl-3">
+                      <StartDate />
+                      <IssueDate />
+                      <EndDate />
+                      <RetroactiveDate />
+                    </div>
+                  ),
+                },
+                {
+                  title: "Datat",
+                  children: (
+                    <div className="grid grid-cols-1 gap-y-3 pl-3">
+                      <StartDate />
+                      <IssueDate />
+                      <EndDate />
+                      <RetroactiveDate />
+                    </div>
+                  ),
+                },
+              ]}
+            />
+          </div>
         </div>
         <div className="col-span-3">
           <Preview />
         </div>
       </div>
+     </div>
     </SaleProvider>
   );
 }
