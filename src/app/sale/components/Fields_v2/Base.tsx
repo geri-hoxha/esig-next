@@ -17,12 +17,14 @@ export interface IField {
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
   options?: IOptions[];
+  className?: string;
 }
 
 const Base = ({
   name,
   label,
   placeholder,
+  className = '',
   type = "text",
   options = [],
 }: IField) => {
@@ -38,7 +40,7 @@ const Base = ({
                 type="text"
                 id={name}
                 // border-gray-400 kur eshte i plotesuar 
-                className="block pt-2.5 pb-1.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-esig peer"
+                className={`block pt-2.5 pb-1.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-esig peer ${className}`}
                 placeholder=" "
               />
               <label

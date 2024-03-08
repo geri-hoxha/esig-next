@@ -29,9 +29,14 @@ const EsigLogo = () => {
 
 const Navbar: React.FC = () => {
   return (
-    <>
-      <nav className="px-3 py-2 md:px-4 md:py-3 bg-white flex items-center border-gray-200 border-b z-50">
+    <div className="fixed top-0 left-0 w-full z-50">
+
+<div className="w-full py-1.5 my-0 mx-auto bg-esig flex items-center justify-center text-white font-bold text-sm"><span>Development environment</span></div>
+
+      <nav className=" w-full px-3 py-2 md:px-4 md:py-3 bg-white flex items-center border-gray-200 border-b z-50">
+       
         <div className="lg:min-w-52  ">
+
           <div className="flex md:hidden">
             <Sheet>
               <SheetTrigger>
@@ -68,7 +73,7 @@ const Navbar: React.FC = () => {
           <Balance />
         </div>
       </nav>
-    </>
+    </div>
   );
 };
 

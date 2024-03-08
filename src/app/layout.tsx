@@ -25,12 +25,11 @@ export default function RootLayout({
         <div className="min-h-screen full relative w-full bg-white bg-background antialiased flex flex-col font-primary">
           <TooltipProvider delayDuration={300}>
 
-            <EnvironmentBar />
             <Navbar />
-            <div className="flex w-full h-full grow">
+            <div className="flex w-full h-full grow mt-[93px]">
               <Sidemenu className="hidden md:flex" />
-              <div className="flex flex-col h-auto w-full ">
-                <main className="w-full h-full px-4 py-4">
+              <div className="flex flex-col h-auto w-full ml-[255px]">
+                <main className="w-full h-full px-4 py-4 bg-gray-50">
                   <Breadcrumb />
                   {/* <PageTitle /> */}
                   {children}
