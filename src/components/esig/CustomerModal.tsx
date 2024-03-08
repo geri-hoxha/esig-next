@@ -10,33 +10,33 @@ const CustomerModal = () => {
     };
 
     
-
-    return (
+    return null
+    // return (
        
-        <Form>
-         <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input id="name" {...register('name', { required: true })} />
-        {errors.name && <p>Name is required.</p>}
-      </div>
+    //     <Form>
+    //      <form onSubmit={handleSubmit(onSubmit)}>
+    //   <div>
+    //     <label htmlFor="name">Name</label>
+    //     <input id="name" {...register('name', { required: true })} />
+    //     {errors.name && <p>Name is required.</p>}
+    //   </div>
 
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="email" {...register('email', { required: true })} />
-        {errors.email && <p>Email is required.</p>}
-      </div>
+    //   <div>
+    //     <label htmlFor="email">Email</label>
+    //     <input id="email" type="email" {...register('email', { required: true })} />
+    //     {errors.email && <p>Email is required.</p>}
+    //   </div>
 
-      <div>
-        <label htmlFor="password">Password</label>
-        <input id="password" type="password" {...register('password', { required: true })} />
-        {errors.password && <p>Password is required.</p>}
-      </div>
+    //   <div>
+    //     <label htmlFor="password">Password</label>
+    //     <input id="password" type="password" {...register('password', { required: true })} />
+    //     {errors.password && <p>Password is required.</p>}
+    //   </div>
 
-      <button type="submit">Register</button>
-    </form>
-      </Form>
-    )
+    //   <button type="submit">Register</button>
+    // </form>
+    //   </Form>
+    // )
 }
 
 export default CustomerModal;
