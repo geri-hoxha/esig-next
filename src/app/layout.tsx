@@ -28,8 +28,8 @@ export default function RootLayout({
             <Navbar />
             <div className="flex w-full h-full grow mt-[93px]">
               <Sidemenu className="hidden md:flex" />
-              <div className="flex flex-col h-auto w-full ml-[255px]">
-                <main className="w-full h-full px-4 py-4 bg-gray-50">
+              <div className="flex flex-col h-auto w-full ml-0 md:ml-[255px]">
+                <main className="w-full h-full p-6 bg-white flex flex-col gap-6">
                   <Breadcrumb />
                   {/* <PageTitle /> */}
                   {children}

@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 const Zerat = () => {
     return (
         <>
-         <div className="font-bold mt-7">Zerat e polices &#40; zeri 1 &#41;</div>
+         <div className="text-2xl pb-4">Zerat e polices &#40; zeri 1 &#41;</div>
       <div className="grid grid-cols-2 gap-6">
         <div className="flex flex-col">
           <span className=" my-2">Objektet e siguruara</span>

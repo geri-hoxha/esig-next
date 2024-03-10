@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import DrawerContent from "./DrawerContent";
 
-const Currencies = React.lazy(() => import("./Currencies"));
+// const Currencies = React.lazy(() => import("./Currencies"));
 
 const EsigLogo = () => {
   return (
@@ -29,7 +29,7 @@ const EsigLogo = () => {
 
 const Navbar: React.FC = () => {
   return (
-    <div className="fixed top-0 left-0 w-full z-50">
+    <div className="fixed top-0 left-0 w-full z-50 ">
 
 <div className="w-full py-1.5 my-0 mx-auto bg-esig flex items-center justify-center text-white font-bold text-sm"><span>Development environment</span></div>
 
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
         <Suspense fallback={<></>}>
-          <Currencies />
+          {/* <Currencies /> */}
         </Suspense>
         <div className="ml-auto flex items-center gap-x-3">
           <div className="hidden md:block">

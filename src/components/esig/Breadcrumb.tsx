@@ -20,7 +20,7 @@ const Breadcrumb = () => {
   if(pathNames.length === 0) return null;
 
   return (
-    <div className=" ">
+    <div className="">
       <ul className="flex items-center text-sm text-esig-secondary">
         {alreadyOnHome ? null : (
           <li
