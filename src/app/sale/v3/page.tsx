@@ -70,7 +70,7 @@ const Toggle = () => {
           priority
         />
         <span className="ml-0">
-          {x ? 'Bej policembajtes vetem liderin' : 'Ndaj policembajtesit ne menyre te barabarte'}
+          {x ? 'Vetem lideri' : 'Ne menyre te barabarte'}
         </span>
       </div>
     </ButtonGeri>
@@ -242,13 +242,14 @@ export default function Sale() {
             )
           },
           {
+            cols: '3',
             title: 'Palet pjesemarrese ne police',
             children: (
               <>
 
                 <div className="flex flex-col">
                   <div className="flex items-center text-lg font-semibold text-gray-700">
-                    Policembajtesit do te jene
+                    Policembajtesit
                     <ButtonGeri className="text-esig hover:bg-sky-50">
                       <div className="flex items-center gap-x-1">
                         <Image
@@ -270,7 +271,7 @@ export default function Sale() {
 
                 <div className="flex flex-col">
                   <div className="flex items-center text-lg font-semibold text-gray-700">
-                    Perfituesit do te jene
+                    Perfituesit
                     <ButtonGeri className="text-esig hover:bg-sky-50">
                       <div className="flex items-center gap-x-1">
                         <Image
@@ -287,12 +288,16 @@ export default function Sale() {
                     </ButtonGeri>
                   </div>
                   <Toggle />
-                  - Erin Hoxha, 100%
+                  <ul>
+                    <li>* Erin Hoxha, 34%</li>
+                    <li>- Geri Hoxha, 33%</li>
+                    <li>- Oltion Driza, 33%</li>
+                  </ul>
                 </div>
 
                 <div className="flex flex-col">
                   <div className="flex items-center text-lg font-semibold text-gray-700">
-                    Fatura do ti shkoje
+                    Te faturarit
                     <ButtonGeri className="text-esig hover:bg-sky-50">
                       <div className="flex items-center gap-x-1">
                         <Image
@@ -309,7 +314,10 @@ export default function Sale() {
                     </ButtonGeri>
                   </div>
                   <Toggle />
-                  - Erin Hoxha, 100%
+                  <ul>
+                    <li>* Geri Hoxha, 77%</li>
+                    <li>- Kledi Kallastra, 33%</li>
+                  </ul>
                 </div>
               </>
             )
