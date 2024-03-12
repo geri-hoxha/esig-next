@@ -1,12 +1,6 @@
 "use client";
 import Base from "../components/Fields_v2/Base";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
-import Timeline from "./Timeline";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { ReactNode, useState } from "react";
+import Image from "next/image"
 import Checkbox from "./Checkbox";
 import { ButtonGeri } from "./page";
 
@@ -21,12 +15,10 @@ const Zerat = () => {
             </span>
           }
         />
-
         <div className="grid grid-cols-2 gap-8">
           <Base label="Primi" name="serial" className="h-8" />
           <Base label="Shuma e siguruar / limit i mbulimit" name="serial" className="h-8" />
         </div>
-
         <div className="grid grid-cols-2 gap-8 ">
           <div className="flex flex-col gap-2 text-sm">
             <div className="flex items-center">
@@ -89,13 +81,11 @@ const Zerat = () => {
                 </div>
               </ButtonGeri>
             </div>
-
             <div className="flex flex-col text-xs gap-2">
               <div className="grid grid-cols-2 ">
                 <div className="italic">Emri i limitit</div>
                 <div className="italic">Vlera e limitit</div>
               </div>
-
               <div className="grid grid-cols-2 ">
                 <div>Mbulimi 1</div>
                 <div>12,000 Euro</div>
@@ -111,9 +101,7 @@ const Zerat = () => {
             </div>
           </div>
         </div>
-      </div>
-
-       
+      </div>       
     </>
   );
 };

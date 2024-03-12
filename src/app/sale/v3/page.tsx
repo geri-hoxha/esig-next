@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import Zerat from "./Zerat";
-import Timeline from "./Timeline";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ReactNode, useState } from "react";
 import Checkbox from "./Checkbox";
 import Cards from "./Cards";
+import History from "./History";
+import Comments from "./Comments";
 
 interface IProps {
   title: string;
@@ -306,7 +307,7 @@ export default function Sale() {
           {
             cols: "1",
             title: "Palet pjesemarrese ne police",
-            className: "overflow-x-scroll min-[1838px]:overflow-auto",
+            className: "scrollArea  overflow-x-auto pb-2",
             children: (
               <div className="grid grid-cols-3 gap-4 min-w-max">
                 <div className="flex flex-col min-w-60">
@@ -391,10 +392,18 @@ export default function Sale() {
         items={[
           {
             title: "Objektet e siguruara",
-            className: " h-[500px] overflow-y-scroll px-2",
+            className: "scrollArea h-[500px] overflow-y-scroll pr-2",
             children: (
               <>
                 <Cards />
+                <Cards />
+                <Cards />
+                <Cards />
+                <Cards />
+                <Cards />
+                <Cards />
+                <Cards />
+
               </>
             ),
           },
@@ -413,13 +422,13 @@ export default function Sale() {
                       style={{ width: 20, height: 20 }}
                       priority
                     />
-                    <span>Modiko mbulimet</span>
+                    <span>Modifiko mbulimet</span>
                   </div>
                 </ButtonGeri>
               </div>
             ),
             cols: "1",
-            className: " h-[500px] overflow-y-scroll px-2",
+            className: "scrollArea h-[500px] overflow-y-scroll pr-2",
             children: (
               <>
                 <Zerat />
@@ -477,22 +486,17 @@ export default function Sale() {
         items={[
           {
             title: "Historiku",
-            cols: '1',
-            children: <Timeline />,
+            cols: "1",
+            children: (
+              <>
+                <History />
+              </>
+            ),
           },
           {
             title: "Komente",
-            cols: '1',
-            children: (
-              <div className="flex flex-col gap-2 mt-2 h-full">
-                <Label htmlFor="message">Shenime per policen</Label>
-                <Textarea
-                  placeholder="Type your message here."
-                  id="message"
-                  className="!h-full w-full !max-h-none"
-                />
-              </div>
-            ),
+            cols: "1",
+            children: <Comments />,
           },
         ]}
       />
