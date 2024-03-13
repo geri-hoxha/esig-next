@@ -15,7 +15,7 @@ const Checkbox: React.FC<IProps> = ({ label }) => {
             aria-describedby="comments-description"
             name="comments"
             type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+            className="h-4 w-4 rounded border-gray-300 text-esig focus:ring-esig"
           />
         </div>
         <div className="ml-3 text-sm leading-6">

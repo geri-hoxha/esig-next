@@ -7,7 +7,7 @@ import { ButtonGeri } from "./page";
 const Zerat = () => {
   return (
     <>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 pl-1">
         <Checkbox
           label={
             <span className="text-lg font-bold text-gray-800">

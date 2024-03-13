@@ -1,3 +1,4 @@
+import { classNames } from "@/lib/utils";
 import Image from "next/image";
 
 type Type = "created" | "edited" | "cancelled" | "sold";
@@ -38,16 +39,12 @@ const activity: IActivity[] = [
     days: 4,
   },
   {
-    id: 4,
+    id: 5,
     type: "sold",
     person: "Erin Hoxha",
     days: 1,
   },
 ];
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function History() {
   return (

@@ -1,15 +1,5 @@
 import { IOptions } from "@/components/esig/Fields/type";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { HTMLInputTypeAttribute, ReactNode } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import Datepicker from "@/components/esig/Fields/Datepicker";
 
 export interface IField {
   name: string;
@@ -119,25 +109,3 @@ const Base = ({
 };
 
 export default Base;
-
-// const Input = ({}) => {
-//   return (
-//     <div className="relative">
-//     {icon && (
-//       <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-//         {icon}
-//       </div>
-//     )}
-//     <input
-//       type={type}
-//       className={cn(
-//         "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50",
-//         !!icon ? "pl-10" : '',
-//         className
-//       )}
-//       ref={ref}
-//       {...props}
-//     />
-//   </div>
-//   )
-// }
