@@ -1,6 +1,7 @@
 "use client";
+
 import Base from "../components/Fields_v2/Base";
-import Image from "next/image"
+import Image from "next/image";
 import Checkbox from "./Checkbox";
 import { ButtonGeri } from "./page";
 
@@ -17,7 +18,11 @@ const Zerat = () => {
         />
         <div className="grid grid-cols-2 gap-8">
           <Base label="Primi" name="serial" className="h-8" />
-          <Base label="Shuma e siguruar / limit i mbulimit" name="serial" className="h-8" />
+          <Base
+            label="Shuma e siguruar / limit i mbulimit"
+            name="serial"
+            className="h-8"
+          />
         </div>
         <div className="grid grid-cols-2 gap-8 ">
           <div className="flex flex-col gap-2 text-sm">
@@ -101,7 +106,7 @@ const Zerat = () => {
             </div>
           </div>
         </div>
-      </div>       
+      </div>
     </>
   );
 };

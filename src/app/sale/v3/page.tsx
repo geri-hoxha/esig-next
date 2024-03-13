@@ -1,16 +1,14 @@
 "use client";
+
 import Base from "../components/Fields_v2/Base";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
 import Zerat from "./Zerat";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { ReactNode, useState } from "react";
-import Checkbox from "./Checkbox";
 import Cards from "./Cards";
 import History from "./History";
 import Comments from "./Comments";
+import Modal from "@/components/esig/Modal";
+import CustomerModal from "./CustomerModal";
 
 interface IProps {
   title: string;
@@ -22,7 +20,7 @@ interface IProps {
   }[];
 }
 
-const Geri: React.FC<Partial<IProps>> = ({ title = "", items = [] }) => {
+const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
   return (
     <div className="flex flex-col gap-4">
       {typeof title === "string" ? (
@@ -51,6 +49,7 @@ const Geri: React.FC<Partial<IProps>> = ({ title = "", items = [] }) => {
 };
 
 const Toggle = () => {
+
   const [x, setx] = useState(false);
 
   const onToggle = () => {
@@ -99,7 +98,6 @@ export default function Sale() {
       </h1>
 
       <Geri
-        title="Informacione te pergjithshme"
         items={[
           {
             title: "Te pergjithme",
@@ -171,7 +169,6 @@ export default function Sale() {
         ]}
       />
       <Geri
-        title="Palet pjesemarrese"
         items={[
           {
             cols: "1",
@@ -273,22 +270,28 @@ export default function Sale() {
                     </button>
                   </div>
                 </div>
-                <div>
-                  <ButtonGeri className="text-esig hover:bg-sky-50 !text-base !w-full">
-                    <div className="flex items-center gap-x-1 mx-auto">
-                      <svg
-                        className="stroke-esig"
-                        width="14"
-                        height="14"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                      >
-                        <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
-                      </svg>
-                      <span>Shto perdorues tjeter</span>
-                    </div>
-                  </ButtonGeri>
+                <div className="w-full">
+                  <Modal
+                    title="Modali i pjesemarresve"
+                    description="Ketu mund te modikoni klientin e perzgjedhur."
+                    body={<CustomerModal />}
+                  >
+                    <ButtonGeri className="text-esig hover:bg-sky-50 !text-base !w-full">
+                      <div className="flex items-center gap-x-1 mx-auto">
+                        <svg
+                          className="stroke-esig"
+                          width="14"
+                          height="14"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                        >
+                          <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+                        </svg>
+                        <span>Shto perdorues tjeter</span>
+                      </div>
+                    </ButtonGeri>
+                  </Modal>
                 </div>
               </>
             ),
@@ -392,14 +395,13 @@ export default function Sale() {
                 <Cards />
                 <Cards />
                 <Cards />
-
               </>
             ),
           },
           {
             title: (
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl bg-red-0">Mbulimet e objektit / eve</h2>
+                <h2 className="text-xl bg-red-0">Mbulimet e objektit / eve</h2>
                 <ButtonGeri className="text-esig hover:bg-sky-50">
                   <div className="flex items-center gap-x-1 text-lg">
                     <Image
@@ -433,7 +435,8 @@ export default function Sale() {
         title="Zerat e polices ( zeri 1 )"
         items={[
           {
-            className: 'scrollArea max-h-[500px] overflow-y-auto pr-2 divide-x divide-y',
+            className:
+              "scrollArea max-h-[500px] overflow-y-auto pr-2 divide-x divide-y",
             title: "Objektet e siguruara",
             children: (
               <>
@@ -444,7 +447,7 @@ export default function Sale() {
           {
             title: (
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl bg-red-0">Mbulimet e objektit / eve</h2>
+                <h2 className="text-xl bg-red-0">Mbulimet e objektit / eve</h2>
                 <ButtonGeri className="text-esig hover:bg-sky-50">
                   <div className="flex items-center gap-x-1 text-lg">
                     <Image
