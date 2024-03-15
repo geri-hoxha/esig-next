@@ -25,9 +25,16 @@ interface IProps {
   body: ReactNode;
   children: ReactNode;
   description: string;
+  noButtons?: boolean;
 }
 
-const Modal: React.FC<IProps> = ({ title, description, body, children }) => {
+const Modal: React.FC<IProps> = ({
+  title,
+  description,
+  body,
+  children,
+  noButtons = false,
+}) => {
   const [open, setOpen] = useState(false);
 
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
@@ -49,12 +56,15 @@ const Modal: React.FC<IProps> = ({ title, description, body, children }) => {
             </DialogDescription>
           </DialogHeader>
           {body}
-          <div className="flex items-center w-max ml-auto gap-x-2">
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-            <Button variant="default">Save</Button>
-          </div>
+
+          {noButtons ? null : (
+            <div className="flex items-center w-max ml-auto gap-x-2">
+              <DrawerClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DrawerClose>
+              <Button variant="default">Save</Button>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     );
@@ -70,9 +80,11 @@ const Modal: React.FC<IProps> = ({ title, description, body, children }) => {
         </DrawerHeader>
         {body}
         <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
+          {noButtons ? null : (
+            <DrawerClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DrawerClose>
+          )}
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

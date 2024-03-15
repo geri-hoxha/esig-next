@@ -9,6 +9,7 @@ export interface IField {
   icon?: ReactNode;
   options?: IOptions[];
   className?: string;
+  onChange?: any;
 }
 
 const Base = ({
@@ -16,20 +17,20 @@ const Base = ({
   label,
   placeholder,
   icon = undefined,
-  className = '',
+  className = "",
   type = "text",
   options = [],
+  onChange = () => {}
 }: IField) => {
-
   let iconDiv;
-  let pl10 = '';
+  let pl10 = "";
   if (icon !== undefined) {
     iconDiv = (
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         {icon}
       </div>
-    )
-    pl10 = 'pl-10';
+    );
+    pl10 = "pl-10";
   }
 
   return (
@@ -42,26 +43,39 @@ const Base = ({
           {label}
         </label>
         {iconDiv}
-        {
-          type == 'select'
-            ? <select
-              id={name}
-              name={name}
-              className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-esig sm:text-sm sm:leading-6 ${className}`}
-              defaultValue="Leke"
-            >
-              <option>Leke</option>
-              <option>Euro</option>
-              <option>Dollar Amerikan</option>
-            </select>
-            : <input
-              type={type}
-              name={name}
-              id={name}
-              className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-esig sm:text-sm sm:leading-6 ${className}`}
-              placeholder={placeholder}
-            />
-        }
+        {type == "select" ? (
+          <select
+            id={name}
+            name={name}
+            onChange={onChange}
+            className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-esig sm:text-sm sm:leading-6 ${className}`}
+            defaultValue="Leke"
+          >
+            {options.length === 0 ? (
+              <>
+                <option>Leke</option>
+                <option>Euro</option>
+                <option>Dollar Amerikan</option>
+              </>
+            ) : (
+              options.map((option) => {
+                return (
+                  <option key={option.value} value={option.value}>
+                    {option.key}
+                  </option>
+                );
+              })
+            )}
+          </select>
+        ) : (
+          <input
+            type={type}
+            name={name}
+            id={name}
+            className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-esig sm:text-sm sm:leading-6 ${className}`}
+            placeholder={placeholder}
+          />
+        )}
       </div>
     </div>
 
@@ -75,7 +89,7 @@ const Base = ({
     //           <input
     //             type="text"
     //             id={name}
-    //             // border-gray-400 kur eshte i plotesuar 
+    //             // border-gray-400 kur eshte i plotesuar
     //             className={`block pt-2.5 pb-0.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-esig peer ${className}`}
     //             placeholder=" "
     //           />

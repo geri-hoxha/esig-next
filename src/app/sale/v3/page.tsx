@@ -9,6 +9,7 @@ import History from "./History";
 import Comments from "./Comments";
 import Modal from "@/components/esig/Modal";
 import CustomerModal from "./CustomerModal";
+import CustomerDonut from "./CustomerDonut";
 
 interface IProps {
   title: string;
@@ -49,7 +50,6 @@ const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
 };
 
 const Toggle = () => {
-
   const [x, setx] = useState(false);
 
   const onToggle = () => {
@@ -275,6 +275,7 @@ export default function Sale() {
                     title="Modali i pjesemarresve"
                     description="Ketu mund te modikoni klientin e perzgjedhur."
                     body={<CustomerModal />}
+                    noButtons
                   >
                     <ButtonGeri className="text-esig hover:bg-sky-50 !text-base !w-full">
                       <div className="flex items-center gap-x-1 mx-auto">

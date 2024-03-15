@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import UserActions from "./UserActions";
 import Balance from "./Balance";
@@ -11,6 +12,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import DrawerContent from "./DrawerContent";
+import Base from "@/app/sale/components/Fields_v2/Base";
+import { useToast } from "@/components/ui/use-toast";
 
 // const Currencies = React.lazy(() => import("./Currencies"));
 
@@ -28,15 +31,16 @@ const EsigLogo = () => {
 };
 
 const Navbar: React.FC = () => {
+  const { toast } = useToast();
+
   return (
     <div className="fixed top-0 left-0 w-full z-50 ">
-
-<div className="w-full py-1.5 my-0 mx-auto bg-esig flex items-center justify-center text-white font-bold text-sm"><span>Development environment</span></div>
+      <div className="w-full py-1.5 my-0 mx-auto bg-esig flex items-center justify-center text-white font-bold text-sm">
+        <span>Development environment</span>
+      </div>
 
       <nav className=" w-full px-3 py-2 md:px-4 md:py-3 bg-white flex items-center border-gray-200 border-b z-50">
-       
         <div className="lg:min-w-52  ">
-
           <div className="flex md:hidden">
             <Sheet>
               <SheetTrigger>
@@ -59,14 +63,50 @@ const Navbar: React.FC = () => {
             <EsigLogo />
           </div>
         </div>
-        <Suspense fallback={<></>}>
-          {/* <Currencies /> */}
-        </Suspense>
+        <Suspense fallback={<></>}>{/* <Currencies /> */}</Suspense>
         <div className="ml-auto flex items-center gap-x-3">
           <div className="hidden md:block">
-            <Input
-              icon={<Search size={15} />}
-              className="bg-gray-50 h-9 text-gray-900 rounded-lg border-gray-300 "
+            <Base
+              className="!w-60 !h-10"
+              type="select"
+              icon={
+                <Image
+                  className="cursor-pointer"
+                  src="/svg/user.svg"
+                  alt="edit"
+                  width={"0"}
+                  height={"0"}
+                  style={{ width: 20, height: 20 }}
+                  priority
+                />
+              }
+              options={[
+                {
+                  key: "Geri Hoxha",
+                  value: "Geri Hoxha",
+                },
+                {
+                  key: "Erin Hoxha",
+                  value: "Erin Hoxha",
+                },
+                {
+                  key: "Oltion Driza",
+                  value: "Oltion Driza",
+                },
+                {
+                  key: "Kledi Kallastra",
+                  value: "Kledi Kallastra",
+                },
+              ]}
+              label="Agjenti"
+              name="serial"
+              onChange={(e: any) => {
+                toast({
+                  variant: "default",
+                  title: `Jeni duke shitur si agjenti: ${e.target.value}`,
+                  description: "Veprim me sukses!",
+                });
+              }}
             />
           </div>
           <UserActions />
