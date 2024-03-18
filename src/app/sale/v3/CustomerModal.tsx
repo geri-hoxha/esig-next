@@ -9,6 +9,7 @@ import CustomerDonut from "./CustomerDonut";
 import { Button } from "@/components/ui/button";
 import { ButtonGeri } from "./page";
 import { DrawerClose } from "@/components/ui/drawer";
+import { Separator } from "@/components/ui/separator";
 
 interface CustomerModel {
   displayName: string;
@@ -55,7 +56,7 @@ const CustomerModal = () => {
       headerName: "Full name",
       field: "displayName",
       minWidth: 110,
-      flex: 1
+      flex: 1,
     },
 
     {
@@ -66,7 +67,7 @@ const CustomerModal = () => {
   ];
 
   return (
-    <div className="grid grid-cols-12 gap-4 divide-x-2 divide-dashed">
+    <div className="grid grid-cols-12 gap-4  ">
       <div className="col-span-4">
         <div className="flex flex-col  gap-4">
           <RadioGroup
@@ -81,7 +82,7 @@ const CustomerModal = () => {
               },
             ]}
           />
-          <div className="flex items-center  ">
+          <div className="flex items-center gap-2">
             <Base
               className="bg-red-0"
               label="Emri / Nipt i klientit"
@@ -103,9 +104,14 @@ const CustomerModal = () => {
         </div>
       </div>
 
-      <div className="col-span-5 pl-4">
+      <div className="col-span-8 border-l-2 border-dashed pl-4">
         <div className=" flex items-center mb-4">
-          Te dhenat e klientit: <span className="italic pl-2">Geri Hoxha</span>
+          <span className="text-lg  ">
+            {" "}
+            Te dhenat e klientit:{" "}
+            <span className="italic pl-2">Geri Hoxha</span>
+          </span>
+
           <ButtonGeri className="text-esig hover:bg-sky-50">
             <div className="flex items-center gap-x-1">
               <Image
@@ -121,23 +127,54 @@ const CustomerModal = () => {
             </div>
           </ButtonGeri>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mb-4">
           <Base label="Nipt i klientit" name="serial" />
           <Base label="Emri i plote" name="serial" />
           <Base label="Lloji i kontaktit" name="serial" />
           <Base label="Numri i telefonit" name="serial" />
-          <Base label="Email" name="serial" />
-          <Base label="Gjinia" name="serial" />
         </div>
-        <div className="h-80">
-          <CustomerDonut />
+
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="flex flex-col gap-4">
+            <Base label="Email" name="serial" />
+            <Base label="Gjinia" name="serial" />
+            <Base label="Shtetesia" name="serial" />
+
+            <Base label="Atesia" name="serial" />
+            <Base label="Ditelindja" name="serial" />
+            <Base label="Tjeter" name="serial" />
+          </div>
+          <div className="h-50">
+            <CustomerDonut />
+          </div>
         </div>
       </div>
-      <div className="col-span-3 pl-4 ">
-        <div className="flex flex-col justify-between h-full">
-          <div className="flex flex-col gap-4 border-b-2 border-dashed pb-4">
-            <div className="">Konfigurime per kete police</div>
-            <div className="flex items-center">
+
+      <div className="col-span-12  border-t-2 border-dashed">
+        <div className="flex items-center justify-between pt-4">
+          <div className="flex items-center gap-4 ">
+            <Image
+              className="cursor-pointer"
+              src="/svg/question.svg"
+              alt="edit"
+              width={"0"}
+              height={"0"}
+              style={{ width: 30, height: 20 }}
+              priority
+            />
+            <div className="w-full">
+              <Base className="bg-red-0" label="Perqindja" name="serial" />
+            </div>
+            <Image
+              className="cursor-pointer"
+              src="/svg/question.svg"
+              alt="edit"
+              width={"0"}
+              height={"0"}
+              style={{ width: 30, height: 20 }}
+              priority
+            />
+            <div className="flex items-center w-full">
               <div className="mr-2 text-gray-700 font-semibold text-sm">
                 Extra Charge:
               </div>
@@ -156,13 +193,12 @@ const CustomerModal = () => {
                 />
               </div>
             </div>
-            <Base className="bg-red-0" label="Serial" name="serial" />
           </div>
-          <div className="flex items-end h-auto  mt-auto gap-2 pt-4 border-t-2 border-dashed">
+          <div className="flex items-center gap-4">
             <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Anullo veprimin</Button>
             </DrawerClose>
-            <Button variant="default">Save</Button>
+            <Button variant="default">Ruaj dhe apliko</Button>
           </div>
         </div>
       </div>

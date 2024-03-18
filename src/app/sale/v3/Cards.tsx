@@ -12,21 +12,21 @@ const Cards = () => {
           </div>
           <ul className="flex flex-col gap-y-2">
             <li>
-              <div className="flex items-center ">
+              <div className="flex items-center gap-4 ">
                 <div>Datelindja</div>
                 <div className="border-b-2 border-dotted w-full"></div>
                 <div>25.04.1998</div>
               </div>
             </li>
             <li>
-              <div className="flex items-center ">
+              <div className="flex items-center gap-4">
                 <div>Nr.Tel</div>
                 <div className="border-b-2 border-dotted w-full"></div>
                 <div>+3556935032</div>
               </div>
             </li>
             <li>
-              <div className="flex items-center ">
+              <div className="flex items-center gap-4">
                 <div>Gjinia</div>
                 <div className="border-b-2 border-dotted w-full"></div>
 
@@ -34,7 +34,7 @@ const Cards = () => {
               </div>
             </li>
             <li>
-              <div className="flex items-center ">
+              <div className="flex items-center gap-4">
                 <div>Atesia</div>
                 <div className="border-b-2 border-dotted w-full"></div>
                 <div>Veli</div>

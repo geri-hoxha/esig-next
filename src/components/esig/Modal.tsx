@@ -26,6 +26,9 @@ interface IProps {
   children: ReactNode;
   description: string;
   noButtons?: boolean;
+  width?: string;
+  openProp?: boolean;
+  setOpenProp?: any;
 }
 
 const Modal: React.FC<IProps> = ({
@@ -34,9 +37,10 @@ const Modal: React.FC<IProps> = ({
   body,
   children,
   noButtons = false,
+  width = "min-w-[65%]",
+  openProp = false,
+  setOpenProp,
 }) => {
-  const [open, setOpen] = useState(false);
-
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
   useEffect(() => {
@@ -46,9 +50,14 @@ const Modal: React.FC<IProps> = ({
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={openProp}
+        onOpenChange={(open) => {
+          setOpenProp(open);
+        }}
+      >
         <DialogTrigger asChild>{children}</DialogTrigger>
-        <DialogContent className="min-w-[65%]">
+        <DialogContent className={width}>
           <DialogHeader className="pb-2 border-gray-300 border-b-2 border-dashed">
             <DialogTitle className="text-xl">{title}</DialogTitle>
             <DialogDescription className="text-base">
@@ -60,9 +69,9 @@ const Modal: React.FC<IProps> = ({
           {noButtons ? null : (
             <div className="flex items-center w-max ml-auto gap-x-2">
               <DrawerClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">Anullo veprimin</Button>
               </DrawerClose>
-              <Button variant="default">Save</Button>
+              <Button variant="default">Ruaj dhe apliko</Button>
             </div>
           )}
         </DialogContent>
@@ -71,7 +80,7 @@ const Modal: React.FC<IProps> = ({
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer open={openProp} onOpenChange={setOpenProp}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
@@ -82,7 +91,7 @@ const Modal: React.FC<IProps> = ({
         <DrawerFooter className="pt-2">
           {noButtons ? null : (
             <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Anullo veprimin</Button>
             </DrawerClose>
           )}
         </DrawerFooter>

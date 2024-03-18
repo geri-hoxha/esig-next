@@ -2,9 +2,10 @@ import { ReactNode } from "react";
 
 interface IProps {
   label: ReactNode;
+  defaultChecked?: boolean;
 }
 
-const Checkbox: React.FC<IProps> = ({ label }) => {
+const Checkbox: React.FC<IProps> = ({ label , defaultChecked = false}) => {
   return (
     <fieldset>
       <legend className="sr-only"></legend>
@@ -15,6 +16,7 @@ const Checkbox: React.FC<IProps> = ({ label }) => {
             aria-describedby="comments-description"
             name="comments"
             type="checkbox"
+            defaultChecked={defaultChecked}
             className="h-4 w-4 rounded border-gray-300 text-esig focus:ring-esig"
           />
         </div>

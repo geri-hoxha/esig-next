@@ -9,7 +9,8 @@ import History from "./History";
 import Comments from "./Comments";
 import Modal from "@/components/esig/Modal";
 import CustomerModal from "./CustomerModal";
-import CustomerDonut from "./CustomerDonut";
+import  { beneficiaries } from "./ParticipantModal";
+import GeriHoxha from "./GeriHoxha";
 
 interface IProps {
   title: string;
@@ -93,14 +94,17 @@ export const ButtonGeri: React.FC<{
 export default function Sale() {
   return (
     <>
-      <h1 className="text-3xl font-bold border-b-4 border-dashed w-max border-sky-400">
-        Shitje produkti <span className="text-sky-600">MTPL</span>
-      </h1>
-
+      <div className="flex flex-col  justify-center">
+        <h1 className="text-3xl font-bold w-max">Shitje produkti TPL</h1>
+        <span className="text-gray-600 text-xl">
+          Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
+        </span>
+      </div>
+      
       <Geri
         items={[
           {
-            title: "Te pergjithme",
+            title: "Te pergjithshme",
             children: (
               <>
                 <Base className="bg-red-0" label="Serial" name="serial" />
@@ -327,26 +331,18 @@ export default function Sale() {
                 <div className="flex flex-col min-w-60">
                   <div className="flex items-center text-lg font-semibold text-gray-700">
                     Perfituesit
-                    <ButtonGeri className="text-esig hover:bg-sky-50">
-                      <div className="flex items-center gap-x-1">
-                        <Image
-                          className="cursor-pointer"
-                          src="/svg/edit.svg"
-                          alt="edit"
-                          width={"0"}
-                          height={"0"}
-                          style={{ width: 20, height: 20 }}
-                          priority
-                        />
-                        <span>Ndrysho</span>
-                      </div>
-                    </ButtonGeri>
+                    <GeriHoxha />
                   </div>
                   <Toggle />
                   <ul>
-                    <li>* Erin Hoxha, 34%</li>
-                    <li>- Geri Hoxha, 33%</li>
-                    <li>- Oltion Driza, 33%</li>
+                    {beneficiaries.map((beneficiary, index) => {
+                      return (
+                        <li key={index}>
+                          {index === 0 && "*"} {beneficiary.displayName},{" "}
+                          {beneficiary.percentage * 100}%
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 

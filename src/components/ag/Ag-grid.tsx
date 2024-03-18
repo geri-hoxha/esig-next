@@ -10,7 +10,7 @@ interface IProps<T> {
 }
 
 function AgGrid<T>({ rowData, colDefs }: IProps<T>) {
-  console.log(rowData)
+
   return (
     // wrapping container with theme & size
     <div

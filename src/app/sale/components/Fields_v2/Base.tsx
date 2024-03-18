@@ -2,7 +2,7 @@ import { IOptions } from "@/components/esig/Fields/type";
 import { HTMLInputTypeAttribute, ReactNode } from "react";
 
 export interface IField {
-  name: string;
+  name?: string;
   label?: string;
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
@@ -10,6 +10,7 @@ export interface IField {
   options?: IOptions[];
   className?: string;
   onChange?: any;
+  value?: any
 }
 
 const Base = ({
@@ -20,7 +21,8 @@ const Base = ({
   className = "",
   type = "text",
   options = [],
-  onChange = () => {}
+  onChange = () => {},
+  value
 }: IField) => {
   let iconDiv;
   let pl10 = "";
@@ -38,7 +40,7 @@ const Base = ({
       <div className="relative rounded-md shadow-sm">
         <label
           htmlFor={name}
-          className="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900"
+          className="absolute -top-3 left-2 inline-block rounded-md bg-white px-1 text-xs font-medium text-gray-900"
         >
           {label}
         </label>
@@ -48,7 +50,7 @@ const Base = ({
             id={name}
             name={name}
             onChange={onChange}
-            className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-esig sm:text-sm sm:leading-6 ${className}`}
+            className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-esig  focus:ring-inset  sm:text-sm sm:leading-6 ${className}`}
             defaultValue="Leke"
           >
             {options.length === 0 ? (
@@ -72,7 +74,8 @@ const Base = ({
             type={type}
             name={name}
             id={name}
-            className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-esig sm:text-sm sm:leading-6 ${className}`}
+            value={value}
+            className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-esig sm:text-sm sm:leading-6 ${className}`}
             placeholder={placeholder}
           />
         )}

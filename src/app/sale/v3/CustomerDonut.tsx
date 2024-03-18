@@ -6,6 +6,7 @@ function getData() {
   return [
     { asset: "Prime", amount: 60000 },
     { asset: "Deme", amount: 40000 },
+    { asset: "Detyrime", amount: 30500 },
   ];
 }
 
@@ -15,8 +16,10 @@ const CustomerDonut = () => {
       options={{
         data: getData(),
         title: {
-          text: "Raporti Prime / Deme",
-         },
+          text: "Periudha: 01/01/2024 - 16/03/2024 ",
+          fontSize: 14,
+          fontWeight: 'bold',
+          },
         legend: {
           enabled: true,
           item: {
@@ -39,9 +42,9 @@ const CustomerDonut = () => {
             },
             calloutLine: {
               length: 10,
-              colors: ["#005CA9", "#9B8AB8"]
+              colors: ["#005CA9", "#9B8AB8", '#008C89']
             },
-            fills: ["#005CA9", "#9B8AB8"],
+            fills: ["#005CA9", "#9B8AB8", "#008C89"],
             innerRadiusRatio: 0.8,
             calloutLabelName: "23423",
             innerLabels: [
