@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Modal from "@/components/esig/Modal";
-import ParticipantModal, { beneficiaries } from "./ParticipantModal";
+import ParticipantModal from "./ParticipantModal";
 import { ButtonGeri } from "./page";
 import { useCallback, useState } from "react";
 import CustomerModal from "./CustomerModal";
-import { DrawerClose } from "@/components/ui/drawer";
 
 const GeriHoxha = () => {
   const [firstModalOpen, setFirstModalOpen] = useState(false);
@@ -20,14 +19,13 @@ const GeriHoxha = () => {
   };
 
   const geri = useCallback((e) => {
-    setFirstModalOpen(e)
-  }, [])
+    setFirstModalOpen(e);
+  }, []);
 
   if (firstModalOpen) {
-    console.log(firstModalOpen)
     return (
       <Modal
-        openProp 
+        openProp
         setOpenProp={geri}
         title="Modali i perfituesit"
         description="Ketu mund te modikoni perfituesit e polices."
@@ -77,10 +75,9 @@ const GeriHoxha = () => {
           setNestedModalOpen(false);
 
           setFirstModalOpen(true);
-
         }}
       >
-        geri
+        <></>
       </Modal>
     );
   }

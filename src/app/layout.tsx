@@ -19,12 +19,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log("ome");
+  console.log(children);
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
         <div className="min-h-screen full relative w-full bg-white bg-background antialiased flex flex-col font-primary">
           <TooltipProvider delayDuration={300}>
-
             <Navbar />
             <div className="flex w-full h-full grow mt-[93px]">
               <Sidemenu className="hidden md:flex" />

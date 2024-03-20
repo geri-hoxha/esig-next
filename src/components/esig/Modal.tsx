@@ -38,7 +38,7 @@ const Modal: React.FC<IProps> = ({
   children,
   noButtons = false,
   width = "min-w-[65%]",
-  openProp = false,
+  openProp,
   setOpenProp,
 }) => {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
@@ -53,7 +53,7 @@ const Modal: React.FC<IProps> = ({
       <Dialog
         open={openProp}
         onOpenChange={(open) => {
-          setOpenProp(open);
+          setOpenProp?.(open);
         }}
       >
         <DialogTrigger asChild>{children}</DialogTrigger>
@@ -68,8 +68,8 @@ const Modal: React.FC<IProps> = ({
 
           {noButtons ? null : (
             <div className="flex items-center w-max ml-auto gap-x-2">
-              <DrawerClose asChild>
-                <Button variant="outline">Anullo veprimin</Button>
+              <DrawerClose asChild >
+                <Button variant="outline" onClick={() => setOpenProp(false)}>Anullo veprimin</Button>
               </DrawerClose>
               <Button variant="default">Ruaj dhe apliko</Button>
             </div>

@@ -11,6 +11,7 @@ import Modal from "@/components/esig/Modal";
 import CustomerModal from "./CustomerModal";
 import  { beneficiaries } from "./ParticipantModal";
 import GeriHoxha from "./GeriHoxha";
+import ZeratModal from "./ZeratModal";
 
 interface IProps {
   title: string;
@@ -399,20 +400,7 @@ export default function Sale() {
             title: (
               <div className="flex items-center justify-between">
                 <h2 className="text-xl bg-red-0">Mbulimet e objektit / eve</h2>
-                <ButtonGeri className="text-esig hover:bg-sky-50">
-                  <div className="flex items-center gap-x-1 text-lg">
-                    <Image
-                      className="cursor-pointer"
-                      src="/svg/edit.svg"
-                      alt="edit"
-                      width={"0"}
-                      height={"0"}
-                      style={{ width: 20, height: 20 }}
-                      priority
-                    />
-                    <span>Modifiko mbulimet</span>
-                  </div>
-                </ButtonGeri>
+                <ZeratModal />
               </div>
             ),
             cols: "1",

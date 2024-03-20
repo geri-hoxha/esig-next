@@ -16,7 +16,7 @@ const Zerat = () => {
             </span>
           }
         />
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-2 gap-8 my-1">
           <Base label="Primi" name="serial" className="h-8" />
           <Base
             label="Shuma e siguruar / limit i mbulimit"
@@ -39,7 +39,7 @@ const Zerat = () => {
                     style={{ width: 15, height: 15 }}
                     priority
                   />
-                  <span className="text-xs">Modiko limitet</span>
+                  <span className="text-xs">Modifiko limitet</span>
                 </div>
               </ButtonGeri>
             </div>
@@ -82,7 +82,7 @@ const Zerat = () => {
                     style={{ width: 15, height: 15 }}
                     priority
                   />
-                  <span className="text-xs">Modiko nenlimitet</span>
+                  <span className="text-xs">Modifiko nenlimitet</span>
                 </div>
               </ButtonGeri>
             </div>
