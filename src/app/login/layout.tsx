@@ -1,13 +1,17 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ESIG",
+  description: "Esig - Sigal core system",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
-        <main>{children}</main>
-      </body>
-    </html>
-  );
+  <div className="">
+     {children}</div>
+  )
 }

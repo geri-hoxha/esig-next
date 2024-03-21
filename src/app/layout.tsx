@@ -19,8 +19,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  console.log("ome");
-  console.log(children);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body>

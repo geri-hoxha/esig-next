@@ -18,6 +18,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import Image from "next/image";
 import { ReactNode, useEffect, useState } from "react";
 
 interface IProps {
@@ -29,6 +30,7 @@ interface IProps {
   width?: string;
   openProp?: boolean;
   setOpenProp?: any;
+  back?: boolean;
 }
 
 const Modal: React.FC<IProps> = ({
@@ -40,6 +42,7 @@ const Modal: React.FC<IProps> = ({
   width = "min-w-[65%]",
   openProp,
   setOpenProp,
+  back = false,
 }) => {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
@@ -58,18 +61,38 @@ const Modal: React.FC<IProps> = ({
       >
         <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent className={width}>
-          <DialogHeader className="pb-2 border-gray-300 border-b-2 border-dashed">
-            <DialogTitle className="text-xl">{title}</DialogTitle>
-            <DialogDescription className="text-base">
-              {description}
-            </DialogDescription>
-          </DialogHeader>
+          <div className="flex items-center pb-2 border-gray-300 border-b-2 border-dashed">
+            <div onClick={() => setOpenProp(false)}>
+              {back && (
+                <div className="w-7 h-7 mr-4 cursor-pointer border-2 border-esig flex items-center justify-center rounded-full bg-sky-50">
+                  <Image
+                    src="/svg/left_arrow.svg"
+                    alt="edit"
+                    width={"0"}
+                    height={"0"}
+                    style={{ width: 30, height: 30 }}
+                    priority
+                  />
+                </div>
+              )}
+            </div>
+
+            <DialogHeader>
+              <DialogTitle className="text-xl">{title}</DialogTitle>
+              <DialogDescription className="text-base">
+                {description}
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+
           {body}
 
           {noButtons ? null : (
             <div className="flex items-center w-max ml-auto gap-x-2">
-              <DrawerClose asChild >
-                <Button variant="outline" onClick={() => setOpenProp(false)}>Anullo veprimin</Button>
+              <DrawerClose asChild>
+                <Button variant="outline" onClick={() => setOpenProp(false)}>
+                  Anullo veprimin
+                </Button>
               </DrawerClose>
               <Button variant="default">Ruaj dhe apliko</Button>
             </div>

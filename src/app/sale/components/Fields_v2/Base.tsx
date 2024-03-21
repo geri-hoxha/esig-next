@@ -10,7 +10,8 @@ export interface IField {
   options?: IOptions[];
   className?: string;
   onChange?: any;
-  value?: any
+  value?: any;
+  suffix?: any;
 }
 
 const Base = ({
@@ -22,7 +23,8 @@ const Base = ({
   type = "text",
   options = [],
   onChange = () => {},
-  value
+  value,
+  suffix,
 }: IField) => {
   let iconDiv;
   let pl10 = "";
@@ -70,14 +72,22 @@ const Base = ({
             )}
           </select>
         ) : (
-          <input
-            type={type}
-            name={name}
-            id={name}
-            value={value}
-            className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-esig sm:text-sm sm:leading-6 ${className}`}
-            placeholder={placeholder}
-          />
+          <>
+            <input
+              type={type}
+              name={name}
+              id={name}
+              value={value}
+              className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-esig sm:text-sm sm:leading-6 ${className}`}
+              placeholder={placeholder}
+            />
+
+            {suffix && (
+              <div className="absolute text-gray-500 h-[calc(100%-4px)] mr-0.5 flex items-center justify-center px-2 border-l-2 rounded-r-md  top-0.5 right-0 font-medium text-sm">
+                {suffix}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
