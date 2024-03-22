@@ -5,6 +5,7 @@ import Modal from "@/components/esig/Modal";
 import { DrawerClose } from "@/components/ui/drawer";
 import Base from "../components/Fields_v2/Base";
 import Checkbox from "./Checkbox";
+import {SimpleChartBar, RangeBar } from "./Charts";
 
 const Box = ({ name, description, index, setCoverageOpen }: any) => {
   const randomNumber = Math.floor(1000 + Math.random() * 9000);
@@ -242,7 +243,6 @@ const Limit = ({ name }: any) => {
                     fill="none"
                     viewBox="0 0 24 24"
                     className="w-4 h-4"
-
                   >
                     <path
                       stroke="#000"
@@ -361,7 +361,10 @@ const Body = ({ setCoverageOpen }: any) => {
           <Limit name="Ne periudhe" />
         </div>
       </div>
-      <div className="col-span-1"></div>
+      <div className="col-span-1">
+        <SimpleChartBar />
+        <RangeBar />
+      </div>
     </div>
   );
 };

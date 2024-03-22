@@ -8,6 +8,9 @@ import Breadcrumb from "@/components/esig/Breadcrumb";
 import PageTitle from "@/components/esig/PageTitle";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import 'ag-grid-enterprise';
+import { AgCharts } from 'ag-charts-enterprise';
+AgCharts.setLicenseKey('your license key');
 
 export const metadata: Metadata = {
   title: "ESIG",
