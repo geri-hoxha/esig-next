@@ -144,7 +144,7 @@ const CustomerModal = () => {
             <Base label="Ditelindja" name="serial" />
             <Base label="Tjeter" name="serial" />
           </div>
-          <div className="h-50">
+          <div className="h-72">
             <CustomerDonut />
           </div>
         </div>

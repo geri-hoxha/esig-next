@@ -5,7 +5,8 @@ import Modal from "@/components/esig/Modal";
 import { DrawerClose } from "@/components/ui/drawer";
 import Base from "../components/Fields_v2/Base";
 import Checkbox from "./Checkbox";
-import {SimpleChartBar, RangeBar } from "./Charts";
+import { RangeBar, SublimitsChart } from "./Charts";
+import CustomerDonut from "./CustomerDonut";
 
 const Box = ({ name, description, index, setCoverageOpen }: any) => {
   const randomNumber = Math.floor(1000 + Math.random() * 9000);
@@ -132,11 +133,10 @@ const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
       <div
         className={`flex flex-col   scrollArea max-h-[320px] overflow-x-hidden overflow-y-auto pr-2  transition-all duration-500
       
-      ${
-        geri
-          ? " translate-x-0 opacity-100 visible pointer-events-auto"
-          : "-translate-x-10 opacity-0 invisible pointer-events-none"
-      } 
+      ${geri
+            ? " translate-x-0 opacity-100 visible pointer-events-auto"
+            : "-translate-x-10 opacity-0 invisible pointer-events-none"
+          } 
       `}
       >
         {staticCoverages.map((coverage, index) => {
@@ -183,7 +183,7 @@ const Limit = ({ name }: any) => {
   return (
     <>
       <div className="col-span-4">
-        <div className="font-bold pl-2 text-sm h-full flex items-center justify-center">
+        <div className="font-bold pl-10 text-sm h-full flex items-center justify-center">
           <span className="text-esig w-full   ">- {name}</span>
           <div className="w-full  h-px border-b border-dotted border-gray-400"></div>
         </div>
@@ -362,8 +362,71 @@ const Body = ({ setCoverageOpen }: any) => {
         </div>
       </div>
       <div className="col-span-1">
-        <SimpleChartBar />
-        <RangeBar />
+        <div className="h-90">
+          <RangeBar />
+        </div>
+      </div>
+
+      <div className="col-span-2">
+
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-3">
+            <span className="font-bold text-gray-600 ">4. Nenlimitet:</span>
+          </div>
+          <div className="col-span-9"></div>
+          <div className="col-span-4">
+          </div>
+          <div className="col-span-8">
+
+            <div className="grid grid-cols-2 gap-4">
+
+              {
+                Array.from(Array(4).keys()).map((index) => {
+                  return (
+                   <>
+                    <div className="">
+                <Base label={`Nenmbulimi ${index + 1}`} name="serial" />
+              </div>
+              <div>
+                <Base
+                  className="bg-red-0 "
+                  label="Vlera e siguruar"
+                  name="serial"
+                  suffix="Euro"
+                  icon={
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                  }
+                />
+              </div>
+                   </>
+                  )
+                })
+
+              }
+             
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <div className="col-span-1">
+        <div className="h-60">
+          <SublimitsChart />
+        </div>
       </div>
     </div>
   );

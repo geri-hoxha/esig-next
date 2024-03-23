@@ -17,7 +17,7 @@ const CustomerDonut = () => {
         data: getData(),
         title: {
           text: "Periudha: 01/01/2024 - 16/03/2024 ",
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: 'bold',
           },
         legend: {
@@ -49,7 +49,7 @@ const CustomerDonut = () => {
             calloutLabelName: "23423",
             innerLabels: [
               {
-                text: "PAMJE 360 ° ",
+                text: "PAMJE 360°",
                 color: "#005CA9"
               },
             ],
