@@ -7,7 +7,7 @@ const Preview: React.FC = () => {
   const [pdf, setPdf] = useState<string>("");
 
   useEffect(() => {
-    getPolicyPreview();
+    // getPolicyPreview();
   }, []);
 
   const getPolicyPreview = async () => {

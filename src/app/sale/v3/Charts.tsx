@@ -49,37 +49,133 @@ const SimpleChartBar = () => {
   );
 };
 
-const RangeBar = () => {
-  const [options, setOptions] = useState<AgChartOptions>({
-    data: [
-      { department: "Franzhiza", low: 500, high: 2700 },
-      { department: "Pjesa e zbritshme", low: 0, high: 6000 },
-      { department: "Ne ngjarje", low: 0, high: 0 },
-      { department: "Ne persona", low: 2000, high: 5000 },
-      { department: "Ne periudhe", low: 1000, high: 4000 },
+ 
 
-    ],
-    series: [
-      {
-        type: "range-bar",
-        xKey: "department",
-        yLowKey: "low",
-        yHighKey: "high",
-        label: {
-          padding: 10,
-          formatter: ({ itemId, value }) => {
-            return `$${value.toFixed(0)}K ${itemId === "low" ? "↓" : "↑"}`;
+function getData() {
+  return [
+    { asset: "Franzhisa", amount: 60000 },
+    { asset: "Pjesa e zbritshme", amount: 40000 },
+    { asset: "Ne ngjarje", amount: 30500 },
+  ];
+}
+
+const RangeBar = () => {
+  return (
+    <AgChartsReact
+      options={{
+        data: getData(),
+        title: {
+          text: "Primi 300 Euro ka keto limite:",
+          fontSize: 12,
+          fontWeight: 'bold',
+          },
+        legend: {
+          enabled: true,
+          item: {
+            label: {
+            //   formatter: (params) => {
+            //     return "my legend goes here";
+            //   },
+            },
           },
         },
+        series: [
+          {
+            type: "donut",
+            calloutLabelKey: "asset",
+            angleKey: "amount",
+            calloutLabel: {
+              formatter: (params) => {
+                return params.value;
+              },
+            },
+            calloutLine: {
+              length: 10,
+              colors: ["#005CA9", "#9B8AB8", '#008C89']
+            },
+            fills: ["#005CA9", "#9B8AB8", "#008C89"],
+            innerRadiusRatio: 0.8,
+            calloutLabelName: "23423",
+            innerLabels: [
+              {
+                text: "SI: 200.000 Euro",
+                color: "#005CA9"
+              },
+            ],
+            innerCircle: {
+              fill: "#f0f9ff",
+            },
+          },
+        ],
+      }}
+    />
+  );
+};
+
+const SublimitsChart = () => {
+  const [options, setOptions] = useState<AgChartOptions>({
+    autoSize: true,
+    data: [
+      {
+        name: "Nenmbulimi 1",
+        sublimit1: 3000,
       },
+      {
+        name: "Nenmbulimi 2",
+        sublimit2: 5000,
+      },
+      {
+        name: "Nenmbulimi 3",
+        sublimit3: 7000,
+      },
+      {
+        name: "Nenmbulimi 4",
+        sublimit4: 2000,
+      },
+    ],
+    theme: "ag-polychroma",
+    series: [
+      {
+        type: "bar",
+        direction: "horizontal",
+        xKey: "name",
+        yKey: "sublimit1",
+        yName: "sublimit1",
+        showInLegend: false,
+      },
+      {
+        type: "bar",
+        direction: "horizontal",
+        xKey: "name",
+        yKey: "sublimit2",
+        yName: "sublimit2",
+        showInLegend: false,
+      },
+ 
+      {
+        type: "bar",
+        direction: "horizontal",
+        xKey: "name",
+        yKey: "sublimit3",
+        yName: "sublimit3",
+        showInLegend: false,
+      },
+      {
+        type: "bar",
+        direction: "horizontal",
+        xKey: "name",
+        yKey: "sublimit4",
+        yName: "sublimit4",
+        showInLegend: false,
+      },
+ 
     ],
   });
 
   return (
-    <div className="h-96 my-5">
-      <AgChartsReact debug options={options} />
-    </div>
+      <AgChartsReact options={options} />
   );
-};
+}
 
-export { SimpleChartBar, RangeBar };
+
+export { SimpleChartBar, RangeBar, SublimitsChart };
