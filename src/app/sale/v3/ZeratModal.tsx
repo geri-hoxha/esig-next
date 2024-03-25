@@ -5,28 +5,34 @@ import Modal from "@/components/esig/Modal";
 import { DrawerClose } from "@/components/ui/drawer";
 import Base from "../components/Fields_v2/Base";
 import Checkbox from "./Checkbox";
-import { RangeBar, SublimitsChart } from "./Charts";
-import CustomerDonut from "./CustomerDonut";
+import Templates from "./Templates";
 
-const Box = ({ name, description, index, setCoverageOpen }: any) => {
+const Box = ({ name, description, checked, index, setCoverageOpen }: any) => {
   const randomNumber = Math.floor(1000 + Math.random() * 9000);
   const randomNumber2 = Math.floor(10 + Math.random() * 90);
 
   return (
     <div className={` text-esig  font-medium  cursor-pointer group`}>
       <div className=" flex items-center gap-4">
-        <span className="bg-sky w-7 h-7 text-sm grow shrink-0 rounded-full bg-sky-100 flex items-center justify-center">
-          {index}
+        <span
+          className={`bg-sky   text-sm grow shrink-0     flex items-center justify-center  `}
+        >
+          {index}.
         </span>
 
-        <div className="flex items-center  gap-2 group-hover:bg-sky-50 rounded-xl w-full px-3 py-2  transition-all duration-100">
-          <span className="text-base w-48	 truncate   ">{name}</span>
+        <div className="flex items-center  gap-2 group-hover:bg-sky-50 rounded-xl w-full px-3 py-1.5  transition-all duration-100">
+          <Checkbox
+            defaultChecked={checked}
+            label={
+              <span className={`text-base text-gray-600 w-48 `}>{name}</span>
+            }
+          />
 
-          <div className="h-5 ml-auto flex items-center">
-            <button
-              onClick={() => setCoverageOpen(true)}
-              className="    hidden group-hover:block    text-xs rounded-md  px-3 py-1     text-esig hover:bg-white   border border-transparent hover:border-esig transition-all duration-200"
-            >
+          <div
+            className="h-5 ml-auto flex items-center"
+            onClick={() => setCoverageOpen(true)}
+          >
+            <button className="hidden group-hover:block text-xs rounded-md  px-3 py-1 text-esig">
               <div className="flex items-center gap-x-1">
                 <Image
                   src="/svg/edit.svg"
@@ -40,7 +46,7 @@ const Box = ({ name, description, index, setCoverageOpen }: any) => {
               </div>
             </button>
           </div>
-          <div className="ml-auto  group-hover:hidden truncate   text-xs text-gray-600">
+          <div className="ml-auto  group-hover:hidden truncate   text-xs text-esig">
             <span>
               {randomNumber2}% SI dhe {randomNumber}$ primi
             </span>
@@ -54,6 +60,7 @@ const Box = ({ name, description, index, setCoverageOpen }: any) => {
 interface ICoverages {
   name: string;
   description: string;
+  checked?: boolean;
 }
 
 const staticCoverages: ICoverages[] = [
@@ -61,21 +68,25 @@ const staticCoverages: ICoverages[] = [
     name: "Katastrofat natyrore",
     description:
       "Siguruesi do të paguajë të gjitha dëmet sipas kushteve te kontrates.",
+    checked: true,
   },
   {
     name: "Vjedhja (totale e mjetit)",
     description:
       "Siguruesi do të paguajë të gjitha dëmet sipas kushteve te kontrates.",
+    checked: true,
   },
   {
     name: "Zjarr, Rrufe, Eksplozion",
     description:
       "Siguruesi do të paguajë të gjitha dëmet sipas kushteve te kontrates.",
+    checked: true,
   },
   {
     name: "Thyerja e xhamave",
     description:
       "Siguruesi do të paguajë të gjitha dëmet sipas kushteve te kontrates.",
+    checked: true,
   },
   {
     name: "Demtime aksidentale",
@@ -91,6 +102,7 @@ const staticCoverages: ICoverages[] = [
     name: "Vjedhja (totale e mjetit)",
     description:
       "Siguruesi do të paguajë të gjitha dëmet sipas kushteve te kontrates.",
+    checked: true,
   },
   {
     name: "Zjarr, Rrufe, Eksplozion",
@@ -101,42 +113,37 @@ const staticCoverages: ICoverages[] = [
     name: "Thyerja e xhamave",
     description:
       "Siguruesi do të paguajë të gjitha dëmet sipas kushteve te kontrates.",
+    checked: true,
   },
   {
     name: "Demtime aksidentale",
     description:
       "Siguruesi do të paguajë të gjitha dëmet sipas kushteve te kontrates.",
+    checked: true,
   },
 ];
 
 const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
   setCoverageOpen,
 }) => {
-  const [x, setX] = useState(false);
-
   const [geri, setGeri] = useState(false);
 
   useEffect(() => {
     setGeri(true);
   }, []);
 
-  const onClick = () => {
-    setX(!x);
-  };
-
-  if (x) {
-    return <div>geri</div>;
-  }
-
   return (
     <div className="flex flex-col gap-6  overflow-x-hidden">
+
+      <Templates />
       <div
-        className={`flex flex-col   scrollArea max-h-[320px] overflow-x-hidden overflow-y-auto pr-2  transition-all duration-500
+        className={`flex flex-col border-t-2 border-dashed  scrollArea max-h-[320px] overflow-x-hidden overflow-y-auto pr-2  transition-all duration-500
       
-      ${geri
-            ? " translate-x-0 opacity-100 visible pointer-events-auto"
-            : "-translate-x-10 opacity-0 invisible pointer-events-none"
-          } 
+      ${
+        geri
+          ? " translate-x-0 opacity-100 visible pointer-events-auto"
+          : "-translate-x-10 opacity-0 invisible pointer-events-none"
+      } 
       `}
       >
         {staticCoverages.map((coverage, index) => {
@@ -144,30 +151,28 @@ const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
             <Box
               key={index}
               index={index + 1}
-              name={coverage.name}
-              description={coverage.description}
+              {...coverage}
               setCoverageOpen={setCoverageOpen}
             />
           );
         })}
       </div>
       <div className="border-t-2 border-dashed w-full pt-3 text-right">
-        <button
-          onClick={onClick}
-          className="w-max   text-base rounded-md  px-3 py-1     text-esig-error hover:bg-red-50 transition-all duration-100"
-        >
-          <div className="flex items-center gap-x-1">
-            <Image
-              src="/svg/close.svg"
-              alt="edit"
-              width={"0"}
-              height={"0"}
-              style={{ width: 30, height: 30 }}
-              priority
-            />
-            <span>Anullo veprimin</span>
-          </div>
-        </button>
+        <DrawerClose asChild>
+          <button className="w-max   text-base rounded-md  px-3 py-1     text-esig-error hover:bg-red-50 transition-all duration-100">
+            <div className="flex items-center gap-x-1">
+              <Image
+                src="/svg/close.svg"
+                alt="edit"
+                width={"0"}
+                height={"0"}
+                style={{ width: 30, height: 30 }}
+                priority
+              />
+              <span>Mbyll modalin</span>
+            </div>
+          </button>
+        </DrawerClose>
       </div>
     </div>
   );
@@ -183,9 +188,9 @@ const Limit = ({ name }: any) => {
   return (
     <>
       <div className="col-span-4">
-        <div className="font-bold pl-10 text-sm h-full flex items-center justify-center">
-          <span className="text-esig w-full   ">- {name}</span>
-          <div className="w-full  h-px border-b border-dotted border-gray-400"></div>
+        <div className="font-bold  text-sm h-full flex items-center justify-center">
+          <span className="text-esig w-full text-xs">- {name}</span>
+          <div className="w-full  h-px border-b border-dotted border-gray-400 "></div>
         </div>
       </div>
       <div className="col-span-8">
@@ -263,10 +268,10 @@ const Limit = ({ name }: any) => {
   );
 };
 
-const Body = ({ setCoverageOpen }: any) => {
+const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
   return (
-    <div className="grid grid-cols-3 gap-4 mt-4">
-      <div className="col-span-2">
+    <div className="grid grid-cols-12 gap-6 mt-2">
+      <div className={` ${openSublimits ? "col-span-9 " : "col-span-12 "}   `}>
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-3">
             <span className="font-bold text-gray-600">1. Premium: </span>
@@ -361,71 +366,108 @@ const Body = ({ setCoverageOpen }: any) => {
           <Limit name="Ne periudhe" />
         </div>
       </div>
-      <div className="col-span-1">
-        <div className="h-90">
-          <RangeBar />
+
+      <div
+        className={`col-span-3 border-l-2 pl-6 border-dashed ${
+          openSublimits ? "" : "hidden"
+        }    `}
+      >
+        <div className="flex flex-col gap-6">
+          <span className="font-bold text-gray-600 text-center">
+            4. Nenlimitet:
+          </span>
+          <div className="grid grid-cols-2 gap-4">
+            {Array.from(Array(4).keys()).map((index) => {
+              return (
+                <>
+                  <div className="">
+                    <Base label={`Nenmbulimi ${index + 1}`} name="serial" />
+                  </div>
+                  <div>
+                    <Base className="bg-red-0 " label="Vlera" name="serial" />
+                  </div>
+                </>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <div className="col-span-2">
-
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-3">
-            <span className="font-bold text-gray-600 ">4. Nenlimitet:</span>
-          </div>
-          <div className="col-span-9"></div>
-          <div className="col-span-4">
-          </div>
-          <div className="col-span-8">
-
-            <div className="grid grid-cols-2 gap-4">
-
-              {
-                Array.from(Array(4).keys()).map((index) => {
-                  return (
-                   <>
-                    <div className="">
-                <Base label={`Nenmbulimi ${index + 1}`} name="serial" />
+      <div className="col-span-12">
+        <div className="border-t-2 border-dashed w-full pt-3 flex items-center justify-between">
+          {openSublimits ? (
+            <ButtonGeri
+              className="text-red-600 hover:bg-red-50 !text-base  "
+              onClick={() => setOpenSublimits(false)}
+            >
+              <div className="flex items-center gap-x-2 mx-auto">
+                <svg
+                  className="stroke-red-600"
+                  width="14"
+                  height="14"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                >
+                  <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+                </svg>
+                <span>Çaktivizo nenmbulimet</span>
               </div>
-              <div>
-                <Base
-                  className="bg-red-0 "
-                  label="Vlera e siguruar"
-                  name="serial"
-                  suffix="Euro"
-                  icon={
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
-                  }
-                />
+            </ButtonGeri>
+          ) : (
+            <ButtonGeri
+              className="text-green-600 hover:bg-green-50 !text-base  "
+              onClick={() => setOpenSublimits(true)}
+            >
+              <div className="flex items-center gap-x-2 mx-auto">
+                <svg
+                  className="stroke-green-600"
+                  width="14"
+                  height="14"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                >
+                  <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+                </svg>
+                <span>Aktivizo nenmbulimet</span>
               </div>
-                   </>
-                  )
-                })
+            </ButtonGeri>
+          )}
 
-              }
-             
-            </div>
+          <div className="flex items-center ">
+            <DrawerClose asChild>
+              <button className="w-max   text-base rounded-md  px-3 py-1     text-esig-error hover:bg-red-50 transition-all duration-100">
+                <div className="flex items-center gap-x-1">
+                  <Image
+                    src="/svg/close.svg"
+                    alt="edit"
+                    width={"0"}
+                    height={"0"}
+                    style={{ width: 30, height: 30 }}
+                    priority
+                  />
+                  <span>Mbyll modalin</span>
+                </div>
+              </button>
+            </DrawerClose>
 
+            <DrawerClose asChild>
+              <button className="w-max   text-lg rounded-md  px-3 py-1     text-esig hover:bg-sky-50 transition-all duration-100">
+                <div className="flex items-center gap-x-2">
+                  <Image
+                    src="/svg/edit.svg"
+                    alt="edit"
+                    width={"0"}
+                    height={"0"}
+                    style={{ width: 20, height: 20 }}
+                    priority
+                  />
+                  <span>Ruaj dhe apliko</span>
+                </div>
+              </button>
+            </DrawerClose>
           </div>
-        </div>
-
-      </div>
-      <div className="col-span-1">
-        <div className="h-60">
-          <SublimitsChart />
         </div>
       </div>
     </div>
@@ -437,16 +479,24 @@ const ZeratModal = () => {
 
   const [coverageOpen, setCoverageOpen] = useState(false);
 
+  const [openSublimits, setOpenSublimits] = useState(false);
+
   if (coverageOpen) {
     return (
       <Modal
         title="Demtime aksidentate"
         description="Siguruesi do të paguajë të gjitha dëmet sipas kushteve te kontrates."
-        body={<Body setCoverageOpen={setCoverageOpen} />}
+        body={
+          <Body
+            openSublimits={openSublimits}
+            setCoverageOpen={setCoverageOpen}
+            setOpenSublimits={setOpenSublimits}
+          />
+        }
         noButtons
         openProp
         setOpenProp={setCoverageOpen}
-        width={"min-w-[90%]"}
+        width={openSublimits ? "min-w-[80%]" : "min-w-[50%]"}
         back
       >
         <ButtonGeri className="text-esig hover:bg-sky-50">
@@ -460,7 +510,7 @@ const ZeratModal = () => {
               style={{ width: 20, height: 20 }}
               priority
             />
-            <span>Modifiko mbulimet</span>
+            <span>Modifiko mbulimet / Zgjidh pakete</span>
           </div>
         </ButtonGeri>
       </Modal>
@@ -489,7 +539,7 @@ const ZeratModal = () => {
               style={{ width: 20, height: 20 }}
               priority
             />
-            <span>Modifiko mbulimet</span>
+            <span>Modifiko mbulimet / Zgjidh pakete</span>
           </div>
         </ButtonGeri>
       </Modal>

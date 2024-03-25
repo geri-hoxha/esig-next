@@ -4,7 +4,7 @@ import Base from "../components/Fields_v2/Base";
 import Image from "next/image";
 import Zerat from "./Zerat";
 import { ReactNode, useState } from "react";
-import Cards from "./Cards";
+import Cards, { EmptyCard } from "./Cards";
 import History from "./History";
 import Comments from "./Comments";
 import Modal from "@/components/esig/Modal";
@@ -326,7 +326,10 @@ export default function Sale() {
                       </div>
                     </ButtonGeri>
                   </div>
-                  <Toggle /><div className="flex gap-2"><div>-</div> Erin Hoxha, 100%</div>
+                  <Toggle />
+                  <div className="flex gap-2">
+                    <div>-</div> Erin Hoxha, 100%
+                  </div>
                 </div>
 
                 <div className="flex flex-col min-w-60">
@@ -420,8 +423,8 @@ export default function Sale() {
                 <Cards />
                 <Cards />
                 <Cards />
-                <Cards />
-                <Cards />
+
+                <EmptyCard />
               </>
             ),
           },
@@ -449,12 +452,12 @@ export default function Sale() {
         title="Zerat e polices ( zeri 1 )"
         items={[
           {
-            className:
-              "scrollArea max-h-[500px] overflow-y-auto pr-2 divide-x divide-y",
+            className: "scrollArea max-h-[500px] overflow-y-auto pr-2  ",
             title: "Objektet e siguruara",
             children: (
               <>
                 <Cards />
+                <EmptyCard />
               </>
             ),
           },
@@ -462,20 +465,7 @@ export default function Sale() {
             title: (
               <div className="flex items-center justify-between">
                 <h2 className="text-xl bg-red-0">Mbulimet e objektit / eve</h2>
-                <ButtonGeri className="text-esig hover:bg-sky-50">
-                  <div className="flex items-center gap-x-1 text-lg">
-                    <Image
-                      className="cursor-pointer"
-                      src="/svg/edit.svg"
-                      alt="edit"
-                      width={"0"}
-                      height={"0"}
-                      style={{ width: 20, height: 20 }}
-                      priority
-                    />
-                    <span>Modiko mbulimet</span>
-                  </div>
-                </ButtonGeri>
+                <ZeratModal />
               </div>
             ),
             cols: "1",
@@ -487,6 +477,27 @@ export default function Sale() {
           },
         ]}
       />
+
+      <div className="flex items-center ">
+        <div className="border-b-2 w-full h-px border-dashed  border-esig"></div>
+        <div className="cursor-pointer group border-2  w-1/2 mx-auto  py-2 text-esig   h-max border-dashed  border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-sm   transition-all duration-200 relative">
+          <div className="flex items-center justify-center gap-2">
+            <svg
+              className="stroke-esig"
+              width="15"
+              height="15"
+              xmlns="http://www.w3.org/2000/svg"
+              fillRule="evenodd"
+              clipRule="evenodd"
+            >
+              <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+            </svg>
+
+            <span className="font-semibold">Shto ze police</span>
+          </div>
+        </div>
+        <div className="border-b-2 w-full h-px border-dashed  border-esig"></div>
+      </div>
 
       <Geri
         title="Historik dhe komente"
@@ -501,7 +512,7 @@ export default function Sale() {
             ),
           },
           {
-            title: "Komente",
+            title: "Dokumente & Komente",
             cols: "1",
             children: <Comments />,
           },
