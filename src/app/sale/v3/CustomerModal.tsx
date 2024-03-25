@@ -36,7 +36,7 @@ const CustomerModal = () => {
       id: 3,
       displayName: "Oltion Driza",
       taxNumber: "K23490232S",
-      contactType: "Person",
+      contactType: "Organization",
     },
     {
       id: 4,
@@ -44,31 +44,92 @@ const CustomerModal = () => {
       taxNumber: "G24234232S",
       contactType: "Organization",
     },
+    {
+      id: 5,
+      displayName: "Geri Hoxha",
+      taxNumber: "J91223011S",
+      contactType: "Person",
+    },
+    {
+      id: 6,
+      displayName: "Erin Hoxha",
+      taxNumber: "M23094000L",
+      contactType: "Organization",
+    },
+    {
+      id: 7,
+      displayName: "Oltion Driza",
+      taxNumber: "K23490232S",
+      contactType: "Person",
+    },
+    {
+      id: 8,
+      displayName: "Kledi Kallastra",
+      taxNumber: "G24234232S",
+      contactType: "Person",
+    },
   ];
 
   const colDefs: ColDef[] = [
     {
       headerName: "NIPT",
       field: "taxNumber",
-      maxWidth: 100,
+      maxWidth: 120,
+      cellStyle: {
+        fontSize: 14,
+        padding: 3,
+      },
+      cellRenderer: ({ data }: any) => {
+        if (data.contactType === "Person") {
+          return (
+            <div className="flex items-center gap-2">
+              <Image
+                src="/svg/person.svg"
+                alt="users_group"
+                width={"0"}
+                className="fill-gray-700	"
+                height={"0"}
+                style={{ width: 20, height: 20 }}
+                priority
+              />
+
+              <span>{data.taxNumber}</span>
+            </div>
+          );
+        }
+
+        return (
+          <div className="flex items-center gap-2">
+            <Image
+              src="/svg/building.svg"
+              alt="users_group"
+              width={"0"}
+              height={"0"}
+              style={{ width: 20, height: 20 }}
+              className=""
+              priority
+            />
+
+            <span>{data.taxNumber}</span>
+          </div>
+        );
+      },
     },
     {
       headerName: "Full name",
       field: "displayName",
-      minWidth: 110,
+      minWidth: 100,
       flex: 1,
-    },
-
-    {
-      headerName: "Contact Type",
-      field: "contactType",
-      maxWidth: 100,
+      cellStyle: {
+        fontSize: 14,
+        padding: 3,
+      },
     },
   ];
 
   return (
     <div className="grid grid-cols-12 gap-4  ">
-      <div className="col-span-4">
+      <div className="col-span-3">
         <div className="flex flex-col  gap-4">
           <RadioGroup
             options={[
@@ -82,7 +143,7 @@ const CustomerModal = () => {
               },
             ]}
           />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mt-2">
             <Base
               className="bg-red-0"
               label="Emri / Nipt i klientit"
@@ -100,11 +161,15 @@ const CustomerModal = () => {
               />
             </div>
           </div>
-          <AgGrid<CustomerModel> rowData={rowData} colDefs={colDefs} />
+          <AgGrid<CustomerModel>
+            heightClass="h-[350px]"
+            rowData={rowData}
+            colDefs={colDefs}
+          />
         </div>
       </div>
 
-      <div className="col-span-8 border-l-2 border-dashed pl-4">
+      <div className="col-span-9 border-l-2 border-dashed pl-4">
         <div className=" flex items-center mb-4">
           <span className="text-lg  ">
             {" "}

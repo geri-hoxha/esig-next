@@ -9,7 +9,7 @@ import History from "./History";
 import Comments from "./Comments";
 import Modal from "@/components/esig/Modal";
 import CustomerModal from "./CustomerModal";
-import  { beneficiaries } from "./ParticipantModal";
+import { beneficiaries } from "./ParticipantModal";
 import GeriHoxha from "./GeriHoxha";
 import ZeratModal from "./ZeratModal";
 
@@ -101,7 +101,7 @@ export default function Sale() {
           Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
         </span>
       </div>
-      
+
       <Geri
         items={[
           {
@@ -326,7 +326,7 @@ export default function Sale() {
                       </div>
                     </ButtonGeri>
                   </div>
-                  <Toggle />- Erin Hoxha, 100%
+                  <Toggle /><div className="flex gap-2"><div>-</div> Erin Hoxha, 100%</div>
                 </div>
 
                 <div className="flex flex-col min-w-60">
@@ -338,8 +338,21 @@ export default function Sale() {
                   <ul>
                     {beneficiaries.map((beneficiary, index) => {
                       return (
-                        <li key={index}>
-                          {index === 0 && "*"} {beneficiary.displayName},{" "}
+                        <li key={index} className="flex  gap-2">
+                          {index === 0 ? (
+                            <Image
+                              src="/svg/star.svg"
+                              alt="users_group"
+                              width={"0"}
+                              height={"0"}
+                              style={{ width: 15, height: 15 }}
+                              className=""
+                              priority
+                            />
+                          ) : (
+                            <div>-</div>
+                          )}{" "}
+                          {beneficiary.displayName},{" "}
                           {beneficiary.percentage * 100}%
                         </li>
                       );
@@ -367,8 +380,24 @@ export default function Sale() {
                   </div>
                   <Toggle />
                   <ul>
-                    <li>* Geri Hoxha, 77%</li>
-                    <li>- Kledi Kallastra, 33%</li>
+                    <li className="flex gap-2">
+                      <Image
+                        src="/svg/star.svg"
+                        alt="users_group"
+                        width={"0"}
+                        height={"0"}
+                        style={{ width: 15, height: 15 }}
+                        className=""
+                        priority
+                      />
+
+                      <span>Geri Hoxha, 77%</span>
+                    </li>
+                    <li className="flex gap-2">
+                      {" "}
+                      <div>-</div>
+                      Kledi Kallastra, 33%
+                    </li>
                   </ul>
                 </div>
               </div>

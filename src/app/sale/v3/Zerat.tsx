@@ -8,15 +8,11 @@ import { ButtonGeri } from "./page";
 const Zerat = () => {
   return (
     <>
-      <div className="flex flex-col gap-2 pl-1">
-        <Checkbox
-          label={
-            <span className="text-lg font-bold text-gray-800">
-              Shtrim ne spital
-            </span>
-          }
-        />
-        <div className="grid grid-cols-2 gap-8 my-1">
+      <div className="flex flex-col gap-4 pl-1">
+        <span className="text-lg font-bold text-gray-800">
+          Shtrim ne spital
+        </span>
+        <div className="grid grid-cols-2 gap-8  ">
           <Base label="Primi" name="serial" className="h-8" />
           <Base
             label="Shuma e siguruar / limit i mbulimit"
