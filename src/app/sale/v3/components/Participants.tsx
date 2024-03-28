@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import GeriHoxha from "../GeriHoxha";
 import { Toggle } from "../page";
 
@@ -19,7 +20,19 @@ const Participants =({title, baseUsers}) => {
                     {baseUsers.map((user, index) => {
                       return (
                         <li key={index}>
-                          {index === 0 && "*"} <span className="truncate w-40"> {user.displayName}</span>,{" "}
+                          {index === 0 ? (
+                            <Image
+                              src="/svg/star.svg"
+                              alt="users_group"
+                              width={"0"}
+                              height={"0"}
+                              style={{ width: 15, height: 15 }}
+                              className=""
+                              priority
+                            />
+                          ) : (
+                            <div>-</div>
+                          )} <span className="truncate w-40"> {user.displayName}</span>,{" "}
                           {user.percentage ?? 1 * 100}%
                         </li>
                       );

@@ -29,19 +29,56 @@ const CustomerModal = ({ onSave }) => {
     {
       headerName: "NIPT",
       field: "taxNumber",
-      maxWidth: 100,
+      maxWidth: 120,
+      cellStyle: {
+        fontSize: 14,
+        padding: 3,
+      },
+      cellRenderer: ({ data }: any) => {
+        if (data.contactType === "Person") {
+          return (
+            <div className="flex items-center gap-2">
+              <Image
+                src="/svg/person.svg"
+                alt="users_group"
+                width={"0"}
+                className="fill-gray-700	"
+                height={"0"}
+                style={{ width: 20, height: 20 }}
+                priority
+              />
+
+              <span>{data.taxNumber}</span>
+            </div>
+          );
+        }
+
+        return (
+          <div className="flex items-center gap-2">
+            <Image
+              src="/svg/building.svg"
+              alt="users_group"
+              width={"0"}
+              height={"0"}
+              style={{ width: 20, height: 20 }}
+              className=""
+              priority
+            />
+
+            <span>{data.taxNumber}</span>
+          </div>
+        );
+      },
     },
     {
       headerName: "Full name",
       field: "displayName",
-      minWidth: 110,
+      minWidth: 100,
       flex: 1,
-    },
-
-    {
-      headerName: "Contact Type",
-      field: "contactType",
-      maxWidth: 100,
+      cellStyle: {
+        fontSize: 14,
+        padding: 3,
+      },
     },
   ];
 
@@ -79,7 +116,7 @@ const CustomerModal = ({ onSave }) => {
 
   return (
     <div className="grid grid-cols-12 gap-4  ">
-      <div className="col-span-4">
+      <div className="col-span-3">
         <div className="flex flex-col  gap-4">
           <RadioGroup
 
@@ -94,7 +131,7 @@ const CustomerModal = ({ onSave }) => {
               },
             ]}
           />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mt-2">
             <Base
               className="bg-red-0"
               label="Emri / Nipt i klientit"
@@ -113,13 +150,14 @@ const CustomerModal = ({ onSave }) => {
               />
             </div>
           </div>
-          <AgGrid<CustomerModel> rowSelection='single' domLayout='normal' onRowClicked={(params) => {
+          <AgGrid<CustomerModel>             heightClass="h-[350px]"
+ rowSelection='single' domLayout='normal' onRowClicked={(params) => {
             setValues(params.data);
-          }} height={'h-80'} rowData={rowData} colDefs={colDefs} />
+          }} rowData={rowData} colDefs={colDefs} />
         </div>
       </div>
 
-      <div className="col-span-8 border-l-2 border-dashed pl-4">
+      <div className="col-span-9 border-l-2 border-dashed pl-4">
         <div className=" flex items-center mb-4">
           <span className="text-lg flex items-center ">
             {" "}
