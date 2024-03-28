@@ -1,37 +1,72 @@
 import { useState } from "react";
-import Cards, { EmptyCard } from "../Cards";
+import Cards from "../Cards";
 import Modal from "@/components/esig/Modal";
 import CustomerModal from "../CustomerModal";
 
-const InsuredObjects =() => {
-    const [objects, setObjects] = useState([{}]);
+const InsuredObjects = () => {
+  const [objects, setObjects] = useState<any>([]);
+  const [open, setOpen] = useState(false);
 
-    const onSave = (values) => {
-        setObjects([...objects, values])
-    }
+  const onSave = (values) => {
+    setObjects([...objects.filter((object: any) => !!object?.id), values]);
+  };
+
+  if (objects.length === 0) {
     return (
-        <>
-            {objects.map((object) => {
-                if(!object.id) {
-                    return (
+      <Modal
+        title="Modali i objekteve te siguruara"
+        description="Ketu mund te modikoni klientin e perzgjedhur."
+        body={<CustomerModal onSave={onSave} />}
+        noButtons
+        openProp={open}
+        setOpenProp={setOpen}
+      >
+        <div className="cursor-pointer group border   w-full h-full border-dashed min-h-[268px] border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+          <svg
+            className="stroke-esig"
+            width="30"
+            height="30"
+            xmlns="http://www.w3.org/2000/svg"
+            fillRule="evenodd"
+            clipRule="evenodd"
+          >
+            <path d="M14 14v-14h1v14h14v1h-14v14h-1v-14h-14v-1h14z" />
+          </svg>
+        </div>
+      </Modal>
+    );
+  }
 
-                        <Modal
-                        title="Modali i objekteve te siguruara"
-                        description="Ketu mund te modikoni klientin e perzgjedhur."
-                        body={<CustomerModal onSave={onSave} />}
-                        noButtons
-                      >
-                                                <EmptyCard />
-
-                      </Modal>
-                    )
-                }
-                return (
-                    <Cards object={object} objects={objects} setObjects={setObjects} />
-                )
-            })}
-        </>
-    )
-}
+  return (
+    <>
+      {objects.map((object) => {
+        return (
+          <Cards object={object} objects={objects} setObjects={setObjects} />
+        );
+      })}
+      <Modal
+        title="Modali i objekteve te siguruara"
+        description="Ketu mund te modikoni klientin e perzgjedhur."
+        body={<CustomerModal onSave={onSave} />}
+        noButtons
+        openProp={open}
+        setOpenProp={setOpen}
+      >
+        <div className="cursor-pointer group border   w-full h-full border-dashed min-h-[268px] border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+          <svg
+            className="stroke-esig"
+            width="30"
+            height="30"
+            xmlns="http://www.w3.org/2000/svg"
+            fillRule="evenodd"
+            clipRule="evenodd"
+          >
+            <path d="M14 14v-14h1v14h14v1h-14v14h-1v-14h-14v-1h14z" />
+          </svg>
+        </div>
+      </Modal>
+    </>
+  );
+};
 
 export default InsuredObjects;

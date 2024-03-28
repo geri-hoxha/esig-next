@@ -11,7 +11,7 @@ interface IProps<T> {
   heightClass?: string;
 }
 
-function AgGrid<T>({ rowData, colDefs, heightClass = 'h-[500px]' }: IProps<T>) {
+function AgGrid<T>({ rowData, colDefs, heightClass = 'h-[500px]', ...other }: IProps<T>) {
 
   return (
     // wrapping container with theme & size
@@ -21,6 +21,7 @@ function AgGrid<T>({ rowData, colDefs, heightClass = 'h-[500px]' }: IProps<T>) {
       <AgGridReact
         rowData={rowData}
         columnDefs={colDefs}
+        {...other}
        />
     </div>
   );

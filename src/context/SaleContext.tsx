@@ -116,4 +116,4 @@ const useSale = () => useContext(SaleContext);
 
 export { SaleProvider, useSale, defaultRules };
 
-export type { ISaleContext, IContext, ParticipantsLimits, IRule, IParticipantsComponent };
+export type { ISaleContext, IContext, ParticipantsLimits, IRule, IParticipantsComponent, Reducer };

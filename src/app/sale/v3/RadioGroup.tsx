@@ -20,7 +20,7 @@ const RadioGroup = ({ options }: IProps) => {
               id={option.id}
               name={option.id}
               type="radio"
-              checked={option.id === '1'}
+              defaultChecked={option.id === '1'}
 
               className="h-4 w-4 border-gray-300 text-esig focus:ring-esig "
             />

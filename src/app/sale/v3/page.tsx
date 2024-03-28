@@ -4,7 +4,6 @@ import Base from "../components/Fields_v2/Base";
 import Image from "next/image";
 import Zerat from "./Zerat";
 import { ReactNode, useState } from "react";
-import Cards, { EmptyCard } from "./Cards";
 import History from "./History";
 import Comments from "./Comments";
 import Modal from "@/components/esig/Modal";
@@ -17,6 +16,7 @@ import GeneralFields from "./components/GeneralFields";
 import DatesFields from "./components/DatesFields";
 import Participants from "./components/Participants";
 import InsuredObjects from "./components/InsuredObjects";
+import ParticipantsWrapper from "./components/ParticipantsWrapper";
 
 interface IProps {
   title: string;
@@ -28,7 +28,7 @@ interface IProps {
   }[];
 }
 
-const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
+export const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
   return (
     <div className="flex flex-col gap-4">
       {typeof title === "string" ? (
@@ -42,8 +42,9 @@ const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
             <div key={index} className="flex flex-col gap-4">
               <h3 className="text-xl bg-red-0">{item.title}</h3>
               <div
-                className={`grid grid-cols-${item?.cols ?? "2"} gap-4 ${item.className ?? ""
-                  }`}
+                className={`grid grid-cols-${item?.cols ?? "2"} gap-4 ${
+                  item.className ?? ""
+                }`}
               >
                 {item.children}
               </div>
@@ -52,32 +53,6 @@ const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
         })}
       </div>
     </div>
-  );
-};
-
-export const Toggle = () => {
-  const [x, setx] = useState(false);
-
-  const onToggle = () => {
-    setx(!x);
-  };
-
-  return (
-    <ButtonGeri className="text-esig hover:bg-sky-50" onClick={onToggle}>
-      <div className="flex items-center gap-x-1">
-        <Image
-          src="/svg/refresh.svg"
-          alt="edit"
-          width={"0"}
-          height={"0"}
-          style={{ width: 20, height: 20 }}
-          priority
-        />
-        <span className="ml-0">
-          {x ? "Vetem lideri" : "Ne menyre te barabarte"}
-        </span>
-      </div>
-    </ButtonGeri>
   );
 };
 
@@ -97,8 +72,7 @@ export const ButtonGeri: React.FC<{
 };
 
 export default function Sale() {
-  const [baseUsers, setBaseUsers] = useState([])
-
+  const [baseUsers, setBaseUsers] = useState([]);
 
   return (
     <>
@@ -121,109 +95,15 @@ export default function Sale() {
           },
         ]}
       />
-      <Geri
-        items={[
-          {
-            cols: "1",
-            title: "Perdoruesit e polices",
-            children: <PolicyUsers setBaseUsers={setBaseUsers} />,
-          },
-          {
-            cols: "1",
-            title: "Palet pjesemarrese ne police",
-            className: "scrollArea  overflow-x-auto pb-2",
-            children: (
-              <div className="grid grid-cols-3 gap-4 min-w-max">
-                <div className="flex flex-col min-w-60">
-                  <div className="flex items-center text-lg font-semibold text-gray-700">
-                    Policembajtesit
-                    <ButtonGeri className="text-esig hover:bg-sky-50">
-                      <div className="flex items-center gap-x-1">
-                        <Image
-                          className="cursor-pointer"
-                          src="/svg/edit.svg"
-                          alt="edit"
-                          width={"0"}
-                          height={"0"}
-                          style={{ width: 20, height: 20 }}
-                          priority
-                        />
-                        <span>Ndrysho</span>
-                      </div>
-                    </ButtonGeri>
-                  </div>
-                  <Toggle />
-                  <div className="flex gap-2">
-                    <div>-</div> Erin Hoxha, 100%
-                  </div>
-                </div>
-
-                {
-                  baseUsers.filter((user) => !!user?.id).length === 0 ? null :
-                    <Participants
-                      title='Perfituesit'
-                      baseUsers={baseUsers}
-                    />
-                }
-
-
-
-                <div className="flex flex-col min-w-60">
-                  <div className="flex items-center text-lg font-semibold text-gray-700">
-                    Te faturarit
-                    <ButtonGeri className="text-esig hover:bg-sky-50">
-                      <div className="flex items-center gap-x-1">
-                        <Image
-                          className="cursor-pointer"
-                          src="/svg/edit.svg"
-                          alt="edit"
-                          width={"0"}
-                          height={"0"}
-                          style={{ width: 20, height: 20 }}
-                          priority
-                        />
-                        <span>Ndrysho</span>
-                      </div>
-                    </ButtonGeri>
-                  </div>
-                  <Toggle />
-                  <ul>
-                    <li className="flex gap-2">
-                      <Image
-                        src="/svg/star.svg"
-                        alt="users_group"
-                        width={"0"}
-                        height={"0"}
-                        style={{ width: 15, height: 15 }}
-                        className=""
-                        priority
-                      />
-
-                      <span>Geri Hoxha, 77%</span>
-                    </li>
-                    <li className="flex gap-2">
-                      {" "}
-                      <div>-</div>
-                      Kledi Kallastra, 33%
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            ),
-          },
-        ]}
-      />
-
+   
+      <ParticipantsWrapper />
       <Geri
         title="Zerat e polices ( zeri 1 )"
         items={[
           {
             title: "Objektet e siguruara",
             className: "scrollArea max-h-[500px] overflow-y-scroll pr-2 pb-2",
-            children: (
-              <InsuredObjects />
-
-            ),
+            children: <InsuredObjects />,
           },
           {
             title: (
@@ -244,9 +124,6 @@ export default function Sale() {
           },
         ]}
       />
-
-    
-
       <div className="flex items-center ">
         <div className="border-b-2 w-full h-px border-dashed  border-esig"></div>
         <div className="cursor-pointer group border-2  w-1/2 mx-auto  py-2 text-esig   h-max border-dashed  border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-sm   transition-all duration-200 relative">
@@ -267,7 +144,6 @@ export default function Sale() {
         </div>
         <div className="border-b-2 w-full h-px border-dashed  border-esig"></div>
       </div>
-
       <Geri
         title="Historik dhe komente"
         items={[

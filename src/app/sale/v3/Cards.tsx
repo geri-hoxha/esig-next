@@ -108,24 +108,6 @@ const Cards = ({object, objects, setObjects}) => {
     </div>
   );
 };
-
-const EmptyCard = () => {
-  return (
-    <div className="cursor-pointer group border   w-full h-full border-dashed min-h-[268px] border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
-      <svg
-        className="stroke-esig"
-        width="30"
-        height="30"
-        xmlns="http://www.w3.org/2000/svg"
-        fillRule="evenodd"
-        clipRule="evenodd"
-      >
-        <path d="M14 14v-14h1v14h14v1h-14v14h-1v-14h-14v-1h14z" />
-      </svg>
-    </div>
-  );
-};
-
-export { EmptyCard };
-
+ 
+ 
 export default Cards;

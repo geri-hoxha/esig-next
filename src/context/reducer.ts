@@ -44,7 +44,13 @@ function reducer<T>(state: T, action: IAction<T>): T {
             return { ...state, [key]: [...selectedArray, item] };
 
         case UPDATE:
-            return { ...state, [key]: [item, ...selectedArray.filter((item) => item[identifier.key ?? 'id'] !== identifier.value)] };
+            return { ...state, [key]: [ ...selectedArray.map((_item) => {
+                if(_item[identifier.key ?? 'id'] === identifier.value) {
+                    return item;
+                }
+
+                return _item;
+            })] };
 
         case DELETE:
             return { ...state, [key]: [...selectedArray.filter((item) => item[identifier.key ?? 'id'] !== identifier.value)] };
