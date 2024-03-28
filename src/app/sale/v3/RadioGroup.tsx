@@ -11,14 +11,17 @@ const RadioGroup = ({ options }: IProps) => {
   return (
     <fieldset className="">
       <legend className="sr-only">Notification method</legend>
+      <form>
+
       <div className="space-y-4 sm:flex sm:items-center sm:space-x-5 sm:space-y-0">
         {options.map((option) => (
           <div key={option.id} className="flex items-center cursor-pointer">
             <input
               id={option.id}
-              name="notification-method"
+              name={option.id}
               type="radio"
-              defaultChecked={option.id === '1'}
+              checked={option.id === '1'}
+
               className="h-4 w-4 border-gray-300 text-esig focus:ring-esig "
             />
             <label
@@ -30,6 +33,8 @@ const RadioGroup = ({ options }: IProps) => {
           </div>
         ))}
       </div>
+      </form>
+
     </fieldset>
   );
 };

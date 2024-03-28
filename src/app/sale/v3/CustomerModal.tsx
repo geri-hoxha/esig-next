@@ -3,13 +3,15 @@ import Base from "../components/Fields_v2/Base";
 import RadioGroup from "./RadioGroup";
 import AgGrid from "@/components/ag/Ag-grid";
 import type { ColDef } from "ag-grid-community";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AgChartsReact } from "ag-charts-react";
 import CustomerDonut from "./CustomerDonut";
 import { Button } from "@/components/ui/button";
 import { ButtonGeri } from "./page";
 import { DrawerClose } from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
+import request from "@/request";
+import { token } from "@/components/esig/Navbar/Currencies";
 
 interface CustomerModel {
   displayName: string;
@@ -18,33 +20,10 @@ interface CustomerModel {
   contactType: "Person" | "Organization";
 }
 
-const CustomerModal = () => {
-  const rowData: CustomerModel[] = [
-    {
-      id: 1,
-      displayName: "Geri Hoxha",
-      taxNumber: "J91223011S",
-      contactType: "Person",
-    },
-    {
-      id: 2,
-      displayName: "Erin Hoxha",
-      taxNumber: "M23094000L",
-      contactType: "Organization",
-    },
-    {
-      id: 3,
-      displayName: "Oltion Driza",
-      taxNumber: "K23490232S",
-      contactType: "Person",
-    },
-    {
-      id: 4,
-      displayName: "Kledi Kallastra",
-      taxNumber: "G24234232S",
-      contactType: "Organization",
-    },
-  ];
+const CustomerModal = ({ onSave }) => {
+  const [rowData, setRowData] = useState<any>([]);
+  const [values, setValues] = useState(null);
+  const [searchedName, setSeachedName] = useState();
 
   const colDefs: ColDef[] = [
     {
@@ -66,11 +45,44 @@ const CustomerModal = () => {
     },
   ];
 
+  const onNameChange = (event) => {
+    console.log(event.target.value)
+    setSeachedName(event.target.value)
+  }
+  const onSearch = async () => {
+    if (!searchedName) return;
+    const response = await request('/customer/ag',
+      token,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          startRow: 0,
+          endRow: 100,
+          filterModel: {
+            searchName: {
+              filterType: 'text',
+              type: 'contains',
+              filter: searchedName
+            }
+          },
+          sortModel: []
+        })
+      })
+
+    setRowData(response.data);
+  }
+
   return (
     <div className="grid grid-cols-12 gap-4  ">
       <div className="col-span-4">
         <div className="flex flex-col  gap-4">
           <RadioGroup
+
             options={[
               {
                 id: "1",
@@ -87,8 +99,9 @@ const CustomerModal = () => {
               className="bg-red-0"
               label="Emri / Nipt i klientit"
               name="serial"
+              onChange={onNameChange}
             />
-            <div className="bg-esig p-2 rounded-md">
+            <div className="bg-esig p-2 rounded-md" onClick={onSearch}>
               <Image
                 className="cursor-pointer"
                 src="/svg/search.svg"
@@ -100,16 +113,18 @@ const CustomerModal = () => {
               />
             </div>
           </div>
-          <AgGrid<CustomerModel> rowData={rowData} colDefs={colDefs} />
+          <AgGrid<CustomerModel> rowSelection='single' domLayout='normal' onRowClicked={(params) => {
+            setValues(params.data);
+          }} height={'h-80'} rowData={rowData} colDefs={colDefs} />
         </div>
       </div>
 
       <div className="col-span-8 border-l-2 border-dashed pl-4">
         <div className=" flex items-center mb-4">
-          <span className="text-lg  ">
+          <span className="text-lg flex items-center ">
             {" "}
             Te dhenat e klientit:{" "}
-            <span className="italic pl-2">Geri Hoxha</span>
+            <div className="italic pl-2 truncate w-40">{values?.displayName}</div>
           </span>
 
           <ButtonGeri className="text-esig hover:bg-sky-50">
@@ -128,21 +143,21 @@ const CustomerModal = () => {
           </ButtonGeri>
         </div>
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <Base label="Nipt i klientit" name="serial" />
-          <Base label="Emri i plote" name="serial" />
-          <Base label="Lloji i kontaktit" name="serial" />
-          <Base label="Numri i telefonit" name="serial" />
+          <Base label="Nipt i klientit" name="serial" value={values?.taxNumber} />
+          <Base label="Emri i plote" name="serial" value={values?.displayName} />
+          <Base label="Lloji i kontaktit" name="serial" value={values?.contactType} />
+          <Base label="Numri i telefonit" name="serial" value={values?.phoneNumber} />
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="flex flex-col gap-4">
-            <Base label="Email" name="serial" />
-            <Base label="Gjinia" name="serial" />
-            <Base label="Shtetesia" name="serial" />
+            <Base label="Email" name="serial" value={values?.email} />
+            <Base label="Gjinia" name="serial" value={values?.gender} />
+            <Base label="Shtetesia" name="serial" value={values?.isLocal === true ? 'Shqiptar' : 'I huaj'} />
 
-            <Base label="Atesia" name="serial" />
-            <Base label="Ditelindja" name="serial" />
-            <Base label="Tjeter" name="serial" />
+            <Base label="Atesia" name="serial" value={values?.fathersName} />
+            <Base label="Ditelindja" name="serial" value={values?.birthday} />
+            <Base label="Tjeter" name="serial" value={''} />
           </div>
           <div className="h-72">
             <CustomerDonut />
@@ -163,7 +178,7 @@ const CustomerModal = () => {
               priority
             />
             <div className="w-full">
-              <Base className="bg-red-0" label="Perqindja" name="serial" />
+              <Base className="bg-red-0" label="Perqindja" name="serial" suffix={'%'} />
             </div>
             <Image
               className="cursor-pointer"
@@ -196,9 +211,19 @@ const CustomerModal = () => {
           </div>
           <div className="flex items-center gap-4">
             <DrawerClose asChild>
-              <Button variant="outline">Anullo veprimin</Button>
+              <Button variant="outline" onClick={() => {
+                setRowData([]);
+                setValues(null)
+                setSeachedName(undefined)
+              }}>Anullo veprimin</Button>
             </DrawerClose>
-            <Button variant="default">Ruaj dhe apliko</Button>
+            <DrawerClose onClick={() => {
+              onSave(values)
+            }} asChild>
+
+              <Button variant="default">Ruaj dhe apliko</Button>
+            </DrawerClose>
+
           </div>
         </div>
       </div>

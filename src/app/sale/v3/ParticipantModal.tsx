@@ -27,16 +27,16 @@ export const beneficiaries = [
   },
 ];
 
-const ParticipantModal: React.FC<{ children: ReactNode  }> = ({
-  children
+const ParticipantModal: React.FC<{ children: ReactNode , baseUsers }> = ({
+  children,
+  baseUsers
  }) => {
-
 
 
   return (
     <>
       <div className="flex flex-col gap-4">
-       <Draggable />
+       <Draggable baseUsers={baseUsers} />
       </div>
 
         {children}

@@ -2,11 +2,10 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { AgGridReact } from "ag-grid-react";
 import React, { useCallback, useMemo, useState } from "react";
-import { beneficiaries } from "./ParticipantModal";
 import Image from "next/image";
 import Base from "../components/Fields_v2/Base";
 
-const Draggable = () => {
+const Draggable = ({baseUsers}) => {
   const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
   const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
   const [rowData, setRowData] = useState([]);
@@ -75,11 +74,11 @@ const Draggable = () => {
   }, []);
 
   const onGridReady = useCallback((params) => {
-    beneficiaries.forEach(function (dataItem: any, index) {
+    baseUsers.forEach(function (dataItem: any, index) {
       dataItem.rowHeight = index === 0 ? 135 : 110;
     });
 
-    setRowData(beneficiaries);
+    setRowData(baseUsers);
   }, []);
 
   const getRowHeight = useCallback((params) => {

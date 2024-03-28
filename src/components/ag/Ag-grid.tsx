@@ -7,19 +7,21 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied
 interface IProps<T> {
   rowData: T[];
   colDefs: ColDef[];
+  height: string
 }
 
-function AgGrid<T>({ rowData, colDefs }: IProps<T>) {
+function AgGrid<T>({ rowData, colDefs, height, ...other }: IProps<T>) {
 
   return (
     // wrapping container with theme & size
     <div
-      className="max-h-[500px] ag-theme-quartz" // applying the grid theme
+      className={`max-h-[500px] ag-theme-quartz ${height}`} // applying the grid theme
     >
       <AgGridReact
         rowData={rowData}
         columnDefs={colDefs}
         domLayout="autoHeight"
+        {...other}
       />
     </div>
   );

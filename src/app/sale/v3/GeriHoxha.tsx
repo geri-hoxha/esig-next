@@ -5,7 +5,7 @@ import { ButtonGeri } from "./page";
 import { useCallback, useState } from "react";
 import CustomerModal from "./CustomerModal";
 
-const GeriHoxha = () => {
+const GeriHoxha = ({baseUsers}) => {
   const [firstModalOpen, setFirstModalOpen] = useState(false);
   const [nestedModalOpen, setNestedModalOpen] = useState(false);
 
@@ -30,7 +30,7 @@ const GeriHoxha = () => {
         title="Modali i perfituesit"
         description="Ketu mund te modikoni perfituesit e polices."
         body={
-          <ParticipantModal>
+          <ParticipantModal baseUsers={baseUsers}>
             <ButtonGeri
               className="text-esig hover:bg-sky-50 !text-base !w-full"
               onClick={() => {

@@ -9,9 +9,13 @@ import History from "./History";
 import Comments from "./Comments";
 import Modal from "@/components/esig/Modal";
 import CustomerModal from "./CustomerModal";
-import  { beneficiaries } from "./ParticipantModal";
+import { beneficiaries } from "./ParticipantModal";
 import GeriHoxha from "./GeriHoxha";
 import ZeratModal from "./ZeratModal";
+import PolicyUsers from "./components/PolicyUsers";
+import GeneralFields from "./components/GeneralFields";
+import DatesFields from "./components/DatesFields";
+import Participants from "./components/Participants";
 
 interface IProps {
   title: string;
@@ -37,9 +41,8 @@ const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
             <div key={index} className="flex flex-col gap-4">
               <h3 className="text-xl bg-red-0">{item.title}</h3>
               <div
-                className={`grid grid-cols-${item?.cols ?? "2"} gap-4 ${
-                  item.className ?? ""
-                }`}
+                className={`grid grid-cols-${item?.cols ?? "2"} gap-4 ${item.className ?? ""
+                  }`}
               >
                 {item.children}
               </div>
@@ -51,7 +54,7 @@ const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
   );
 };
 
-const Toggle = () => {
+export const Toggle = () => {
   const [x, setx] = useState(false);
 
   const onToggle = () => {
@@ -93,6 +96,9 @@ export const ButtonGeri: React.FC<{
 };
 
 export default function Sale() {
+  const [baseUsers, setBaseUsers] = useState([])
+
+
   return (
     <>
       <div className="flex flex-col  justify-center">
@@ -101,75 +107,16 @@ export default function Sale() {
           Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
         </span>
       </div>
-      
+
       <Geri
         items={[
           {
             title: "Te pergjithshme",
-            children: (
-              <>
-                <Base className="bg-red-0" label="Serial" name="serial" />
-                <Base
-                  className="bg-red-0"
-                  type="select"
-                  icon={
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
-                  }
-                  label="Monedha"
-                  name="serial"
-                />
-                <Base
-                  className="bg-red-0"
-                  label="Lloji i pageses"
-                  name="serial"
-                />
-                {/* <Base className="bg-red-0" label="Kanali i shperndarjes" name="serial" /> */}
-              </>
-            ),
+            children: <GeneralFields />,
           },
           {
             title: "Data",
-            children: (
-              <>
-                <Base
-                  className="bg-red-0"
-                  type="date"
-                  label="Data e fillimit"
-                  name="serial"
-                />
-                <Base
-                  className="bg-red-0"
-                  type="date"
-                  label="Data e perfundimit"
-                  name="serial"
-                />
-                <Base
-                  className="bg-red-0"
-                  type="date"
-                  label="Data e leshimit"
-                  name="serial"
-                />
-                <Base
-                  className="bg-red-0"
-                  type="date"
-                  label="Data retroaktive"
-                  name="serial"
-                />
-              </>
-            ),
+            children: <DatesFields />,
           },
         ]}
       />
@@ -178,129 +125,7 @@ export default function Sale() {
           {
             cols: "1",
             title: "Perdoruesit e polices",
-            children: (
-              <>
-                <div className="flex items-center">
-                  <Base className="bg-red-0" label="Lideri *" name="serial" />
-                  <div>
-                    <button className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig hover:bg-sky-50 transition-all duration-100">
-                      <div className="flex items-center gap-x-1">
-                        <Image
-                          className="cursor-pointer"
-                          src="/svg/edit.svg"
-                          alt="edit"
-                          width={"0"}
-                          height={"0"}
-                          style={{ width: 20, height: 20 }}
-                          priority
-                        />
-                        <span>Zgjidh</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <Base
-                    className="bg-red-0"
-                    label="Perdoruesi 2"
-                    name="serial"
-                  />
-                  <div>
-                    <button className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig hover:bg-sky-50 transition-all duration-100">
-                      <div className="flex items-center gap-x-1">
-                        <Image
-                          className="cursor-pointer"
-                          src="/svg/edit.svg"
-                          alt="edit"
-                          width={"0"}
-                          height={"0"}
-                          style={{ width: 20, height: 20 }}
-                          priority
-                        />
-                        <span>Zgjidh</span>
-                      </div>
-                    </button>
-                  </div>
-                  <div>
-                    <button className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig-error hover:bg-red-50 transition-all duration-100">
-                      <div className="flex items-center gap-x-1">
-                        <Image
-                          src="/svg/close.svg"
-                          alt="edit"
-                          width={"0"}
-                          height={"0"}
-                          style={{ width: 20, height: 20 }}
-                          priority
-                        />
-                        <span>Fshij</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <Base
-                    className="bg-red-0"
-                    label="Perdoruesi 3"
-                    name="serial"
-                  />
-                  <div>
-                    <button className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig hover:bg-sky-50 transition-all duration-100">
-                      <div className="flex items-center gap-x-1">
-                        <Image
-                          className="cursor-pointer"
-                          src="/svg/edit.svg"
-                          alt="edit"
-                          width={"0"}
-                          height={"0"}
-                          style={{ width: 20, height: 20 }}
-                          priority
-                        />
-                        <span>Zgjidh</span>
-                      </div>
-                    </button>
-                  </div>
-                  <div>
-                    <button className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig-error hover:bg-red-50 transition-all duration-100">
-                      <div className="flex items-center gap-x-1">
-                        <Image
-                          src="/svg/close.svg"
-                          alt="edit"
-                          width={"0"}
-                          height={"0"}
-                          style={{ width: 20, height: 20 }}
-                          priority
-                        />
-                        <span>Fshij</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-                <div className="w-full">
-                  <Modal
-                    title="Modali i pjesemarresve"
-                    description="Ketu mund te modikoni klientin e perzgjedhur."
-                    body={<CustomerModal />}
-                    noButtons
-                  >
-                    <ButtonGeri className="text-esig hover:bg-sky-50 !text-base !w-full">
-                      <div className="flex items-center gap-x-1 mx-auto">
-                        <svg
-                          className="stroke-esig"
-                          width="14"
-                          height="14"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                        >
-                          <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
-                        </svg>
-                        <span>Shto perdorues tjeter</span>
-                      </div>
-                    </ButtonGeri>
-                  </Modal>
-                </div>
-              </>
-            ),
+            children: <PolicyUsers setBaseUsers={setBaseUsers} />,
           },
           {
             cols: "1",
@@ -329,23 +154,15 @@ export default function Sale() {
                   <Toggle />- Erin Hoxha, 100%
                 </div>
 
-                <div className="flex flex-col min-w-60">
-                  <div className="flex items-center text-lg font-semibold text-gray-700">
-                    Perfituesit
-                    <GeriHoxha />
-                  </div>
-                  <Toggle />
-                  <ul>
-                    {beneficiaries.map((beneficiary, index) => {
-                      return (
-                        <li key={index}>
-                          {index === 0 && "*"} {beneficiary.displayName},{" "}
-                          {beneficiary.percentage * 100}%
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
+                {
+                  baseUsers.filter((user) => !!user?.id).length === 0 ? null :
+                    <Participants
+                      title='Perfituesit'
+                      baseUsers={baseUsers}
+                    />
+                }
+
+
 
                 <div className="flex flex-col min-w-60">
                   <div className="flex items-center text-lg font-semibold text-gray-700">
