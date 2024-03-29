@@ -35,8 +35,8 @@ const Draggable = ({baseUsers}) => {
                 </div>
               )}
 
-              <div className="flex items-center gap-4  mt-2 mb-4 ">
-                <span className="font-bold text-lg text-gray-600">
+              <div className="flex items-center justify-between gap-4  mt-2 mb-4 ">
+                <span className="font-bold text-lg text-gray-600 truncate w-3/5">
                   {data.displayName}
                 </span>
 

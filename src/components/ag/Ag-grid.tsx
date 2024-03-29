@@ -3,9 +3,9 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import { useState } from "react";
 import type { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
-import { ColGroupDef } from "ag-grid-enterprise";
+import { ColGroupDef, GridOptions } from "ag-grid-enterprise";
 
-interface IProps<T> {
+interface IProps<T>  extends GridOptions {
   rowData: T[];
   colDefs: (ColDef<T> | ColGroupDef<T>)[] | null;
   heightClass?: string;

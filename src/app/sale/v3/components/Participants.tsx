@@ -6,6 +6,7 @@ import { Dispatch, useEffect, useState } from "react";
 import { ButtonGeri } from "../page";
 import { IAction, SET } from "@/context/reducer";
 import { IParticipants } from "./ParticipantsWrapper";
+import numeral from "numeral";
 
 interface IProps {
   title: string;
@@ -15,6 +16,8 @@ interface IProps {
   stateKey: keyof IParticipants;
   percentageKey?: "ownershipPercentage" | "invoiceSplitPercentage" | "";
 }
+
+let toggle: boolean = false;
 
 const Participants: React.FC<IProps> = ({
   title,
@@ -27,7 +30,84 @@ const Participants: React.FC<IProps> = ({
   const [x, setx] = useState(false);
 
   useEffect(() => {
+    setx(toggle);
+
+    if (toggle) {
+      const splitPercentage = 1 / data.length;
+      const item = [
+        ...data.map((user: any) => {
+          return {
+            ...user,
+            [percentageKey]: splitPercentage,
+          };
+        }),
+      ];
+
+      dispatch({
+        type: SET,
+        payload: {
+          key: stateKey,
+          item,
+        },
+      });
+    } else {
+      if (!percentageKey) return;
+
+      const item = [
+        ...data.map((user: any, index: number) => {
+          if (index === 0) {
+            return {
+              ...user,
+              [percentageKey]: 1,
+            };
+          }
+
+          return {
+            ...user,
+            [percentageKey]: 0,
+          };
+        }),
+      ];
+
+      dispatch({
+        type: SET,
+        payload: {
+          key: stateKey,
+          item,
+        },
+      });
+    }
+  }, []);
+
+  const onToggle = () => {
+    setx(!x);
+    toggle = !x;
+
     if (!percentageKey) return;
+
+    // it was false
+    if (x === false) {
+      const splitPercentage = 1 / data.length;
+
+      const item = [
+        ...data.map((user: any) => {
+          return {
+            ...user,
+            [percentageKey]: splitPercentage,
+          };
+        }),
+      ];
+
+      dispatch({
+        type: SET,
+        payload: {
+          key: stateKey,
+          item,
+        },
+      });
+
+      return;
+    }
 
     const item = [
       ...data.map((user: any, index: number) => {
@@ -52,46 +132,6 @@ const Participants: React.FC<IProps> = ({
         item,
       },
     });
-  }, []);
-
-  const onToggle = () => {
-    setx(!x);
-
-    if (!percentageKey) return;
-
-    // it was false
-    if (x === false) {
-      const firstParticipantPercentage = data?.at(0)[percentageKey];
-
-      const splitPercentage = firstParticipantPercentage / copiedUsers.length;
-
-      setCopiedUsers([
-        ...copiedUsers.map((user: any) => {
-          return {
-            ...user,
-            [percentageKey]: splitPercentage,
-          };
-        }),
-      ]);
-
-      return;
-    }
-
-    setCopiedUsers([
-      ...copiedUsers.map((user: any, index: number) => {
-        if (index === 0) {
-          return {
-            ...user,
-            [percentageKey]: 1,
-          };
-        }
-
-        return {
-          ...user,
-          [percentageKey]: 0,
-        };
-      }),
-    ]);
   };
 
   return (
@@ -116,7 +156,7 @@ const Participants: React.FC<IProps> = ({
         </div>
       </ButtonGeri>
       <ul>
-        {data.map((user, index) => {
+        {data.map((user: any, index: number) => {
           return (
             <li key={index} className="flex items-center gap-2">
               {index === 0 && haveLeader ? (
@@ -133,7 +173,9 @@ const Participants: React.FC<IProps> = ({
                 <div>-</div>
               )}{" "}
               <span className="truncate max-w-32"> {user.displayName},</span>
-              {percentageKey && <span>{user[percentageKey] * 100}%</span>}
+              {percentageKey && (
+                <span>{numeral(user[percentageKey]).format("0.0%")}</span>
+              )}
             </li>
           );
         })}

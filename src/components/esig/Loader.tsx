@@ -1,23 +1,23 @@
 import Image from "next/image";
 
 interface IProps {
-    text?: string;
+  text?: string;
 }
 
-const Loader: React.FC<IProps> = ({ text = 'Process is running...' }) => {
-    return (
-        <div className="flex items-center">
-            <Image
-                src="/loader.svg"
-                alt="loader"
-                width={'0'}
-                height={'0'}
-                style={{ width: 40, height: 80 }}
-                priority
-            />
-            <span className="ml-2 font-bold text-esig">{text}</span>
-        </div>
-    )
-}
+const Loader: React.FC<IProps> = ({ text = "Process is running..." }) => {
+  return (
+    <div className="flex items-center">
+      <Image
+        src="/loader.svg"
+        alt="loader"
+        width={"0"}
+        height={"0"}
+        style={{ width: 40, height: 80 }}
+        priority
+      />
+      <span className="ml-2 font-bold text-esig">{text}</span>
+    </div>
+  );
+};
 
 export default Loader;

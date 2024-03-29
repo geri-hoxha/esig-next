@@ -10,6 +10,7 @@ import { ButtonGeri } from "../page";
 import { IParticipants } from "./ParticipantsWrapper";
 import { CREATE, DELETE, IAction, UPDATE } from "@/context/reducer";
 import { useToast } from "@/components/ui/use-toast";
+import RadioGroup from "../RadioGroup";
 
 interface IProps {
   data: any;
@@ -181,6 +182,38 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
           description="Ketu mund te modikoni klientin e perzgjedhur."
           body={
             <CustomerModal
+              footer={
+                <>
+                  <Image
+                    className="cursor-pointer"
+                    src="/svg/question.svg"
+                    alt="edit"
+                    width={"0"}
+                    height={"0"}
+                    style={{ width: 30, height: 20 }}
+                    priority
+                  />
+                  <div className="flex items-center w-full">
+                    <div className="mr-2 text-gray-700 font-semibold text-sm">
+                      Extra Charge:
+                    </div>
+                    <div className="w-10">
+                      <RadioGroup
+                        options={[
+                          {
+                            id: "3",
+                            title: "Po",
+                          },
+                          {
+                            id: "4",
+                            title: "Jo",
+                          },
+                        ]}
+                      />
+                    </div>
+                  </div>
+                </>
+              }
               onSave={(values) => onParticipantUpdate(values, undefined)}
             />
           }
@@ -272,33 +305,44 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
         );
       })}
 
-      {
-        data.length < 3 &&
+      {data.length < 3 ? (
         <div className="w-full">
-        <Modal
-          title="Modali i pjesemarresve"
-          description="Ketu mund te modikoni klientin e perzgjedhur."
-          body={<CustomerModal onSave={onAddParticipant} />}
-          noButtons
-        >
-          <ButtonGeri className="text-esig hover:bg-sky-50 !text-base !w-full">
-            <div className="flex items-center gap-x-1 mx-auto">
-              <svg
-                className="stroke-esig"
-                width="14"
-                height="14"
-                xmlns="http://www.w3.org/2000/svg"
-                fillRule="evenodd"
-                clipRule="evenodd"
-              >
-                <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
-              </svg>
-              <span>Shto perdorues tjeter</span>
-            </div>
-          </ButtonGeri>
-        </Modal>
-      </div>
-      }
+          <Modal
+            title="Modali i pjesemarresve"
+            description="Ketu mund te modikoni klientin e perzgjedhur."
+            body={<CustomerModal onSave={onAddParticipant} />}
+            noButtons
+          >
+            <ButtonGeri className="text-esig hover:bg-sky-50 !text-base !w-full">
+              <div className="flex items-center gap-x-1 mx-auto">
+                <svg
+                  className="stroke-esig"
+                  width="14"
+                  height="14"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                >
+                  <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+                </svg>
+                <span>Shto perdorues tjeter</span>
+              </div>
+            </ButtonGeri>
+          </Modal>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center text-gray-600 gap-2 text-sm">
+          <Image
+            src="/svg/info.svg"
+            alt="edit"
+            width={"0"}
+            height={"0"}
+            style={{ width: 17, height: 17 }}
+            priority
+          />
+          <span>Polica arriti maksimumin e perdorueve</span>
+        </div>
+      )}
     </>
   );
 };
