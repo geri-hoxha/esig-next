@@ -138,7 +138,7 @@ const Participants: React.FC<IProps> = ({
     <div className="flex flex-col min-w-60">
       <div className="flex items-center text-lg font-semibold text-gray-700">
         {title}
-        <GeriHoxha baseUsers={data} />
+        <GeriHoxha baseUsers={data} dispatch={dispatch} stateKey={stateKey} percentageKey={percentageKey}/>
       </div>
       <ButtonGeri className="text-esig hover:bg-sky-50" onClick={onToggle}>
         <div className="flex items-center gap-x-1">
@@ -172,9 +172,9 @@ const Participants: React.FC<IProps> = ({
               ) : (
                 <div>-</div>
               )}{" "}
-              <span className="truncate max-w-32"> {user.displayName},</span>
+              <span className="truncate max-w-32"> {user?.displayName},</span>
               {percentageKey && (
-                <span>{numeral(user[percentageKey]).format("0.0%")}</span>
+                <span>{numeral(user[percentageKey]).format(`0${user[percentageKey] === 0 ? '' : '.0'}%`)}</span>
               )}
             </li>
           );

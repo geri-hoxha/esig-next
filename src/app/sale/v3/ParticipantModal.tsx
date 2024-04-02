@@ -27,24 +27,31 @@ export const beneficiaries = [
   },
 ];
 
-const ParticipantModal: React.FC<{ children: ReactNode , baseUsers }> = ({
-  children,
-  baseUsers
- }) => {
-
-
+const ParticipantModal: React.FC<{
+  children: ReactNode;
+  baseUsers: any[];
+  percentageKey: string;
+  dispatch;
+  stateKey;
+}> = ({ children, baseUsers, percentageKey, dispatch, stateKey }) => {
   return (
     <>
       <div className="flex flex-col gap-4">
-       <Draggable baseUsers={baseUsers} />
+        <Draggable
+          baseUsers={baseUsers}
+          percentageKey={percentageKey}
+          dispatch={dispatch}
+          stateKey={stateKey}
+        />
       </div>
 
-        {children}
+      {children}
       <div className="flex gap-2  items-center w-1/2 ml-auto mt-4">
         <DrawerClose asChild>
-          <Button variant="outline">Cancel</Button>
-        </DrawerClose>
+             <Button variant="outline">Cancel</Button>
+         </DrawerClose>
         <Button variant="default">Ruaj pjesemarresit</Button>
+
       </div>
     </>
   );

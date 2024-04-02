@@ -4,8 +4,10 @@ import ParticipantModal from "./ParticipantModal";
 import { ButtonGeri } from "./page";
 import { useCallback, useState } from "react";
 import CustomerModal from "./CustomerModal";
+import { CREATE } from "@/context/reducer";
+import Base from "../components/Fields_v2/Base";
 
-const GeriHoxha = ({baseUsers}) => {
+const GeriHoxha = ({ baseUsers, percentageKey, dispatch, stateKey }) => {
   const [firstModalOpen, setFirstModalOpen] = useState(false);
   const [nestedModalOpen, setNestedModalOpen] = useState(false);
 
@@ -22,6 +24,18 @@ const GeriHoxha = ({baseUsers}) => {
     setFirstModalOpen(e);
   }, []);
 
+  const onParticipantAdd = (value: any) => {
+    console.log(value);
+
+    dispatch({
+      type: CREATE,
+      payload: {
+        item: value,
+        key: stateKey,
+      },
+    });
+  };
+
   if (firstModalOpen) {
     return (
       <Modal
@@ -30,7 +44,7 @@ const GeriHoxha = ({baseUsers}) => {
         title="Modali i perfituesit"
         description="Ketu mund te modikoni perfituesit e polices."
         body={
-          <ParticipantModal baseUsers={baseUsers}>
+          <ParticipantModal baseUsers={baseUsers} percentageKey={percentageKey} dispatch={dispatch} stateKey={stateKey}>
             <ButtonGeri
               className="text-esig hover:bg-sky-50 !text-base !w-full"
               onClick={() => {
@@ -68,7 +82,32 @@ const GeriHoxha = ({baseUsers}) => {
       <Modal
         title="Modali i pjesemarresve"
         description="Ketu mund te modikoni klientin e perzgjedhur."
-        body={<CustomerModal />}
+        body={
+          <CustomerModal
+            onSave={onParticipantAdd}
+            footer={
+              <>
+                <Image
+                  className="cursor-pointer"
+                  src="/svg/question.svg"
+                  alt="edit"
+                  width={"0"}
+                  height={"0"}
+                  style={{ width: 30, height: 20 }}
+                  priority
+                />
+                <div className="w-full">
+                  <Base
+                    className="bg-red-0"
+                    label="Perqindja"
+                    name="serial"
+                    suffix={"%"}
+                  />
+                </div>
+              </>
+            }
+          />
+        }
         noButtons
         openProp
         setOpenProp={(open: boolean) => {

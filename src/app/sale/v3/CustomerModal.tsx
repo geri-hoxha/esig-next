@@ -4,15 +4,14 @@ import RadioGroup from "./RadioGroup";
 import AgGrid from "@/components/ag/Ag-grid";
 import type { ColDef } from "ag-grid-community";
 import { ReactNode, useEffect, useState } from "react";
-import { AgChartsReact } from "ag-charts-react";
 import CustomerDonut from "./CustomerDonut";
 import { Button } from "@/components/ui/button";
 import { ButtonGeri } from "./page";
 import { DrawerClose } from "@/components/ui/drawer";
-import { Separator } from "@/components/ui/separator";
 import request from "@/request";
 import { token } from "@/components/esig/Navbar/Currencies";
 import Spinner from "./components/Spinner";
+import { getQueryParams } from "./components/PolicyUsers";
 
 interface CustomerModel {
   displayName: string;
@@ -32,6 +31,27 @@ const CustomerModal = ({
   const [values, setValues] = useState(null);
   const [searchedName, setSeachedName] = useState();
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  const init = async () => {
+    const params = getQueryParams();
+    
+    if (!params.id) return;
+
+    const response = await request(`/customer/${params.id}`, token, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    setValues(response.data);
+  };
 
   const colDefs: ColDef[] = [
     {
@@ -177,7 +197,7 @@ const CustomerModal = ({
 
       <div className="col-span-9 border-l-2 border-dashed pl-4">
         {values?.displayName ? (
-          <div className=" flex items-center mb-8">
+          <div className=" flex items-center mb-4  h-8">
             <span className="text-lg flex items-center ">
               {" "}
               Te dhenat e klientit:{" "}
@@ -202,7 +222,7 @@ const CustomerModal = ({
             </ButtonGeri>
           </div>
         ) : (
-          <div className="mb-8 text-sm text-gray-600 flex items-center gap-2">
+          <div className="mb-4 h-8 text-sm text-gray-600 flex items-center gap-2">
             <Image
               src="/svg/info.svg"
               alt="edit"

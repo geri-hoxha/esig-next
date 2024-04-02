@@ -3,7 +3,7 @@
 import Base from "../components/Fields_v2/Base";
 import Image from "next/image";
 import Zerat from "./Zerat";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import History from "./History";
 import Comments from "./Comments";
 import Modal from "@/components/esig/Modal";
@@ -11,7 +11,7 @@ import CustomerModal from "./CustomerModal";
 import { beneficiaries } from "./ParticipantModal";
 import GeriHoxha from "./GeriHoxha";
 import ZeratModal from "./ZeratModal";
-import PolicyUsers from "./components/PolicyUsers";
+import PolicyUsers, { removeQueryParam } from "./components/PolicyUsers";
 import GeneralFields from "./components/GeneralFields";
 import DatesFields from "./components/DatesFields";
 import Participants from "./components/Participants";
@@ -56,6 +56,8 @@ export const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
   );
 };
 
+ 
+ 
 export const ButtonGeri: React.FC<{
   children: ReactNode;
   className: string;
@@ -74,6 +76,11 @@ export const ButtonGeri: React.FC<{
 export default function Sale() {
   const [baseUsers, setBaseUsers] = useState([]);
 
+
+  useEffect(() => {
+    removeQueryParam("id");
+  }, []);
+
   return (
     <>
       <div className="flex flex-col  justify-center">
@@ -82,8 +89,7 @@ export default function Sale() {
           Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
         </span>
       </div>
-
-      <Geri
+       <Geri
         items={[
           {
             title: "Te pergjithshme",

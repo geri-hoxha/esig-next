@@ -3,21 +3,78 @@
 import Image from "next/image";
 
 import Modal from "@/components/esig/Modal";
-import React, { Dispatch } from "react";
+import React, { Dispatch, useState } from "react";
 import Base from "../../components/Fields_v2/Base";
 import CustomerModal from "../CustomerModal";
 import { ButtonGeri } from "../page";
 import { IParticipants } from "./ParticipantsWrapper";
-import { CREATE, DELETE, IAction, UPDATE } from "@/context/reducer";
+import { CREATE, DELETE, IAction, SET, UPDATE } from "@/context/reducer";
 import { useToast } from "@/components/ui/use-toast";
 import RadioGroup from "../RadioGroup";
+import { ToastAction } from "@/components/ui/toast";
 
 interface IProps {
   data: any;
   dispatch: Dispatch<IAction<IParticipants>>;
 }
 
+// Function to push query parameters to the current URL
+export function pushQueryParams(params:any) {
+  // Get current URL and its search parameters
+  const url = new URL(window.location.href);
+  const searchParams = new URLSearchParams(url.search);
+
+  // Append or set the provided parameters
+  for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+          searchParams.set(key, params[key]);
+      }
+  }
+
+  // Update the URL with the new parameters
+  url.search = searchParams.toString();
+  window.history.pushState({ path: url.href }, '', url.href);
+}
+
+// Function to get query parameters from the current URL
+export function getQueryParams() {
+    // Get current URL and its search parameters
+    const url = new URL(window.location.href);
+    const searchParams = new URLSearchParams(url.search);
+    
+    // Create an object to store the query parameters
+    const queryParams = {};
+
+    // Iterate over the search parameters and populate the queryParams object
+    for (const [key, value] of searchParams?.entries()) {
+        queryParams[key] = value;
+    }
+
+    return queryParams;
+}
+
+export function removeQueryParam(paramKey: string) {
+  // Get current URL and its search parameters
+  const url = new URL(window.location.href);
+  const searchParams = new URLSearchParams(url.search);
+
+  // Remove the specified parameter
+  searchParams.delete(paramKey);
+
+  // Update the URL with the new parameters
+  url.search = searchParams.toString();
+  const newUrl = url.toString();
+
+  // Replace the current URL with the new URL
+  window.history.replaceState({ path: newUrl }, '', newUrl);
+}
+
+
+
+
 const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
+  const { toast } = useToast();
+
   const onAddParticipant = (values: any) => {
     dispatch({
       type: CREATE,
@@ -166,7 +223,78 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
         },
       },
     });
+
+    toast({
+      title: `Pjesemarresi: ${data.displayName} u fshi nga lista!`,
+      description: "Klikoni 'Undo' nese ishte gabimisht.",
+      action: (
+        <ToastAction
+          className="bg-esig text-white hover:bg-esig-fluorite"
+          onClick={() => {
+            // using the power of closures
+            dispatch({
+              type: SET,
+              payload: { key: 'policyUsers', item: data },
+            });
+            dispatch({
+              type: SET,
+              payload: { key: 'invoiceRecipients', item: data },
+            });
+            dispatch({
+              type: SET,
+              payload: { key: 'beneficiaries', item: data },
+            });
+            dispatch({
+              type: SET,
+              payload: { key: 'policyHolders', item: data },
+            });
+    
+           }}
+          altText="Goto schedule to undo"
+        >
+          Undo
+        </ToastAction>
+      ),
+    });
+
   };
+
+  const footer = (
+    <>
+      <Image
+        className="cursor-pointer"
+        src="/svg/question.svg"
+        alt="edit"
+        width={"0"}
+        height={"0"}
+        style={{ width: 30, height: 20 }}
+        priority
+      />
+      <div className="flex items-center w-full">
+        <div className="mr-2 text-gray-700 font-semibold text-sm">
+          Extra Charge:
+        </div>
+        <div className="w-10">
+          <RadioGroup
+            options={[
+              {
+                id: "3",
+                title: "Po",
+              },
+              {
+                id: "4",
+                title: "Jo",
+              },
+            ]}
+          />
+        </div>
+      </div>
+    </>
+  );
+
+  const setSelectedPolicyUser = (id: string) => {
+    pushQueryParams({ id});    
+  }
 
   if (data.length === 0) {
     return (
@@ -182,38 +310,7 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
           description="Ketu mund te modikoni klientin e perzgjedhur."
           body={
             <CustomerModal
-              footer={
-                <>
-                  <Image
-                    className="cursor-pointer"
-                    src="/svg/question.svg"
-                    alt="edit"
-                    width={"0"}
-                    height={"0"}
-                    style={{ width: 30, height: 20 }}
-                    priority
-                  />
-                  <div className="flex items-center w-full">
-                    <div className="mr-2 text-gray-700 font-semibold text-sm">
-                      Extra Charge:
-                    </div>
-                    <div className="w-10">
-                      <RadioGroup
-                        options={[
-                          {
-                            id: "3",
-                            title: "Po",
-                          },
-                          {
-                            id: "4",
-                            title: "Jo",
-                          },
-                        ]}
-                      />
-                    </div>
-                  </div>
-                </>
-              }
+              footer={footer}
               onSave={(values) => onParticipantUpdate(values, undefined)}
             />
           }
@@ -257,11 +354,12 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
               body={
                 <CustomerModal
                   onSave={(values) => onParticipantUpdate(values, user.id)}
+                  footer={footer}
                 />
               }
               noButtons
             >
-              <div>
+              <div onClick={() => setSelectedPolicyUser(user.id)}>
                 <button className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig hover:bg-sky-50 transition-all duration-100">
                   <div className="flex items-center gap-x-1">
                     <Image
@@ -310,7 +408,7 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
           <Modal
             title="Modali i pjesemarresve"
             description="Ketu mund te modikoni klientin e perzgjedhur."
-            body={<CustomerModal onSave={onAddParticipant} />}
+            body={<CustomerModal onSave={onAddParticipant} footer={footer} />}
             noButtons
           >
             <ButtonGeri className="text-esig hover:bg-sky-50 !text-base !w-full">

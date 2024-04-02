@@ -1,4 +1,5 @@
 "use client";
+import { removeQueryParam } from "@/app/sale/v3/components/PolicyUsers";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -57,6 +58,9 @@ const Modal: React.FC<IProps> = ({
         open={openProp}
         onOpenChange={(open) => {
           setOpenProp?.(open);
+          if (!open) {
+            removeQueryParam("id");
+          }
         }}
       >
         <DialogTrigger asChild>{children}</DialogTrigger>
@@ -103,7 +107,15 @@ const Modal: React.FC<IProps> = ({
   }
 
   return (
-    <Drawer open={openProp} onOpenChange={setOpenProp}>
+    <Drawer
+      open={openProp}
+      onOpenChange={(open) => {
+        setOpenProp?.(open);
+        if (!open) {
+          removeQueryParam("id");
+        }
+      }}
+    >
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
