@@ -18,11 +18,12 @@ const Zerat = () => {
           Shtrim ne spital
         </span>
         <div className="grid grid-cols-2 gap-8  ">
-          <Base label="Primi" name="serial" className="h-8" />
+          <Base label="Primi" name="serial" className="h-8" value={2000} suffix={'Euro'} />
           <Base
             label="Shuma e siguruar / limit i mbulimit"
             name="serial"
             className="h-8"
+            value={4000} suffix={'Euro'}
           />
         </div>
         <div className="grid grid-cols-2 gap-8 ">

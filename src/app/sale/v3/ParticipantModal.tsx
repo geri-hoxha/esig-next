@@ -33,7 +33,7 @@ const ParticipantModal: React.FC<{
   percentageKey: string;
   dispatch;
   stateKey;
-}> = ({ children, baseUsers, percentageKey, dispatch, stateKey }) => {
+}> = ({ children, baseUsers, percentageKey, dispatch, stateKey, haveLeader }) => {
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -41,6 +41,7 @@ const ParticipantModal: React.FC<{
           baseUsers={baseUsers}
           percentageKey={percentageKey}
           dispatch={dispatch}
+          haveLeader={haveLeader}
           stateKey={stateKey}
         />
       </div>

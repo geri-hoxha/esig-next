@@ -3,7 +3,8 @@ import { ReactNode } from "react";
 interface IProps {
   label: ReactNode;
   defaultChecked?: boolean;
-  name?: string
+  name?: string;
+  onChange?: any
 }
 
 function generateRandomString(length: number) {
@@ -16,7 +17,7 @@ function generateRandomString(length: number) {
   return result;
 }
 
-const Checkbox: React.FC<IProps> = ({ label , defaultChecked = false, name = generateRandomString(10)}) => {
+const Checkbox: React.FC<IProps> = ({ label ,onChange, defaultChecked = false, name = generateRandomString(10)}) => {
   return (
     <fieldset>
       <legend className="sr-only"></legend>
@@ -28,6 +29,7 @@ const Checkbox: React.FC<IProps> = ({ label , defaultChecked = false, name = gen
             name={name}
             type="checkbox"
             defaultChecked={defaultChecked}
+            onClick={onChange}
             className="h-4 w-4 rounded border-gray-300 text-esig focus:ring-esig"
           />
         </div>

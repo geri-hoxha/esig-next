@@ -7,6 +7,54 @@ import Base from "../components/Fields_v2/Base";
 import Checkbox from "./Checkbox";
 import Templates from "./Templates";
 
+const Sublimits = () => {
+  const [count, setCount] = useState(1);
+
+  return (
+    <div className="flex flex-col gap-6">
+      <span className="font-bold text-gray-600 text-center">
+        4. Nenlimitet:
+      </span>
+      <div className="grid grid-cols-2 gap-4">
+        {Array.from(Array(count).keys()).map((index) => {
+          return (
+            <>
+              <div className="">
+                <Base
+                  label={`Nenmbulimi ${index + 1}`}
+                  value="Valid kur personi iken per lesh"
+                />
+              </div>
+              <div>
+                <Base className="bg-red-0 " label="Vlera" value={290} />
+              </div>
+            </>
+          );
+        })}
+      </div>
+
+      <ButtonGeri
+        onClick={() => setCount(count + 1)}
+        className="text-esig hover:bg-sky-50 !text-base !w-full"
+      >
+        <div className="flex items-center gap-x-1 mx-auto">
+          <svg
+            className="stroke-esig"
+            width="14"
+            height="14"
+            xmlns="http://www.w3.org/2000/svg"
+            fillRule="evenodd"
+            clipRule="evenodd"
+          >
+            <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+          </svg>
+          <span>Shto nenlimit tjeter</span>
+        </div>
+      </ButtonGeri>
+    </div>
+  );
+};
+
 const Box = ({ name, description, checked, index, setCoverageOpen }: any) => {
   const randomNumber = Math.floor(1000 + Math.random() * 9000);
   const randomNumber2 = Math.floor(10 + Math.random() * 90);
@@ -62,6 +110,39 @@ interface ICoverages {
   description: string;
   checked?: boolean;
 }
+
+const templates = [
+  {
+    id: 1,
+    title: "Paketa Full",
+    description: "Paketa standarde e garancise se ofertes",
+  },
+  {
+    id: 2,
+    title: "Paketa Variant 20%",
+    description: "Paketa standarde e garancise se ofertes",
+  },
+  {
+    id: 3,
+    title: "Paketa Variant 40%",
+    description: "Paketa standarde e garancise se ofertes",
+  },
+  {
+    id: 4,
+    title: "Variant 2",
+    description: "Paketa standarde e garancise se ofertes",
+  },
+  {
+    id: 5,
+    title: "Variant 3",
+    description: "Paketa standarde e garancise se ofertes",
+  },
+  {
+    id: 6,
+    title: "Variant 4",
+    description: "Paketa standarde e garancise se ofertes",
+  },
+];
 
 const staticCoverages: ICoverages[] = [
   {
@@ -125,28 +206,33 @@ const staticCoverages: ICoverages[] = [
 
 const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
   setCoverageOpen,
+  increment,
 }) => {
-  const [geri, setGeri] = useState(false);
 
-  useEffect(() => {
-    setGeri(true);
-  }, []);
+  const [arrayFake, setArrayFake] = useState<any>([]);
+
+  const onChange = () => {
+    setGeri(false);
+
+    setTimeout(() => {
+      setGeri(true);
+
+      setArrayFake(
+        staticCoverages.slice(0, Math.floor(Math.random() * 10) + 1)
+      );
+    }, 1000);
+  };
 
   return (
     <div className="flex flex-col gap-6  overflow-x-hidden">
+      <Templates items={templates} onChange={onChange} />
 
-      <Templates />
       <div
-        className={`flex flex-col border-t-2 border-dashed  scrollArea max-h-[320px] overflow-x-hidden overflow-y-auto pr-2  transition-all duration-500
+        className={`transition-all overflow-hidden  ease-in-out duration-1000      flex flex-col border-t-2 border-dashed  scrollArea   pr-2   
       
-      ${
-        geri
-          ? " translate-x-0 opacity-100 visible pointer-events-auto"
-          : "-translate-x-10 opacity-0 invisible pointer-events-none"
-      } 
-      `}
+      ${geri ? "max-h-screen" : "max-h-0"} `}
       >
-        {staticCoverages.map((coverage, index) => {
+        {arrayFake.map((coverage, index) => {
           return (
             <Box
               key={index}
@@ -157,7 +243,7 @@ const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
           );
         })}
       </div>
-      <div className="border-t-2 border-dashed w-full pt-3 text-right">
+      <div className="border-t-2 border-dashed w-full pt-3 text-right flex items-center justify-end">
         <DrawerClose asChild>
           <button className="w-max   text-base rounded-md  px-3 py-1     text-esig-error hover:bg-red-50 transition-all duration-100">
             <div className="flex items-center gap-x-1">
@@ -173,6 +259,26 @@ const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
             </div>
           </button>
         </DrawerClose>
+        {arrayFake.length > 0 && (
+          <DrawerClose asChild>
+            <button
+              onClick={increment}
+              className="w-max   text-lg rounded-md  px-3 py-1     text-esig hover:bg-sky-50 transition-all duration-100"
+            >
+              <div className="flex items-center gap-x-2">
+                <Image
+                  src="/svg/edit.svg"
+                  alt="edit"
+                  width={"0"}
+                  height={"0"}
+                  style={{ width: 20, height: 20 }}
+                  priority
+                />
+                <span>Ruaj dhe apliko</span>
+              </div>
+            </button>
+          </DrawerClose>
+        )}
       </div>
     </div>
   );
@@ -215,12 +321,18 @@ const Limit = ({ name }: any) => {
               },
             ]}
           />
-          <Base label="Vlera" name="serial" suffix={type ? "%" : "Euro"} />
+          <Base
+            label="Vlera"
+            name="serial"
+            value={3500}
+            suffix={type ? "%" : "Euro"}
+          />
           {type && (
             <>
               <Base
                 label="Vlera min"
                 name="serial"
+                value={200}
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -242,6 +354,7 @@ const Limit = ({ name }: any) => {
               <Base
                 label="Vlera max"
                 name="serial"
+                value={10000}
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -269,6 +382,9 @@ const Limit = ({ name }: any) => {
 };
 
 const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
+  const [isFlat, setIsFlat] = useState<boolean>(false);
+  const [isFlat2, setIsFlat2] = useState<boolean>(false);
+
   return (
     <div className="grid grid-cols-12 gap-6 mt-2">
       <div className={` ${openSublimits ? "col-span-9 " : "col-span-12 "}   `}>
@@ -280,6 +396,9 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
             <div className="w-full flex items-center ml-auto gap-4 max-w-lg">
               <div>
                 <Checkbox
+                  onChange={(event) => {
+                    setIsFlat(event.target.checked);
+                  }}
                   label={
                     <span className="text-sm font-semibold text-gray-800 w-max block">
                       I sheshte
@@ -291,7 +410,8 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                 className="bg-red-0 "
                 label="Premium"
                 name="serial"
-                suffix="Euro"
+                suffix={isFlat ? "Euro" : "%"}
+                value={isFlat ? 2000 : 10}
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -322,6 +442,9 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
             <div className="w-full flex items-center gap-4 ml-auto  max-w-lg">
               <div>
                 <Checkbox
+                  onChange={(event) => {
+                    setIsFlat2(event.target.checked);
+                  }}
                   label={
                     <span className="text-sm font-semibold text-gray-800 w-max block">
                       I sheshte
@@ -333,7 +456,8 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                 className="bg-red-0 "
                 label="Shuma e siguruar"
                 name="serial"
-                suffix="Euro"
+                value={isFlat2 ? 4000 : 10}
+                suffix={isFlat2 ? "Euro" : "%"}
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -372,25 +496,7 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
           openSublimits ? "" : "hidden"
         }    `}
       >
-        <div className="flex flex-col gap-6">
-          <span className="font-bold text-gray-600 text-center">
-            4. Nenlimitet:
-          </span>
-          <div className="grid grid-cols-2 gap-4">
-            {Array.from(Array(4).keys()).map((index) => {
-              return (
-                <>
-                  <div className="">
-                    <Base label={`Nenmbulimi ${index + 1}`} name="serial" />
-                  </div>
-                  <div>
-                    <Base className="bg-red-0 " label="Vlera" name="serial" />
-                  </div>
-                </>
-              );
-            })}
-          </div>
-        </div>
+        <Sublimits />
       </div>
 
       <div className="col-span-12">
@@ -474,12 +580,15 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
   );
 };
 
-const ZeratModal = () => {
+const ZeratModal = ({ increment }) => {
   const [open, setOpen] = useState(false);
 
   const [coverageOpen, setCoverageOpen] = useState(false);
 
   const [openSublimits, setOpenSublimits] = useState(false);
+
+
+  const [geri, setGeri] = useState(false);
 
   if (coverageOpen) {
     return (
@@ -522,7 +631,12 @@ const ZeratModal = () => {
       <Modal
         title="Modali i mbulimeve"
         description="Selektoni cilin mbulimin doni te perditesoni"
-        body={<CoveragesModal setCoverageOpen={setCoverageOpen} />}
+        body={
+          <CoveragesModal
+            setCoverageOpen={setCoverageOpen}
+            increment={increment}
+          />
+        }
         noButtons
         openProp={open}
         setOpenProp={setOpen}

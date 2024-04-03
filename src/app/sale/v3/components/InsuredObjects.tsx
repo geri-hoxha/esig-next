@@ -16,7 +16,7 @@ const InsuredObjects = () => {
       <Modal
         title="Modali i objekteve te siguruara"
         description="Ketu mund te modikoni klientin e perzgjedhur."
-        body={<CustomerModal onSave={onSave} />}
+        body={<CustomerModal onSave={onSave} footer={null} />}
         noButtons
         openProp={open}
         setOpenProp={setOpen}
@@ -47,7 +47,7 @@ const InsuredObjects = () => {
       <Modal
         title="Modali i objekteve te siguruara"
         description="Ketu mund te modikoni klientin e perzgjedhur."
-        body={<CustomerModal onSave={onSave} />}
+        body={<CustomerModal onSave={onSave} footer={null} />}
         noButtons
         openProp={open}
         setOpenProp={setOpen}

@@ -138,7 +138,7 @@ const Participants: React.FC<IProps> = ({
     <div className="flex flex-col min-w-60">
       <div className="flex items-center text-lg font-semibold text-gray-700">
         {title}
-        <GeriHoxha baseUsers={data} dispatch={dispatch} stateKey={stateKey} percentageKey={percentageKey}/>
+        <GeriHoxha haveLeader={haveLeader} baseUsers={data} dispatch={dispatch} stateKey={stateKey} percentageKey={percentageKey}/>
       </div>
       <ButtonGeri className="text-esig hover:bg-sky-50" onClick={onToggle}>
         <div className="flex items-center gap-x-1">

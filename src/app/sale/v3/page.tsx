@@ -1,25 +1,18 @@
 "use client";
 
-import Base from "../components/Fields_v2/Base";
-import Image from "next/image";
-import Zerat from "./Zerat";
 import { ReactNode, useEffect, useState } from "react";
 import History from "./History";
 import Comments from "./Comments";
-import Modal from "@/components/esig/Modal";
-import CustomerModal from "./CustomerModal";
-import { beneficiaries } from "./ParticipantModal";
-import GeriHoxha from "./GeriHoxha";
-import ZeratModal from "./ZeratModal";
-import PolicyUsers, { removeQueryParam } from "./components/PolicyUsers";
+import { removeQueryParam } from "./components/PolicyUsers";
 import GeneralFields from "./components/GeneralFields";
 import DatesFields from "./components/DatesFields";
-import Participants from "./components/Participants";
-import InsuredObjects from "./components/InsuredObjects";
 import ParticipantsWrapper from "./components/ParticipantsWrapper";
+import ZeratWrapper from "./components/ZeratWrapper";
+import Insurers from "./components/Insurers";
+import Others from "./components/Others";
 
 interface IProps {
-  title: string;
+  title: ReactNode;
   items: {
     title: ReactNode;
     children: ReactNode;
@@ -32,7 +25,7 @@ export const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
   return (
     <div className="flex flex-col gap-4">
       {typeof title === "string" ? (
-        <h2 className="text-2xl bg-red-0">{title}</h2>
+        <h2 className="text-2xl">{title}</h2>
       ) : (
         title
       )}
@@ -40,7 +33,11 @@ export const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
         {items.map((item, index) => {
           return (
             <div key={index} className="flex flex-col gap-4">
-              <h3 className="text-xl bg-red-0">{item.title}</h3>
+              {typeof item.title === "string" ? (
+                <h3 className="text-xl">{item.title}</h3>
+              ) : (
+                item.title
+              )}
               <div
                 className={`grid grid-cols-${item?.cols ?? "2"} gap-4 ${
                   item.className ?? ""
@@ -56,8 +53,6 @@ export const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
   );
 };
 
- 
- 
 export const ButtonGeri: React.FC<{
   children: ReactNode;
   className: string;
@@ -76,7 +71,6 @@ export const ButtonGeri: React.FC<{
 export default function Sale() {
   const [baseUsers, setBaseUsers] = useState([]);
 
-
   useEffect(() => {
     removeQueryParam("id");
   }, []);
@@ -89,7 +83,7 @@ export default function Sale() {
           Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
         </span>
       </div>
-       <Geri
+      <Geri
         items={[
           {
             title: "Te pergjithshme",
@@ -101,55 +95,31 @@ export default function Sale() {
           },
         ]}
       />
-   
+
       <ParticipantsWrapper />
+
+      <ZeratWrapper />
+
       <Geri
-        title="Zerat e polices ( zeri 1 )"
+        title="Siguruesit dhe te tjera"
         items={[
           {
-            title: "Objektet e siguruara",
-            className: "scrollArea max-h-[500px] overflow-y-scroll pr-2 pb-2",
-            children: <InsuredObjects />,
-          },
-          {
-            title: (
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl bg-red-0">Mbulimet e objektit / eve</h2>
-                <ZeratModal />
-              </div>
-            ),
+            title: "Siguruesit",
             cols: "1",
-            className: "scrollArea max-h-[500px] overflow-y-auto pr-2",
             children: (
               <>
-                <Zerat />
-                <Zerat />
-                <Zerat />
+                <Insurers />
               </>
             ),
           },
+          {
+            title: "Te tjera",
+            cols: "1",
+            children: <Others />,
+          },
         ]}
       />
-      <div className="flex items-center ">
-        <div className="border-b-2 w-full h-px border-dashed  border-esig"></div>
-        <div className="cursor-pointer group border-2  w-1/2 mx-auto  py-2 text-esig   h-max border-dashed  border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-sm   transition-all duration-200 relative">
-          <div className="flex items-center justify-center gap-2">
-            <svg
-              className="stroke-esig"
-              width="15"
-              height="15"
-              xmlns="http://www.w3.org/2000/svg"
-              fillRule="evenodd"
-              clipRule="evenodd"
-            >
-              <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
-            </svg>
 
-            <span className="font-semibold">Shto ze police</span>
-          </div>
-        </div>
-        <div className="border-b-2 w-full h-px border-dashed  border-esig"></div>
-      </div>
       <Geri
         title="Historik dhe komente"
         items={[

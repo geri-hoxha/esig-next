@@ -7,7 +7,7 @@ import CustomerModal from "./CustomerModal";
 import { CREATE } from "@/context/reducer";
 import Base from "../components/Fields_v2/Base";
 
-const GeriHoxha = ({ baseUsers, percentageKey, dispatch, stateKey }) => {
+const GeriHoxha = ({ baseUsers, percentageKey, dispatch, stateKey, haveLeader }) => {
   const [firstModalOpen, setFirstModalOpen] = useState(false);
   const [nestedModalOpen, setNestedModalOpen] = useState(false);
 
@@ -44,7 +44,7 @@ const GeriHoxha = ({ baseUsers, percentageKey, dispatch, stateKey }) => {
         title="Modali i perfituesit"
         description="Ketu mund te modikoni perfituesit e polices."
         body={
-          <ParticipantModal baseUsers={baseUsers} percentageKey={percentageKey} dispatch={dispatch} stateKey={stateKey}>
+          <ParticipantModal haveLeader={haveLeader} baseUsers={baseUsers} percentageKey={percentageKey} dispatch={dispatch} stateKey={stateKey}>
             <ButtonGeri
               className="text-esig hover:bg-sky-50 !text-base !w-full"
               onClick={() => {

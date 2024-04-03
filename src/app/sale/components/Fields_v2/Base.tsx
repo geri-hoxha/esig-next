@@ -13,6 +13,7 @@ export interface IField {
   value?: any;
   suffix?: any;
   readOnly?: boolean;
+  selectDefaultValue?: string
 }
 
 const Base = ({
@@ -26,6 +27,7 @@ const Base = ({
   onChange = () => {},
   value,
   readOnly = false,
+  selectDefaultValue = 'Leke',
   suffix,
 }: IField) => {
   let iconDiv;
@@ -44,7 +46,7 @@ const Base = ({
       <div className="relative rounded-md shadow-sm">
         <label
           htmlFor={name}
-          className={`absolute -top-3 left-2 inline-block rounded-md  px-1 text-xs font-medium text-gray-900 ${readOnly ? 'bg-gray-200' : 'bg-white'}`}
+          className={`absolute -top-3 left-2 inline-block rounded-md  px-1 text-xs font-medium text-gray-900 ${readOnly ? 'bg-gray-100' : 'bg-white'}`}
         >
           {label}
         </label>
@@ -55,7 +57,7 @@ const Base = ({
             name={name}
             onChange={onChange}
             className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-esig  focus:ring-inset  sm:text-sm sm:leading-6 ${className}`}
-            defaultValue="Leke"
+            defaultValue={selectDefaultValue}
           >
             {options.length === 0 ? (
               <>
@@ -81,7 +83,7 @@ const Base = ({
               id={name}
               value={value}
               onChange={onChange}
-              className={`block  w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-esig sm:text-sm sm:leading-6 ${className} ${readOnly ? 'bg-gray-200' : ''}`}
+              className={`block  w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-esig sm:text-sm sm:leading-6 ${className} ${readOnly ? 'bg-gray-100' : ''}`}
               placeholder={placeholder}
               readOnly={readOnly}
             />

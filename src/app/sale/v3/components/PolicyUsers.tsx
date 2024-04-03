@@ -19,38 +19,38 @@ interface IProps {
 }
 
 // Function to push query parameters to the current URL
-export function pushQueryParams(params:any) {
+export function pushQueryParams(params: any) {
   // Get current URL and its search parameters
   const url = new URL(window.location.href);
   const searchParams = new URLSearchParams(url.search);
 
   // Append or set the provided parameters
   for (const key in params) {
-      if (params.hasOwnProperty(key)) {
-          searchParams.set(key, params[key]);
-      }
+    if (params.hasOwnProperty(key)) {
+      searchParams.set(key, params[key]);
+    }
   }
 
   // Update the URL with the new parameters
   url.search = searchParams.toString();
-  window.history.pushState({ path: url.href }, '', url.href);
+  window.history.pushState({ path: url.href }, "", url.href);
 }
 
 // Function to get query parameters from the current URL
 export function getQueryParams() {
-    // Get current URL and its search parameters
-    const url = new URL(window.location.href);
-    const searchParams = new URLSearchParams(url.search);
-    
-    // Create an object to store the query parameters
-    const queryParams = {};
+  // Get current URL and its search parameters
+  const url = new URL(window.location.href);
+  const searchParams = new URLSearchParams(url.search);
 
-    // Iterate over the search parameters and populate the queryParams object
-    for (const [key, value] of searchParams?.entries()) {
-        queryParams[key] = value;
-    }
+  // Create an object to store the query parameters
+  const queryParams = {};
 
-    return queryParams;
+  // Iterate over the search parameters and populate the queryParams object
+  for (const [key, value] of searchParams?.entries()) {
+    queryParams[key] = value;
+  }
+
+  return queryParams;
 }
 
 export function removeQueryParam(paramKey: string) {
@@ -66,11 +66,8 @@ export function removeQueryParam(paramKey: string) {
   const newUrl = url.toString();
 
   // Replace the current URL with the new URL
-  window.history.replaceState({ path: newUrl }, '', newUrl);
+  window.history.replaceState({ path: newUrl }, "", newUrl);
 }
-
-
-
 
 const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
   const { toast } = useToast();
@@ -186,7 +183,8 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
     });
   };
 
-  const onParticipantDelete = (id: string) => {
+  const onParticipantDelete = (user: any) => {
+    const { id } = user;
     dispatch({
       type: DELETE,
       payload: {
@@ -225,7 +223,7 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
     });
 
     toast({
-      title: `Pjesemarresi: ${data.displayName} u fshi nga lista!`,
+      title: `Pjesemarresi: ${user.displayName} u fshi nga lista!`,
       description: "Klikoni 'Undo' nese ishte gabimisht.",
       action: (
         <ToastAction
@@ -234,29 +232,27 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
             // using the power of closures
             dispatch({
               type: SET,
-              payload: { key: 'policyUsers', item: data },
+              payload: { key: "policyUsers", item: data },
             });
             dispatch({
               type: SET,
-              payload: { key: 'invoiceRecipients', item: data },
+              payload: { key: "invoiceRecipients", item: data },
             });
             dispatch({
               type: SET,
-              payload: { key: 'beneficiaries', item: data },
+              payload: { key: "beneficiaries", item: data },
             });
             dispatch({
               type: SET,
-              payload: { key: 'policyHolders', item: data },
+              payload: { key: "policyHolders", item: data },
             });
-    
-           }}
+          }}
           altText="Goto schedule to undo"
         >
           Undo
         </ToastAction>
       ),
     });
-
   };
 
   const footer = (
@@ -272,7 +268,7 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
       />
       <div className="flex items-center w-full">
         <div className="mr-2 text-gray-700 font-semibold text-sm">
-          Extra Charge:
+          Tarife shtese:
         </div>
         <div className="w-10">
           <RadioGroup
@@ -293,8 +289,8 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
   );
 
   const setSelectedPolicyUser = (id: string) => {
-    pushQueryParams({ id});    
-  }
+    pushQueryParams({ id });
+  };
 
   if (data.length === 0) {
     return (
@@ -343,10 +339,27 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
         return (
           <div className="flex items-center">
             <Base
-              className="bg-red-0"
               label={index === 0 ? "Lideri *" : ` Perdoruesi ${index + 1}`}
               name="serial"
               value={user?.displayName}
+              suffix={
+                index === 1 ? (
+                  <div className=" flex items-center justify-center gap-2">
+                    <Image
+                      className="cursor-pointer"
+                      src="/svg/chart_up.svg"
+                      alt="edit"
+                      width={"0"}
+                      height={"0"}
+                      style={{ width: 20, height: 20 }}
+                      priority
+                    />
+                    <span className="text-black text-xs"> Tarife shtese</span>
+                  </div>
+                ) : (
+                  ""
+                )
+              }
             />
             <Modal
               title="Modali i pjesemarresve"
@@ -381,7 +394,7 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
               <div>
                 <button
                   onClick={() => {
-                    onParticipantDelete(user.id);
+                    onParticipantDelete(user);
                   }}
                   className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig-error hover:bg-red-50 transition-all duration-100"
                 >

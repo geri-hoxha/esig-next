@@ -10,7 +10,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { GridApi } from "ag-grid-enterprise";
 
-const Draggable = ({ baseUsers, percentageKey, dispatch, stateKey }) => {
+const Draggable = ({ baseUsers, percentageKey, dispatch, stateKey, haveLeader }) => {
   const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
   const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
   const [rowData, setRowData] = useState([]);
@@ -139,7 +139,7 @@ const Draggable = ({ baseUsers, percentageKey, dispatch, stateKey }) => {
     return (
       <>
         <div className={`flex flex-col  border-l  pb-5 pl-5 `}>
-          {node.rowIndex === 0 && (
+          {node.rowIndex === 0 && haveLeader && (
             <div className="mt-2 flex items-center" style={{ lineHeight: 0 }}>
               <Image
                 src="/svg/info.svg"
@@ -210,7 +210,7 @@ const Draggable = ({ baseUsers, percentageKey, dispatch, stateKey }) => {
 
   const onGridReady = useCallback((params) => {
     baseUsers.forEach(function (dataItem: any, index) {
-      dataItem.rowHeight = index === 0 ? 135 : 110;
+      dataItem.rowHeight = index === 0 && haveLeader  ? 135 : 110;
     });
 
     setRowData(baseUsers);
@@ -229,7 +229,7 @@ const Draggable = ({ baseUsers, percentageKey, dispatch, stateKey }) => {
     event.api.forEachNode((node) => rowData.push(node.data));
 
     rowData.forEach(function (dataItem: any, index) {
-      dataItem.rowHeight = index === 0 ? 135 : 110;
+      dataItem.rowHeight = index === 0 && haveLeader  ? 135 : 110;
     });
 
     setRowData(rowData);
@@ -248,7 +248,7 @@ const Draggable = ({ baseUsers, percentageKey, dispatch, stateKey }) => {
           onGridReady={onGridReady}
           getRowHeight={getRowHeight}
           getRowStyle={(params) => {
-            if (params.node.rowIndex === 0) {
+            if (params.node.rowIndex === 0 && haveLeader ) {
               return { background: "#E8F5FE" };
             }
             return { background: "#fff" };

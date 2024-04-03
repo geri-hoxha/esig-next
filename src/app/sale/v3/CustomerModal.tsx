@@ -146,7 +146,7 @@ const CustomerModal = ({
 
   return (
     <div className="grid grid-cols-12 gap-4  ">
-      <div className="col-span-3">
+      <div className="col-span-4">
         <div className="flex flex-col  gap-4">
           <RadioGroup
             options={[
@@ -195,7 +195,7 @@ const CustomerModal = ({
         </div>
       </div>
 
-      <div className="col-span-9 border-l-2 border-dashed pl-4">
+      <div className="col-span-8 border-l-2 border-dashed pl-4">
         {values?.displayName ? (
           <div className=" flex items-center mb-4  h-8">
             <span className="text-lg flex items-center ">
