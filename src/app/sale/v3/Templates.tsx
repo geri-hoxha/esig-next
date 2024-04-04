@@ -6,8 +6,8 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Templates({ items, onChange }: any) {
-  const [selectedMailingLists, setSelectedMailingLists] = useState( );
+export default function Templates({ items, onChange, selected }: any) {
+  const [selectedMailingLists, setSelectedMailingLists] = useState(selected);
 
 
    return (
@@ -15,7 +15,7 @@ export default function Templates({ items, onChange }: any) {
       value={selectedMailingLists}
       onChange={(e) => {
         setSelectedMailingLists(e);
-        onChange(e);
+        onChange?.(e);
       }}
       className={"p-1"}
     >

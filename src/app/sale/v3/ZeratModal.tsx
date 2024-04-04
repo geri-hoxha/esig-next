@@ -207,15 +207,34 @@ const staticCoverages: ICoverages[] = [
 const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
   setCoverageOpen,
   increment,
+  geri,
+  setGeri,
 }) => {
-
   const [arrayFake, setArrayFake] = useState<any>([]);
 
-  const onChange = () => {
-    setGeri(false);
+  useEffect(() => {
+    if(geri === null) return;
+
+    setArrayFake(
+      staticCoverages.slice(0, Math.floor(Math.random() * 10) + 1)
+    );
+  }, []);
+
+  const onChange = (e) => {
+    if (geri === null) {
+      setGeri(e);
+
+      setArrayFake(
+        staticCoverages.slice(0, Math.floor(Math.random() * 10) + 1)
+      );
+
+      return;
+    }
+
+    setGeri(null);
 
     setTimeout(() => {
-      setGeri(true);
+      setGeri(e);
 
       setArrayFake(
         staticCoverages.slice(0, Math.floor(Math.random() * 10) + 1)
@@ -225,7 +244,7 @@ const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
 
   return (
     <div className="flex flex-col gap-6  overflow-x-hidden">
-      <Templates items={templates} onChange={onChange} />
+      <Templates items={templates} onChange={onChange} selected={geri} />
 
       <div
         className={`transition-all overflow-hidden  ease-in-out duration-1000      flex flex-col border-t-2 border-dashed  scrollArea   pr-2   
@@ -587,8 +606,7 @@ const ZeratModal = ({ increment }) => {
 
   const [openSublimits, setOpenSublimits] = useState(false);
 
-
-  const [geri, setGeri] = useState(false);
+  const [geri, setGeri] = useState(null);
 
   if (coverageOpen) {
     return (
@@ -635,6 +653,8 @@ const ZeratModal = ({ increment }) => {
           <CoveragesModal
             setCoverageOpen={setCoverageOpen}
             increment={increment}
+            geri={geri}
+            setGeri={setGeri}
           />
         }
         noButtons
