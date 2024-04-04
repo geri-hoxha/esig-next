@@ -25,21 +25,21 @@ export const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
   return (
     <div className="flex flex-col gap-4">
       {typeof title === "string" ? (
-        <h2 className="text-2xl">{title}</h2>
+        <h2 className="text-xl md:text-2xl">{title}</h2>
       ) : (
         title
       )}
-      <div className={`grid grid-cols-1 md:grid-cols-2 gap-8`}>
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8`}>
         {items.map((item, index) => {
           return (
             <div key={index} className="flex flex-col gap-4">
               {typeof item.title === "string" ? (
-                <h3 className="text-xl">{item.title}</h3>
+                <h3 className="text-lg md:text-xl">{item.title}</h3>
               ) : (
                 item.title
               )}
               <div
-                className={`grid grid-cols-${item?.cols ?? "2"} gap-4 ${
+                className={`grid grid-cols-1  md:grid-cols-${item?.cols ?? "2"} gap-4 ${
                   item.className ?? ""
                 }`}
               >
@@ -78,8 +78,8 @@ export default function Sale() {
   return (
     <>
       <div className="flex flex-col  justify-center">
-        <h1 className="text-3xl font-bold w-max">Shitje produkti TPL</h1>
-        <span className="text-gray-600 text-xl">
+        <h1 className="text-2xl md:text-3xl font-bold w-max">Shitje produkti TPL</h1>
+        <span className="text-gray-600 text-lg md:text-xl">
           Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
         </span>
       </div>

@@ -11,7 +11,7 @@ const Comments = () => {
           type="text"
           name="title"
           id="title"
-          className="block w-full border-0 pt-2.5 text-lg font-medium placeholder:text-gray-400 focus:ring-0"
+          className="block w-full border-0 placeholder:text-base sm:placeholder:text-lg pt-2.5 text-lg font-medium placeholder:text-gray-400 focus:ring-0"
           placeholder="Titulli i komentit"
         />
         <label htmlFor="description" className="sr-only">
@@ -21,7 +21,7 @@ const Comments = () => {
           rows={2}
           name="description"
           id="description"
-          className="block w-full resize-none border-0 py-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+          className="block w-full resize-none placeholder:text-sm sm:placeholder:text-base border-0 py-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
           placeholder=" Pershkrimi i komentit..."
           defaultValue={""}
         />

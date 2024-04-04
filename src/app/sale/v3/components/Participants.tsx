@@ -135,7 +135,7 @@ const Participants: React.FC<IProps> = ({
   };
 
   return (
-    <div className="flex flex-col min-w-60">
+    <div className="flex flex-col min-w-60 ">
       <div className="flex items-center text-lg font-semibold text-gray-700">
         {title}
         <GeriHoxha haveLeader={haveLeader} baseUsers={data} dispatch={dispatch} stateKey={stateKey} percentageKey={percentageKey}/>

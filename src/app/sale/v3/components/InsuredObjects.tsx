@@ -21,9 +21,23 @@ const InsuredObjects = () => {
         openProp={open}
         setOpenProp={setOpen}
       >
-        <div className="cursor-pointer group border   w-full h-full border-dashed min-h-[268px] border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+        <div className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-[268px] border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+          <div className="flex md:hidden items-center gap-x-1 mx-auto py-2">
+            <svg
+              className="stroke-esig"
+              width="14"
+              height="14"
+              xmlns="http://www.w3.org/2000/svg"
+              fillRule="evenodd"
+              clipRule="evenodd"
+            >
+              <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+            </svg>
+            <span className="text-esig">Shto pjesemarres tjeter</span>
+          </div>
+
           <svg
-            className="stroke-esig"
+            className="stroke-esig hidden md:block"
             width="30"
             height="30"
             xmlns="http://www.w3.org/2000/svg"
@@ -52,9 +66,23 @@ const InsuredObjects = () => {
         openProp={open}
         setOpenProp={setOpen}
       >
-        <div className="cursor-pointer group border   w-full h-full border-dashed min-h-[268px] border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+        <div className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-[268px] border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+          <div className="flex md:hidden items-center gap-x-1 mx-auto py-2">
+            <svg
+              className="stroke-esig"
+              width="14"
+              height="14"
+              xmlns="http://www.w3.org/2000/svg"
+              fillRule="evenodd"
+              clipRule="evenodd"
+            >
+              <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+            </svg>
+            <span className="text-esig">Shto pjesemarres tjeter</span>
+          </div>
+
           <svg
-            className="stroke-esig"
+            className="stroke-esig hidden md:block"
             width="30"
             height="30"
             xmlns="http://www.w3.org/2000/svg"

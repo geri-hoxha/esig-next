@@ -38,7 +38,7 @@ const CustomerModal = ({
 
   const init = async () => {
     const params = getQueryParams();
-    
+
     if (!params.id) return;
 
     const response = await request(`/customer/${params.id}`, token, {
@@ -146,7 +146,7 @@ const CustomerModal = ({
 
   return (
     <div className="grid grid-cols-12 gap-4  ">
-      <div className="col-span-4">
+      <div className="col-span-12 md:col-span-4">
         <div className="flex flex-col  gap-4">
           <RadioGroup
             options={[
@@ -182,7 +182,7 @@ const CustomerModal = ({
 
           <Spinner loading={loading}>
             <AgGrid<CustomerModel>
-              heightClass="h-[350px]"
+              heightClass="h-[150px] md:h-[350px]"
               rowSelection="single"
               domLayout="normal"
               onRowClicked={(params) => {
@@ -195,7 +195,7 @@ const CustomerModal = ({
         </div>
       </div>
 
-      <div className="col-span-8 border-l-2 border-dashed pl-4">
+      <div className="col-span-12 md:col-span-8 md:border-l-2 border-dashed">
         {values?.displayName ? (
           <div className=" flex items-center mb-4  h-8">
             <span className="text-lg flex items-center ">
@@ -259,7 +259,7 @@ const CustomerModal = ({
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="flex flex-col gap-4">
+          <div className="grid col-span-2 md:col-span-1 grid-cols-2 md:grid-cols-1 gap-4">
             <Base label="Email" name="serial" value={values?.email} />
             <Base label="Gjinia" name="serial" value={values?.gender} />
             <Base
@@ -267,23 +267,23 @@ const CustomerModal = ({
               name="serial"
               value={values?.isLocal === true ? "Shqiptar" : "I huaj"}
             />
-
             <Base label="Atesia" name="serial" value={values?.fathersName} />
             <Base label="Ditelindja" name="serial" value={values?.birthday} />
             <Base label="Tjeter" name="serial" value={""} />
           </div>
-          <div className="h-72">
+          <div className="hidden md:block h-72">
             <CustomerDonut />
           </div>
         </div>
       </div>
 
       <div className="col-span-12  border-t-2 border-dashed">
-        <div className="flex items-center justify-between pt-4">
+        <div className="flex flex-col md:flex-row gap-4 md:items-center justify-between pt-4">
           <div className="flex items-center gap-4 ">{footer}</div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 ml-auto">
             <DrawerClose asChild>
               <Button
+                className="w-max sm:w-full"
                 variant="outline"
                 onClick={() => {
                   setRowData([]);
@@ -300,7 +300,9 @@ const CustomerModal = ({
               }}
               asChild
             >
-              <Button variant="default">Ruaj dhe apliko</Button>
+              <Button variant="default" className="w-max sm:w-full">
+                Ruaj dhe apliko
+              </Button>
             </DrawerClose>
           </div>
         </div>

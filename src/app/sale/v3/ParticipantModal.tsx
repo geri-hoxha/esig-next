@@ -47,11 +47,11 @@ const ParticipantModal: React.FC<{
       </div>
 
       {children}
-      <div className="flex gap-2  items-center w-1/2 ml-auto mt-4">
+      <div className="flex gap-2  items-center mt-4  ml-auto">
         <DrawerClose asChild>
-             <Button variant="outline">Cancel</Button>
+             <Button className="w-max sm:w-full" variant="outline">Cancel</Button>
          </DrawerClose>
-        <Button variant="default">Ruaj pjesemarresit</Button>
+        <Button className="w-max sm:w-full" variant="default">Ruaj pjesemarresit</Button>
 
       </div>
     </>

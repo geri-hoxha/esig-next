@@ -19,7 +19,7 @@ export default function UserActions() {
           icon={<UserCog size={20} />}
           className="w-full md:w-40 rounded-lg bg-esig-fluorite"
         >
-          <span className="text-sm md:text-base">User settings</span>
+          <span className="hidden md:block text-base">User settings</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-min	 space-y-2 mt-4">

@@ -61,7 +61,7 @@ const Box = ({ name, description, checked, index, setCoverageOpen }: any) => {
 
   return (
     <div className={` text-esig  font-medium  cursor-pointer group`}>
-      <div className=" flex items-center gap-4">
+      <div className=" flex items-center gap-2 sm:gap-4">
         <span
           className={`bg-sky   text-sm grow shrink-0     flex items-center justify-center  `}
         >
@@ -72,7 +72,7 @@ const Box = ({ name, description, checked, index, setCoverageOpen }: any) => {
           <Checkbox
             defaultChecked={checked}
             label={
-              <span className={`text-base text-gray-600 w-48 `}>{name}</span>
+              <span className={`text-sm md:text-base text-gray-600 w-48 `}>{name}</span>
             }
           />
 
@@ -94,7 +94,7 @@ const Box = ({ name, description, checked, index, setCoverageOpen }: any) => {
               </div>
             </button>
           </div>
-          <div className="ml-auto  group-hover:hidden truncate   text-xs text-esig">
+          <div className="ml-auto  group-hover:hidden truncate  text-[10px] sm:text-xs text-esig">
             <span>
               {randomNumber2}% SI dhe {randomNumber}$ primi
             </span>
@@ -213,11 +213,16 @@ const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
   const [arrayFake, setArrayFake] = useState<any>([]);
 
   useEffect(() => {
-    if(geri === null) return;
+    if (geri === null) return;
 
-    setArrayFake(
-      staticCoverages.slice(0, Math.floor(Math.random() * 10) + 1)
-    );
+    setArrayFake(staticCoverages.slice(0, Math.floor(Math.random() * 10) + 1));
+  }, []);
+
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+
+  useEffect(() => {
+    const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+    setIsDesktop(width > 768);
   }, []);
 
   const onChange = (e) => {
@@ -244,12 +249,17 @@ const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
 
   return (
     <div className="flex flex-col gap-6  overflow-x-hidden">
-      <Templates items={templates} onChange={onChange} selected={geri} />
+      <Templates
+        withDesciption={isDesktop}
+        items={templates}
+        onChange={onChange}
+        selected={geri}
+      />
 
       <div
-        className={`transition-all overflow-hidden  ease-in-out duration-1000      flex flex-col border-t-2 border-dashed  scrollArea   pr-2   
+        className={`transition-all overflow-hidden  ease-in-out duration-1000      flex flex-col  border-t-2 border-dashed  scrollArea   pr-2   
       
-      ${geri ? "max-h-screen" : "max-h-0"} `}
+      ${geri ? "max-h-screen border-gray-300" : "max-h-0 border-transparent"} `}
       >
         {arrayFake.map((coverage, index) => {
           return (
@@ -663,7 +673,7 @@ const ZeratModal = ({ increment }) => {
         width={"min-w-[40%]"}
       >
         <ButtonGeri className="text-esig hover:bg-sky-50">
-          <div className="flex items-center gap-x-1 text-lg">
+          <div className="flex items-center gap-x-1 text-base sm:text-lg">
             <Image
               className="cursor-pointer"
               src="/svg/edit.svg"

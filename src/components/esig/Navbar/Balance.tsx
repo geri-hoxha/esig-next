@@ -51,7 +51,7 @@ export default function Balance() {
       onClick={onClick}
       className="w-full md:w-40 rounded-lg"
     >
-      <span className="text-sm md:text-base">Check balance</span>
+      <span className="hidden md:block text-base">Check balance</span>
     </Button>
   );
 }

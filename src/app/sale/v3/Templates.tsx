@@ -6,7 +6,7 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Templates({ items, onChange, selected }: any) {
+export default function Templates({ items, onChange, selected, withDesciption }: any) {
   const [selectedMailingLists, setSelectedMailingLists] = useState(selected);
 
 
@@ -23,15 +23,15 @@ export default function Templates({ items, onChange, selected }: any) {
         Zgjidh paketen
       </RadioGroup.Label> */}
 
-      <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+      <div className={`grid ${withDesciption ? 'grid-cols-1' : 'grid-cols-2'}  gap-y-4 md:gap-y-6 sm:grid-cols-3 gap-x-4`}>
         {items.map((mailingList: any) => (
           <RadioGroup.Option
             key={mailingList.id}
             value={mailingList}
             className={({ checked }) =>
               classNames(
-                checked ? "border-esig ring-2 ring-esig" : "border-gray-300",
-                "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                checked ? "border-esig ring-1 sm:ring-2 ring-esig" : "border-gray-300",
+                "relative flex cursor-pointer rounded-lg border bg-white p-3 md:p-4 shadow-sm focus:outline-none"
               )
             }
           >
@@ -45,7 +45,7 @@ export default function Templates({ items, onChange, selected }: any) {
                     >
                       {mailingList.title}
                     </RadioGroup.Label>
-                    {mailingList.description && (
+                    {mailingList.description && withDesciption && (
                       <RadioGroup.Description
                         as="span"
                         className="mt-1 flex items-center text-sm text-gray-500"
