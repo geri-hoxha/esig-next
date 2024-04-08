@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ButtonGeri } from "./page";
-import { useEffect, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import Modal from "@/components/esig/Modal";
 import { DrawerClose } from "@/components/ui/drawer";
 import Base from "../components/Fields_v2/Base";
@@ -12,7 +12,7 @@ const Sublimits = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <span className="font-bold text-gray-600 text-center">
+      <span className="font-bold text-gray-600 md:text-center">
         4. Nenlimitet:
       </span>
       <div className="grid grid-cols-2 gap-4">
@@ -72,7 +72,9 @@ const Box = ({ name, description, checked, index, setCoverageOpen }: any) => {
           <Checkbox
             defaultChecked={checked}
             label={
-              <span className={`text-sm md:text-base text-gray-600 w-48 `}>{name}</span>
+              <span className={`text-sm md:text-base text-gray-600 w-48 `}>
+                {name}
+              </span>
             }
           />
 
@@ -90,7 +92,7 @@ const Box = ({ name, description, checked, index, setCoverageOpen }: any) => {
                   style={{ width: 15, height: 15 }}
                   priority
                 />
-                <span>Modifiko limitet / nenlimitet etc...</span>
+                <span className="flex items-center gap-1">Modifiko <span className="hidden sm:block">limitet / nenlimitet etc...</span></span>
               </div>
             </button>
           </div>
@@ -248,7 +250,7 @@ const CoveragesModal: React.FC<{ setCoverageOpen: any }> = ({
   };
 
   return (
-    <div className="flex flex-col gap-6  overflow-x-hidden">
+    <div className="flex flex-col gap-6  overflow-x-hidden ">
       <Templates
         withDesciption={isDesktop}
         items={templates}
@@ -320,44 +322,47 @@ const Limit = ({ name }: any) => {
     const value = e.target.value;
     setType(value === "2" || value === "3");
   };
+
   return (
     <>
-      <div className="col-span-4">
+      <div className="col-span-12 md:col-span-4">
         <div className="font-bold  text-sm h-full flex items-center justify-center">
-          <span className="text-esig w-full text-xs">- {name}</span>
-          <div className="w-full  h-px border-b border-dotted border-gray-400 "></div>
+          <span className="text-esig w-full text-xs">- {name}:</span>
+          <div className="w-full  h-px md:border-b border-dotted border-gray-400 "></div>
         </div>
       </div>
-      <div className="col-span-8">
-        <div className="flex items-center gap-4">
-          <Base
-            label="Tipi i limitit"
-            name="serial"
-            type="select"
-            onChange={onChange}
-            options={[
-              {
-                value: "1",
-                key: "Vlere fikse",
-              },
-              {
-                value: "2",
-                key: "% e shumes se siguruar",
-              },
-              {
-                value: "3",
-                key: "% e cdo demi",
-              },
-            ]}
-          />
-          <Base
-            label="Vlera"
-            name="serial"
-            value={3500}
-            suffix={type ? "%" : "Euro"}
-          />
+      <div className="col-span-12 md:col-span-8">
+        <div className="flex flex-col md:flex-row items-center gap-4">
+          <div className="flex items-center gap-4 w-full">
+            <Base
+              label="Tipi i limitit"
+              name="serial"
+              type="select"
+              onChange={onChange}
+              options={[
+                {
+                  value: "1",
+                  key: "Vlere fikse",
+                },
+                {
+                  value: "2",
+                  key: "% e shumes se siguruar",
+                },
+                {
+                  value: "3",
+                  key: "% e cdo demi",
+                },
+              ]}
+            />
+            <Base
+              label="Vlera"
+              name="serial"
+              value={3500}
+              suffix={type ? "%" : "Euro"}
+            />
+          </div>
           {type && (
-            <>
+            <div className="flex items-center gap-4">
               <Base
                 label="Vlera min"
                 name="serial"
@@ -402,7 +407,7 @@ const Limit = ({ name }: any) => {
                   </svg>
                 }
               />
-            </>
+            </div>
           )}
         </div>
       </div>
@@ -414,14 +419,40 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
   const [isFlat, setIsFlat] = useState<boolean>(false);
   const [isFlat2, setIsFlat2] = useState<boolean>(false);
 
+  const sublimitsRef: RefObject<any> = useRef(null);
+
+  const containerRef: RefObject<any> = useRef(null);
+
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+
+  useEffect(() => {
+    const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+    setIsDesktop(width > 768);
+  }, []);
+
+  const scrollDown = () => {
+    const scrollHeight = containerRef.current.scrollHeight;
+    const height = containerRef.current.clientHeight;
+    const maxScrollTop = scrollHeight - height;
+    containerRef.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    containerRef.current.scrollTo({ top: maxScrollTop, behavior: "smooth" });
+  };
+
   return (
     <div className="grid grid-cols-12 gap-6 mt-2">
-      <div className={` ${openSublimits ? "col-span-9 " : "col-span-12 "}   `}>
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-3">
+      <div
+        className={` ${
+          openSublimits && isDesktop ? "col-span-9 " : "col-span-12 "
+        }   `}
+      >
+        <div
+          className="grid grid-cols-12 gap-4 md:gap-6 max-h-[500px] md:max-h-none overflow-y-auto relative"
+          ref={containerRef}
+        >
+          <div className="col-span-12 md:col-span-3">
             <span className="font-bold text-gray-600">1. Premium: </span>
           </div>
-          <div className="col-span-9">
+          <div className="col-span-12 md:col-span-9">
             <div className="w-full flex items-center ml-auto gap-4 max-w-lg">
               <div>
                 <Checkbox
@@ -461,13 +492,13 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
             </div>
           </div>
 
-          <div className="col-span-3">
+          <div className="col-span-12 md:col-span-3">
             <span className="font-bold text-gray-600 text-base ">
               2. Shuma e siguruar:
             </span>
           </div>
 
-          <div className="col-span-9">
+          <div className="col-span-12 md:col-span-9">
             <div className="w-full flex items-center gap-4 ml-auto  max-w-lg">
               <div>
                 <Checkbox
@@ -517,23 +548,50 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
           <Limit name="Ne ngjarje" />
           <Limit name="Ne persona" />
           <Limit name="Ne periudhe" />
+
+          <div
+            className="sticky md:hidden trasform -translate-x-1/2 bottom-0 left-1/2 bg-esig cursor-pointer"
+            onClick={scrollDown}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-white"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 9l5 6 5-6"
+              />
+            </svg>
+          </div>
         </div>
       </div>
 
       <div
         className={`col-span-3 border-l-2 pl-6 border-dashed ${
-          openSublimits ? "" : "hidden"
+          openSublimits && isDesktop ? "" : "hidden"
         }    `}
       >
         <Sublimits />
       </div>
+
+      {openSublimits && (
+        <div ref={sublimitsRef} className="md:hidden col-span-12">
+          <Sublimits />
+        </div>
+      )}
 
       <div className="col-span-12">
         <div className="border-t-2 border-dashed w-full pt-3 flex items-center justify-between">
           {openSublimits ? (
             <ButtonGeri
               className="text-red-600 hover:bg-red-50 !text-base  "
-              onClick={() => setOpenSublimits(false)}
+              onClick={() => {
+                setOpenSublimits(false);
+              }}
             >
               <div className="flex items-center gap-x-2 mx-auto">
                 <svg
@@ -546,13 +604,26 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                 >
                   <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
                 </svg>
-                <span>Çaktivizo nenmbulimet</span>
+                <span className="flex items-center gap-1">Çaktivizo <span className="hidden sm:block">nenmbulimet</span></span>
               </div>
             </ButtonGeri>
           ) : (
             <ButtonGeri
               className="text-green-600 hover:bg-green-50 !text-base  "
-              onClick={() => setOpenSublimits(true)}
+              onClick={() => {
+                setOpenSublimits(true);
+                if (!isDesktop) {
+                  setTimeout(() => {
+                    const yOffset = -100; // Adjust the offset as per your requirement
+                    const y =
+                      sublimitsRef.current.getBoundingClientRect().top +
+                      window.pageYOffset +
+                      yOffset;
+
+                    window.scrollTo({ top: y, behavior: "smooth" });
+                  }, 100);
+                }
+              }}
             >
               <div className="flex items-center gap-x-2 mx-auto">
                 <svg
@@ -565,7 +636,7 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                 >
                   <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
                 </svg>
-                <span>Aktivizo nenmbulimet</span>
+                <span className="flex items-center gap-1">Aktivizo <span className="hidden sm:block">nenmbulimet</span></span>
               </div>
             </ButtonGeri>
           )}
@@ -582,7 +653,7 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                     style={{ width: 30, height: 30 }}
                     priority
                   />
-                  <span>Mbyll modalin</span>
+                  <span className="flex items-center gap-1">Mbyll <span className="hidden sm:block">modalin</span></span>
                 </div>
               </button>
             </DrawerClose>
@@ -598,7 +669,7 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                     style={{ width: 20, height: 20 }}
                     priority
                   />
-                  <span>Ruaj dhe apliko</span>
+                  <span className="flex items-center gap-1">Ruaj <span className="hidden sm:block">dhe apliko</span></span>
                 </div>
               </button>
             </DrawerClose>
@@ -618,6 +689,10 @@ const ZeratModal = ({ increment }) => {
 
   const [geri, setGeri] = useState(null);
 
+  const onReleaseClose = (open: boolean) => {
+    setOpen(open);
+  };
+
   if (coverageOpen) {
     return (
       <Modal
@@ -632,6 +707,7 @@ const ZeratModal = ({ increment }) => {
         }
         noButtons
         openProp
+        onReleaseClose={onReleaseClose}
         setOpenProp={setCoverageOpen}
         width={openSublimits ? "min-w-[80%]" : "min-w-[50%]"}
         back

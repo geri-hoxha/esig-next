@@ -32,6 +32,7 @@ interface IProps {
   openProp?: boolean;
   setOpenProp?: any;
   back?: boolean;
+  onReleaseClose?: any;
 }
 
 const Modal: React.FC<IProps> = ({
@@ -44,6 +45,7 @@ const Modal: React.FC<IProps> = ({
   openProp,
   setOpenProp,
   back = false,
+  onReleaseClose = () => {}
 }) => {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
@@ -115,13 +117,35 @@ const Modal: React.FC<IProps> = ({
           removeQueryParam("id");
         }
       }}
+
+      onRelease={(event, open) => {
+        onReleaseClose(open);
+      }}
     >
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent className="px-4">
-        <DrawerHeader className="text-left">
-          <DrawerTitle>{title}</DrawerTitle>
-          <DrawerDescription>{description}</DrawerDescription>
-        </DrawerHeader>
+        <div className="flex items-center md:pb-2 mb-3 md:mb-0 border-gray-300 border-b-2 border-dashed">
+          <div onClick={() => setOpenProp(false)}>
+            {back && (
+              <div className="w-7 h-7 mr-4 cursor-pointer border-2 border-esig flex items-center justify-center rounded-full bg-sky-50">
+                <Image
+                  src="/svg/left_arrow.svg"
+                  alt="edit"
+                  width={"0"}
+                  height={"0"}
+                  style={{ width: 30, height: 30 }}
+                  priority
+                />
+              </div>
+            )}
+          </div>
+
+          <DrawerHeader className="text-left">
+            <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription>{description}</DrawerDescription>
+          </DrawerHeader>
+        </div>
+
         {body}
         <DrawerFooter className="pt-2">
           {noButtons ? null : (

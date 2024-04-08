@@ -195,7 +195,7 @@ const CustomerModal = ({
         </div>
       </div>
 
-      <div className="col-span-12 md:col-span-8 md:border-l-2 border-dashed">
+      <div className="col-span-12 md:col-span-8 md:border-l-2 border-dashed pl-4">
         {values?.displayName ? (
           <div className=" flex items-center mb-4  h-8">
             <span className="text-lg flex items-center ">
