@@ -41,7 +41,7 @@ export default function Templates({ items, onChange, selected, withDesciption }:
                   <span className="flex flex-col">
                     <RadioGroup.Label
                       as="span"
-                      className="block text-sm font-medium text-gray-900 truncate w-32"
+                      className="block text-sm font-medium text-gray-900 truncate w-32 md:w-40"
                     >
                       {mailingList.title}
                     </RadioGroup.Label>
