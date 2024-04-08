@@ -266,7 +266,7 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
         style={{ width: 30, height: 20 }}
         priority
       />
-      <div className="flex items-center w-full animate-bounce">
+      <div className="flex items-center w-full">
         <div className="mr-2 text-gray-700 font-semibold text-sm ">
           Tarife shtese:
         </div>

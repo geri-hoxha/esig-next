@@ -96,7 +96,7 @@ const GeriHoxha = ({ baseUsers, percentageKey, dispatch, stateKey, haveLeader })
                   style={{ width: 30, height: 20 }}
                   priority
                 />
-                <div className="w-full animate-bounce">
+                <div className="w-full">
                   <Base
                     className="bg-red-0"
                     label="Perqindja"
