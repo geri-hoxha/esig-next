@@ -87,16 +87,8 @@ const GeriHoxha = ({ baseUsers, percentageKey, dispatch, stateKey, haveLeader })
             onSave={onParticipantAdd}
             footer={
               <>
-                <Image
-                  className="cursor-pointer"
-                  src="/svg/question.svg"
-                  alt="edit"
-                  width={"0"}
-                  height={"0"}
-                  style={{ width: 30, height: 20 }}
-                  priority
-                />
-                <div className="w-full">
+                
+                <div className="w-max">
                   <Base
                     className="bg-red-0"
                     label="Perqindja"

@@ -6,6 +6,7 @@ import InsuredObjects from "./InsuredObjects";
 import Image from "next/image";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import Popconfirm from "@/components/Popconfirm";
 
 const Item: React.FC<{
   item: number;
@@ -27,16 +28,23 @@ const Item: React.FC<{
           </h2>
 
           {item !== 1 && (
-            <Image
-              className="cursor-pointer"
-              src="/svg/close.svg"
-              alt="edit"
-              width={"0"}
-              height={"0"}
-              style={{ width: 25, height: 25 }}
-              priority
-              onClick={() => deleteItem(item)}
-            />
+            <Popconfirm
+              title="Fshi zerin?"
+              description="A jeni i sigurte qe doni te fshini zerin?"
+              okText="Po"
+              cancelText="Jo"
+              onConfirm={() => deleteItem(item)}
+            >
+              <Image
+                className="cursor-pointer"
+                src="/svg/close.svg"
+                alt="edit"
+                width={"0"}
+                height={"0"}
+                style={{ width: 25, height: 25 }}
+                priority
+              />
+            </Popconfirm>
           )}
         </div>
       }

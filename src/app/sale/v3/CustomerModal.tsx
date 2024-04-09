@@ -30,6 +30,7 @@ const CustomerModal = ({
   const [rowData, setRowData] = useState<any>([]);
   const [values, setValues] = useState(null);
   const [searchedName, setSeachedName] = useState();
+  const [throwWarning, setThrowWarning] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -279,7 +280,25 @@ const CustomerModal = ({
 
       <div className="col-span-12  border-t-2 border-dashed">
         <div className="flex flex-col md:flex-row gap-4 md:items-center justify-between pt-4">
-          <div className="flex items-center gap-4 ">{footer}</div>
+          <div className="flex items-center gap-4 w-full">
+            {throwWarning ? (
+              <>
+                <Image
+                  className="cursor-pointer"
+                  src="/svg/question.svg"
+                  alt="edit"
+                  width={"0"}
+                  height={"0"}
+                  style={{ width: 30, height: 20 }}
+                  priority
+                />
+              </>
+            ) : null}
+            {footer}
+            {throwWarning && (
+              <span className="text-esig-error w-full text-sm">Plotesoni konfigurimin per pjesemarresin!</span>
+            )}
+          </div>
           <div className="flex items-center gap-4 ml-auto">
             <DrawerClose asChild>
               <Button
@@ -294,8 +313,12 @@ const CustomerModal = ({
                 Anullo veprimin
               </Button>
             </DrawerClose>
-            <DrawerClose
+            <div
               onClick={() => {
+                if (throwWarning === false) {
+                  setThrowWarning(true);
+                  return;
+                }
                 onSave(values);
               }}
               asChild
@@ -303,7 +326,7 @@ const CustomerModal = ({
               <Button variant="default" className="w-max sm:w-full">
                 Ruaj dhe apliko
               </Button>
-            </DrawerClose>
+            </div>
           </div>
         </div>
       </div>

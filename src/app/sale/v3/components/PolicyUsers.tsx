@@ -257,20 +257,12 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
 
   const footer = (
     <>
-      <Image
-        className="cursor-pointer"
-        src="/svg/question.svg"
-        alt="edit"
-        width={"0"}
-        height={"0"}
-        style={{ width: 30, height: 20 }}
-        priority
-      />
-      <div className="flex items-center w-full">
+    
+      <div className="flex items-center grow shrink-0">
         <div className="mr-2 text-gray-700 font-semibold text-sm ">
           Tarife shtese:
         </div>
-        <div className="w-10">
+        <div className="">
           <RadioGroup
             options={[
               {

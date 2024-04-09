@@ -10,6 +10,7 @@ import ParticipantsWrapper from "./components/ParticipantsWrapper";
 import ZeratWrapper from "./components/ZeratWrapper";
 import Insurers from "./components/Insurers";
 import Others from "./components/Others";
+import TutorialStepper from "@/components/TutorialStepper";
 
 interface IProps {
   title: ReactNode;
@@ -39,9 +40,9 @@ export const Geri: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
                 item.title
               )}
               <div
-                className={`grid grid-cols-1  md:grid-cols-${item?.cols ?? "2"} gap-4 ${
-                  item.className ?? ""
-                }`}
+                className={`grid grid-cols-1  md:grid-cols-${
+                  item?.cols ?? "2"
+                } gap-4 ${item.className ?? ""}`}
               >
                 {item.children}
               </div>
@@ -77,8 +78,11 @@ export default function Sale() {
 
   return (
     <>
+      <TutorialStepper />
       <div className="flex flex-col  justify-center">
-        <h1 className="text-2xl md:text-3xl font-bold w-max">Shitje produkti TPL</h1>
+        <h1 className="text-2xl md:text-3xl font-bold w-max">
+          Shitje produkti TPL
+        </h1>
         <span className="text-gray-600 text-lg md:text-xl">
           Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
         </span>

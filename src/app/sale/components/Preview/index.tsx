@@ -1,4 +1,3 @@
-'use client'
 import { token } from "@/components/esig/Navbar/Currencies";
 import request from "@/request";
 import { useEffect, useState } from "react";

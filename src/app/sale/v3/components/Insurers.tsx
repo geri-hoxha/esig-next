@@ -61,22 +61,9 @@ const Insurers: React.FC = () => {
   };
 
   const footer = (
-    <>
-      <>
-        <Image
-          className="cursor-pointer"
-          src="/svg/question.svg"
-          alt="edit"
-          width={"0"}
-          height={"0"}
-          style={{ width: 30, height: 20 }}
-          priority
-        />
-        <div className="w-full">
-          <Base label="Perqindja" name="serial" suffix={"%"} />
-        </div>
-      </>
-    </>
+    <div className="w-max">
+      <Base label="Perqindja" name="serial" suffix={"%"} />
+    </div>
   );
 
   const setSelectedPolicyUser = (id: string) => {
