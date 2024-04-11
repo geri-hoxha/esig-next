@@ -11,6 +11,7 @@ import ZeratWrapper from "./components/ZeratWrapper";
 import Insurers from "./components/Insurers";
 import Others from "./components/Others";
 import TutorialStepper from "@/components/TutorialStepper";
+import Home from "@/components/TutorialStepper";
 
 interface IProps {
   title: ReactNode;
@@ -78,7 +79,7 @@ export default function Sale() {
 
   return (
     <>
-      <TutorialStepper />
+      <Home />
       <div className="flex flex-col  justify-center">
         <h1 className="text-2xl md:text-3xl font-bold w-max">
           Shitje produkti TPL
