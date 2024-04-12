@@ -7,6 +7,10 @@ const DriverComponent = ({ steps, options }) => {
     const driverObj = driver({
       showProgress: true,
       steps,
+      smoothScroll: true,
+      popoverOffset: 30,
+      stageRadius: 10,
+      stagePadding: 100
     });
 
     driverObj.drive();
@@ -29,26 +33,26 @@ const DriverComponent = ({ steps, options }) => {
 const Home = () => {
   const steps = [
     {
-      element: "#first-step",
+      element: "#baseSerial",
       popover: {
-        title: "Title on Popover",
-        description: "Description on the Popover",
+        title: "Seriali i policies",
+        description: "Serial plotesohet automatikisht nga sistemi",
         position: "bottom",
       },
     },
     {
-      element: "#first-step2",
+      element: "#policyUsersIntro",
       popover: {
-        title: "Title on Popover",
-        description: "Description on the Popover",
+        title: "Perdoruesit e polices",
+        description: "Kur plotesoni perdoruesin, pjesemarresit e tjere plotesohen automatikisht",
         position: "bottom",
       },
     },
     {
-      element: "#first-step3",
+      element: "#insuerersIntro",
       popover: {
-        title: "Title on Popover",
-        description: "Description on the Popover",
+        title: "Siguruesit",
+        description: "Kur plotesoni siguruesin, plotesoni perqindjen e pronesine te cilat do te zbriten nga siguruesi lider (i pari)",
         position: "bottom",
       },
     },
@@ -61,10 +65,6 @@ const Home = () => {
 
   return (
     <div>
-      <h1 id="first-step">Welcome to the tour</h1>
-      <h1 id="first-step2">Welcome to the tour</h1>
-      <h1 id="first-step3">Welcome to the tour</h1>
-
       <DriverComponent steps={steps} options={options} />
     </div>
   );

@@ -72,7 +72,7 @@ const Insurers: React.FC = () => {
 
   if (insurers.length === 0) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center" id='insuerersIntro'>
         <Base
           className="bg-red-0"
           label={"Lideri *"}

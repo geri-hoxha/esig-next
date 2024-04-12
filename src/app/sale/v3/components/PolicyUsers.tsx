@@ -286,7 +286,7 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
 
   if (data.length === 0) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center" id="policyUsersIntro">
         <Base
           className="bg-red-0"
           label={"Lideri *"}

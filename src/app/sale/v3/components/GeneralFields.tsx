@@ -3,7 +3,7 @@ import Base from "../../components/Fields_v2/Base";
 const GeneralFields = () => {
     return (
         <>
-            <Base className="bg-red-0" label="Serial" name="serial" />
+            <Base className="bg-red-0" label="Serial" name="baseSerial" />
             <Base
                 className="bg-red-0"
                 type="select"
