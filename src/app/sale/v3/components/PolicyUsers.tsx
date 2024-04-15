@@ -257,7 +257,6 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
 
   const footer = (
     <>
-    
       <div className="flex items-center grow shrink-0">
         <div className="mr-2 text-gray-700 font-semibold text-sm ">
           Tarife shtese:

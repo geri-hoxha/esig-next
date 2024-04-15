@@ -10,7 +10,7 @@ const DriverComponent = ({ steps, options }) => {
       smoothScroll: true,
       popoverOffset: 30,
       stageRadius: 10,
-      stagePadding: 100
+      stagePadding: 15
     });
 
     driverObj.drive();
