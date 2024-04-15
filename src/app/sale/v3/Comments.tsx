@@ -22,20 +22,18 @@ const Comments = () => {
           name="description"
           id="description"
           className="block w-full resize-none placeholder:text-sm sm:placeholder:text-base border-0 py-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-          placeholder=" Pershkrimi i komentit..."
+          placeholder=" Pershkrimi..."
           defaultValue={""}
         />
 
         {/* Spacer element to match the height of the toolbar */}
         <div aria-hidden="true">
           <div className="py-2">
-            <div className="h-9" />
+            <div className="h-4" />
           </div>
           <div className="h-px" />
           <div className="py-2">
-            <div className="py-px">
-              <div className="h-9" />
-            </div>
+          ``
           </div>
         </div>
       </div>

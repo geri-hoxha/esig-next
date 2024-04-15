@@ -19,18 +19,6 @@ const activity: IActivity[] = [
     days: 7,
   },
   {
-    id: 2,
-    type: "edited",
-    person: "Geri Hoxha",
-    days: 5,
-  },
-  {
-    id: 3,
-    type: "edited",
-    person: "Geri Hoxha",
-    days: 5,
-  },
-  {
     id: 4,
     type: "cancelled",
     person: "Oltion Driza",
