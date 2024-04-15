@@ -7,10 +7,14 @@ const DriverComponent = ({ steps, options }) => {
     const driverObj = driver({
       showProgress: true,
       steps,
+      animate: false,
       smoothScroll: true,
       popoverOffset: 30,
       stageRadius: 10,
-      stagePadding: 15
+      stagePadding: 10,
+      nextBtnText: 'Hapi tjeter',
+      prevBtnText: 'Kthehu',
+      doneBtnText: 'Perfundo',
     });
 
     driverObj.drive();

@@ -42,7 +42,7 @@ const Base = ({
   }
 
   return (
-    <div className="w-full pt-3">
+    <div className="w-full">
       <div className="relative rounded-md shadow-sm">
         <label
           htmlFor={name}

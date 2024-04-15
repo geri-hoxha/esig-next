@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     /* colors */
@@ -128,5 +127,9 @@
 }
 
 .drag .ag-header {
-  border-bottom: 0px !important
+  border-bottom: 0px !important;
+}
+
+.driver-active-element {
+  padding: 10px 0 0 0;
 }
