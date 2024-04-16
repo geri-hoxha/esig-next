@@ -12,6 +12,7 @@ import Insurers from "./components/Insurers";
 import Others from "./components/Others";
 import TutorialStepper from "@/components/TutorialStepper";
 import Home from "@/components/TutorialStepper";
+import SaleFooter from "./components/SaleFooter";
 
 interface IProps {
   title: ReactNode;
@@ -144,6 +145,8 @@ export default function Sale() {
           },
         ]}
       />
+
+      <SaleFooter />
     </>
   );
 }

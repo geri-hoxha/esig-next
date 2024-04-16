@@ -17,7 +17,7 @@ const DriverComponent = ({ steps, options }) => {
       doneBtnText: 'Perfundo',
     });
 
-    driverObj.drive();
+    // driverObj.drive();
     // console.log(driver)
 
     //  const driver2 =   driver(options);
