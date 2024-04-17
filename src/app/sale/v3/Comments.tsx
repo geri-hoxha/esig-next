@@ -33,7 +33,6 @@ const Comments = () => {
           </div>
           <div className="h-px" />
           <div className="py-2">
-          ``
           </div>
         </div>
       </div>

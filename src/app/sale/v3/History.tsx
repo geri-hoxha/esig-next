@@ -26,12 +26,12 @@ const activity: IActivity[] = [
       "Polica u anullua pasi agjenti Geri Hoxha kishte kryer axhustim primi gabim prej 20,000 Leke !",
     days: 4,
   },
-  {
-    id: 5,
-    type: "sold",
-    person: "Erin Hoxha",
-    days: 1,
-  },
+  // {
+  //   id: 5,
+  //   type: "sold",
+  //   person: "Erin Hoxha",
+  //   days: 1,
+  // },
 ];
 
 export default function History() {

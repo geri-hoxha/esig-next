@@ -21,7 +21,7 @@ const InsuredObjects = () => {
         openProp={open}
         setOpenProp={setOpen}
       >
-        <div className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-[268px] border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+        <div className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-36 border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
           <div className="flex md:hidden items-center gap-x-1 mx-auto py-2">
             <svg
               className="stroke-esig"
@@ -66,7 +66,7 @@ const InsuredObjects = () => {
         openProp={open}
         setOpenProp={setOpen}
       >
-        <div className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-[268px] border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+        <div className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-36 border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
           <div className="flex md:hidden items-center gap-x-1 mx-auto py-2">
             <svg
               className="stroke-esig"

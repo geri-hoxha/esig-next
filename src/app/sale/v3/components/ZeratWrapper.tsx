@@ -51,6 +51,7 @@ const Item: React.FC<{
       items={[
         {
           title: "Objektet e siguruara",
+          cols: '1',
           className: "scrollArea max-h-[500px] overflow-y-auto pr-2 pb-2",
           children: <InsuredObjects />,
         },
@@ -155,10 +156,10 @@ const ZeratWrapper = () => {
       })}
 
       <div className="flex items-center ">
-        <div className="border-b md:border-b-2 w-full h-px border-dashed  border-esig"></div>
+        <div className="border-b w-full h-px border-dashed  border-esig"></div>
         <div
           onClick={addNewItem}
-          className="cursor-pointer text-sm md:text-lg group border  md:border-2 w-full md:w-1/2 px-5 mx-auto py-1.5 md:py-3 text-esig   h-max border-dashed  border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-sm   transition-all duration-200 relative"
+          className="cursor-pointer text-sm md:text-lg group border w-full md:w-1/2 px-5 mx-auto py-1.5 md:py-3 text-esig   h-max border-dashed  border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-sm   transition-all duration-200 relative"
         >
           <div className="flex items-center justify-center gap-2">
             <svg
@@ -187,7 +188,7 @@ const ZeratWrapper = () => {
             </span>
           </div>
         </div>
-        <div className="border-b md:border-b-2 w-full h-px border-dashed  border-esig"></div>
+        <div className="border-b w-full h-px border-dashed  border-esig"></div>
       </div>
     </>
   );

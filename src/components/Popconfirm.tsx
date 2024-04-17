@@ -45,7 +45,7 @@ const Popconfirm: React.FC<IProps> = ({
     <div className="relative" ref={popupRef} >
       {geri && (
         <>
-        <div className="border p-3 z-50 bg-white border-gray-200 shadow-md rounded-lg min-w-80 min-h-20 absolute left-1/2 bottom-10 transform -translate-x-1/2 flex flex-col">
+        <div className="border p-3 z-50 bg-white border-gray-200 shadow-md rounded-lg min-w-80 min-h-20 absolute -right-5 bottom-10 transform   flex flex-col">
           <div className="flex items-center gap-2">
             <Image
               src="/svg/info.svg"

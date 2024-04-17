@@ -60,11 +60,12 @@ export const ButtonGeri: React.FC<{
   children: ReactNode;
   className: string;
   onClick?: any;
-}> = ({ children, className, onClick }) => {
+}> = ({ children, className, onClick, ...props }) => {
   return (
     <button
       className={`w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none transition-all duration-100 ${className}`}
       onClick={onClick}
+      {...props}
     >
       <div className="flex items-center gap-x-1">{children}</div>
     </button>

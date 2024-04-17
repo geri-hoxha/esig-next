@@ -45,7 +45,7 @@ const Modal: React.FC<IProps> = ({
   openProp,
   setOpenProp,
   back = false,
-  onReleaseClose = () => {}
+  onReleaseClose = () => {},
 }) => {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
@@ -85,7 +85,7 @@ const Modal: React.FC<IProps> = ({
 
             <DialogHeader>
               <DialogTitle className="text-xl">{title}</DialogTitle>
-              <DialogDescription className="text-base">
+              <DialogDescription className="text-base text-gray-600">
                 {description}
               </DialogDescription>
             </DialogHeader>
@@ -117,7 +117,6 @@ const Modal: React.FC<IProps> = ({
           removeQueryParam("id");
         }
       }}
-
       onRelease={(event, open) => {
         onReleaseClose(open);
       }}
@@ -142,7 +141,9 @@ const Modal: React.FC<IProps> = ({
 
           <DrawerHeader className="text-left">
             <DrawerTitle>{title}</DrawerTitle>
-            <DrawerDescription>{description}</DrawerDescription>
+            <DrawerDescription className="text-gray-600">
+              {description}
+            </DrawerDescription>
           </DrawerHeader>
         </div>
 
