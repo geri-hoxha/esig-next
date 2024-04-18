@@ -10,6 +10,7 @@ import Base from "../../components/Fields_v2/Base";
 import Modal from "@/components/esig/Modal";
 import Popconfirm from "@/components/Popconfirm";
 import { classNames } from "@/lib/utils";
+import Preview from "../../components/Preview";
 const SaleFooter = () => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
@@ -173,11 +174,11 @@ const SaleFooter = () => {
           </div>
         </button>
         <Modal
-          title="Shitja e polices u konfirmua!"
-          description="Sistemi eshte duke kryer keto veprime:"
-          body={<SaleStepper myState={myState} />}
+          title="Finalizim shitjes!"
+          description="Ndiqni procesimin nga sistemi!"
+          body={<SaleStepper myState={myState} setOpen={setOpen} />}
           noButtons
-          width={myState[0] ? "min-w-[55%]" : "min-w-[40%]"}
+          width={myState[0] ? "!max-w-lg " : "!max-w-4xl"}
           openProp={open}
           setOpenProp={setOpen}
         >
@@ -220,14 +221,17 @@ const stepsStatic = [
   },
 ];
 
-const SaleStepper = ({ myState }) => {
+const SaleStepper = ({ myState, setOpen }) => {
   const [steps, setSteps] = useState<any>([]);
 
-  const [done, setDone] = useState(false);
-
+ 
   const [confirmed, setConfirmed] = myState;
 
+  const [zoomIn, setZoomIn] = useState(false);
+
   useEffect(() => {
+    if (!confirmed) return;
+
     setSteps(stepsStatic);
 
     const intervalId = setInterval(() => {
@@ -237,8 +241,7 @@ const SaleStepper = ({ myState }) => {
         );
 
         if (curretIndex === steps.length - 1) {
-          setDone(true);
-          clearInterval(intervalId);
+           clearInterval(intervalId);
         }
 
         return steps.map((step, index) => {
@@ -264,15 +267,19 @@ const SaleStepper = ({ myState }) => {
       });
     }, 2000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+    return () => {
+      clearInterval(intervalId);
+       setConfirmed(false);
+      setSteps([]);
+    };
+  }, [confirmed]);
 
-  return (
-    <div className="grid grid-cols-12 divide-x">
-      <div className={`${confirmed ? "col-span-4" : "col-span-12"}`}>
-        <span onClick={() => setConfirmed(true)}>gwegwe</span>
-      </div>
+  const setZoomInHandler = () => {
+    setZoomIn(!zoomIn);
+  };
 
+  if (confirmed) {
+    return (
       <div
         className={`flex flex-col gap-8 p-4 col-span-8 ${
           confirmed ? "" : "hidden"
@@ -284,7 +291,7 @@ const SaleStepper = ({ myState }) => {
               <li
                 key={step.name}
                 className={classNames(
-                  stepIdx !== steps.length - 1 ? "pb-10" : "",
+                  stepIdx !== steps.length - 1 ? "pb-7" : "",
                   "relative"
                 )}
               >
@@ -297,7 +304,7 @@ const SaleStepper = ({ myState }) => {
                       />
                     ) : null}
                     <div className="flex items-end justify-between gap-5">
-                      <div className="group relative flex items-start cursor-pointer  ">
+                      <div className="group relative flex items-center cursor-pointer  ">
                         <span className="flex h-9 items-center">
                           <span className="relative bg-white z-10 flex h-8 w-8 items-center justify-center rounded-full   ">
                             <Image
@@ -314,16 +321,16 @@ const SaleStepper = ({ myState }) => {
                           <span className="text-sm font-medium">
                             {step.name}
                           </span>
-                          <span className="text-sm text-gray-500">
-                            {step.description}
-                          </span>
+                          {/* <span className="text-sm text-gray-500">
+                          {step.description}
+                        </span> */}
                         </span>
                       </div>
                       {step.button && (
                         <button className="w-max px-2 py-2 text-sm rounded-md  bg-transparent border-none text-esig font-semibold hover:bg-sky-100 transition-all duration-100">
                           <div className="flex items-center gap-x-2">
                             <Image
-                              src="/svg/check.svg"
+                              src="/svg/info.svg"
                               alt="edit"
                               width={"0"}
                               height={"0"}
@@ -345,7 +352,7 @@ const SaleStepper = ({ myState }) => {
                       />
                     ) : null}
                     <div
-                      className="group animate-pulse duration-500 relative flex items-start"
+                      className="group animate-pulse duration-500 relative flex items-center"
                       aria-current="step"
                     >
                       <span
@@ -360,9 +367,9 @@ const SaleStepper = ({ myState }) => {
                         <span className="text-sm font-medium text-esig">
                           {step.name}
                         </span>
-                        <span className="text-sm text-gray-500">
-                          {step.description}
-                        </span>
+                        {/* <span className="text-sm text-gray-500">
+                        {step.description}
+                      </span> */}
                       </span>
                     </div>
                   </>
@@ -374,7 +381,7 @@ const SaleStepper = ({ myState }) => {
                         aria-hidden="true"
                       />
                     ) : null}
-                    <div className="group relative flex items-start cursor-pointer">
+                    <div className="group relative flex items-center cursor-pointer">
                       <span
                         className="flex h-9 items-center"
                         aria-hidden="true"
@@ -387,9 +394,9 @@ const SaleStepper = ({ myState }) => {
                         <span className="text-sm font-medium text-gray-500">
                           {step.name}
                         </span>
-                        <span className="text-sm text-gray-500">
-                          {step.description}
-                        </span>
+                        {/* <span className="text-sm text-gray-500">
+                        {step.description}
+                      </span> */}
                       </span>
                     </div>
                   </>
@@ -399,21 +406,77 @@ const SaleStepper = ({ myState }) => {
           </ol>
         </nav>
 
-        {!done && (
-          <button className="ml-auto w-max px-3 py-1 text-sm rounded-md border-2 border-dashed border-esig-error bg-transparent   text-esig-error font-semibold hover:bg-red-50 transition-all duration-100">
-            <div className="flex items-center gap-x-2">
-              <Image
-                src="/svg/stop.svg"
-                alt="edit"
-                width={"0"}
-                height={"0"}
-                style={{ width: 22, height: 22 }}
-                priority
-              />
-              <span>Ndalo procesimin!</span>
-            </div>
-          </button>
-        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-12 gap-8">
+      <div className={`${zoomIn ? "col-span-12" : "col-span-7"}`}>
+        <Preview zoomIn={zoomIn} setZoomInHandler={setZoomInHandler} />
+      </div>
+
+      <div className={`col-span-5 ${zoomIn ? "hidden" : ""}`}>
+        <div className="flex flex-col justify-between h-full">
+          <div className="flex flex-col mb-4 gap-4 p-4 border-l-2 border-gray-400 border-dashed">
+            <span>
+              Seriali: <span className="font-bold">23432423</span>
+            </span>
+            <span>
+              Datat:
+              <span className="font-bold">18.04.2024 -- 17.04.2025</span>
+            </span>
+            <span>
+              Perdorues police: <span className="font-bold">3 persona</span>
+            </span>
+            <span>
+              Primi: <span className="font-bold">18,176.00 ALL</span>
+            </span>
+            <span>
+              Objekte te siguruara: <span className="font-bold">4</span>
+            </span>
+            <span>
+              Paketa e zgjedhur:{" "}
+              <span className="font-bold">Paketa Standard (12 mbulime)</span>
+            </span>
+          </div>
+
+          <div className="flex items-center  gap-4">
+            <button
+              onClick={() => setOpen(false)}
+              className="ml-auto w-max px-3 py-1 text-sm rounded-md border-2 border-dashed border-esig-error bg-transparent   text-esig-error font-semibold hover:bg-red-50 transition-all duration-100"
+            >
+              <div className="flex items-center gap-x-2">
+                <Image
+                  src="/svg/stop.svg"
+                  alt="edit"
+                  width={"0"}
+                  height={"0"}
+                  style={{ width: 18, height: 18 }}
+                  priority
+                />
+                <span>{confirmed ? "Anullo!" : "Anullo shitjen!"}</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setConfirmed(true)}
+              className=" w-max px-3 py-1 text-sm rounded-md border-2 border-dashed border-esig bg-transparent   text-esig font-semibold hover:bg-sky-50 transition-all duration-100"
+            >
+              <div className="flex items-center gap-x-2">
+                <Image
+                  src="/svg/check.svg"
+                  alt="edit"
+                  width={"0"}
+                  height={"0"}
+                  style={{ width: 18, height: 18 }}
+                  priority
+                />
+                <span>{confirmed ? "Finalizo!" : "Finalizo shitjen!"}</span>
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
