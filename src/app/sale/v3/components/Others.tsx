@@ -28,7 +28,7 @@ const riskAddress = [
 
 const Others = () => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2">
       <h3>Periudha e pritjes</h3>
       <Templates items={waitingPeriods} />
       <h3>Mbulimi territorial</h3>

@@ -68,10 +68,9 @@ const Home = () => {
   };
 
   return (
-    <div>
+    
       <DriverComponent steps={steps} options={options} />
-    </div>
-  );
+   );
 };
 
 export default Home;

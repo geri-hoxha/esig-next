@@ -20,7 +20,7 @@ const SaleFooter = () => {
     <div
       className="fixed bottom-0 bg-white shadow-inner
 
-      border-t border-gray-200 left-64 w-full flex items-center justify-between px-6 py-4"
+      border-t border-gray-200 z-10 left-64 w-full flex items-center justify-between px-6 py-4"
       style={{ width: "-webkit-fill-available" }}
     >
       <div className="flex items-center gap-4">
@@ -159,11 +159,12 @@ const SaleFooter = () => {
         </button>
         <button
           onClick={() => setOpen(true)}
-          className="w-max px-2 py-2 text-sm rounded-md  bg-transparent border-none text-esig font-bold hover:bg-sky-100 transition-all duration-100"
+          className="inline-flex items-center rounded-md bg-white px-3 py-2   text-sm font-semibold border-2 text-esig border-esig shadow-sm hover:bg-sky-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-esig"
         >
           <div className="flex items-center gap-x-2">
             <Image
               src="/svg/check.svg"
+              className="z-20 relative"
               alt="edit"
               width={"0"}
               height={"0"}
@@ -174,7 +175,7 @@ const SaleFooter = () => {
           </div>
         </button>
         <Modal
-          title="Finalizim shitjes!"
+          title="Finalizim shitjes per TPL!"
           description="Ndiqni procesimin nga sistemi!"
           body={<SaleStepper myState={myState} setOpen={setOpen} />}
           noButtons
@@ -195,7 +196,7 @@ const stepsStatic = [
   {
     name: "Polica po procesohet ne sistem",
     description: "Validim seriali dhe kalkulim primi.",
-    status: "current",
+    status: "complete",
   },
   {
     name: "PDF polices po gjenerohet",
@@ -224,10 +225,11 @@ const stepsStatic = [
 const SaleStepper = ({ myState, setOpen }) => {
   const [steps, setSteps] = useState<any>([]);
 
- 
   const [confirmed, setConfirmed] = myState;
 
   const [zoomIn, setZoomIn] = useState(false);
+
+  const [showThumbUp, setShowThumbUp] = useState(false);
 
   useEffect(() => {
     if (!confirmed) return;
@@ -241,7 +243,7 @@ const SaleStepper = ({ myState, setOpen }) => {
         );
 
         if (curretIndex === steps.length - 1) {
-           clearInterval(intervalId);
+          clearInterval(intervalId);
         }
 
         return steps.map((step, index) => {
@@ -269,13 +271,22 @@ const SaleStepper = ({ myState, setOpen }) => {
 
     return () => {
       clearInterval(intervalId);
-       setConfirmed(false);
+      setConfirmed(false);
       setSteps([]);
     };
   }, [confirmed]);
 
   const setZoomInHandler = () => {
     setZoomIn(!zoomIn);
+  };
+
+  const finalizeSale = () => {
+    setShowThumbUp(true);
+
+    setTimeout(() => {
+      setConfirmed(true);
+      setShowThumbUp(false);
+    }, 1500);
   };
 
   if (confirmed) {
@@ -307,8 +318,18 @@ const SaleStepper = ({ myState, setOpen }) => {
                       <div className="group relative flex items-center cursor-pointer  ">
                         <span className="flex h-9 items-center">
                           <span className="relative bg-white z-10 flex h-8 w-8 items-center justify-center rounded-full   ">
-                            <Image
+                            {/* <Image
                               src="/svg/check.svg"
+                              alt="edit"
+                              width={"0"}
+                              height={"0"}
+                              style={{ width: 24, height: 24 }}
+                              priority
+                            /> */}
+
+                            <Image
+                              src={"/svg/success.svg"}
+                              className="cursor-pointer"
                               alt="edit"
                               width={"0"}
                               height={"0"}
@@ -327,7 +348,7 @@ const SaleStepper = ({ myState, setOpen }) => {
                         </span>
                       </div>
                       {step.button && (
-                        <button className="w-max px-2 py-2 text-sm rounded-md  bg-transparent border-none text-esig font-semibold hover:bg-sky-100 transition-all duration-100">
+                        <button className="w-max my-auto px-2 py-2 text-sm rounded-md  bg-transparent border-none text-esig font-semibold hover:bg-sky-100 transition-all duration-100">
                           <div className="flex items-center gap-x-2">
                             <Image
                               src="/svg/info.svg"
@@ -405,26 +426,52 @@ const SaleStepper = ({ myState, setOpen }) => {
             ))}
           </ol>
         </nav>
-
       </div>
     );
   }
 
   return (
     <div className="grid grid-cols-12 gap-8">
-      <div className={`${zoomIn ? "col-span-12" : "col-span-7"}`}>
+      <div className={`relative ${zoomIn ? "col-span-12" : "col-span-7"}`}>
+        {showThumbUp && (
+          <div
+            className={` bg-white p-1 rounded-full absolute z-50 top-1/2  left-1/2 transform -translate-x-1/2 -translate-y-1/2  transition-none duration-500  `}
+          >
+            <Image
+              src={"/svg/success.svg"}
+              className="cursor-pointer puff-in-center"
+              alt="edit"
+              width={"0"}
+              height={"0"}
+              style={{ width: 110, height: 110 }}
+              priority
+            />
+          </div>
+        )}
+
         <Preview zoomIn={zoomIn} setZoomInHandler={setZoomInHandler} />
       </div>
 
-      <div className={`col-span-5 ${zoomIn ? "hidden" : ""}`}>
+      <div className={` col-span-5 ${zoomIn ? "hidden" : ""}`}>
         <div className="flex flex-col justify-between h-full">
           <div className="flex flex-col mb-4 gap-4 p-4 border-l-2 border-gray-400 border-dashed">
             <span>
               Seriali: <span className="font-bold">23432423</span>
             </span>
-            <span>
+            <span className="flex items-center">
               Datat:
-              <span className="font-bold">18.04.2024 -- 17.04.2025</span>
+              <span className="font-bold flex items-center gap-2 ml-2">
+                <span>18.04.2024</span>
+                <Image
+                  className="cursor-pointer  "
+                  src="/svg/left_to_right.svg"
+                  alt="edit"
+                  width={"0"}
+                  height={"0"}
+                  style={{ width: 23, height: 23 }}
+                />
+                <span>17.04.2025</span>
+              </span>
             </span>
             <span>
               Perdorues police: <span className="font-bold">3 persona</span>
@@ -437,14 +484,26 @@ const SaleStepper = ({ myState, setOpen }) => {
             </span>
             <span>
               Paketa e zgjedhur:{" "}
-              <span className="font-bold">Paketa Standard (12 mbulime)</span>
+              <span className="font-bold">Paketa Standard</span>
             </span>
+
+            <div className="w-full flex items-center  mt-6">
+              <Image
+                className="cursor-pointer mx-auto"
+                src="/sigal_logo.png"
+                alt="edit"
+                width={"0"}
+                height={"0"}
+                style={{ width: 150, height: 40 }}
+                unoptimized
+              />
+            </div>
           </div>
 
           <div className="flex items-center  gap-4">
             <button
               onClick={() => setOpen(false)}
-              className="ml-auto w-max px-3 py-1 text-sm rounded-md border-2 border-dashed border-esig-error bg-transparent   text-esig-error font-semibold hover:bg-red-50 transition-all duration-100"
+              className="ml-auto w-max px-3 py-1 text-sm rounded-md border border-dashed border-esig-error bg-transparent   text-esig-error font-semibold hover:bg-red-50 transition-all duration-100"
             >
               <div className="flex items-center gap-x-2">
                 <Image
@@ -455,13 +514,13 @@ const SaleStepper = ({ myState, setOpen }) => {
                   style={{ width: 18, height: 18 }}
                   priority
                 />
-                <span>{confirmed ? "Anullo!" : "Anullo shitjen!"}</span>
+                <span>Anullo shitjen!</span>
               </div>
             </button>
 
             <button
-              onClick={() => setConfirmed(true)}
-              className=" w-max px-3 py-1 text-sm rounded-md border-2 border-dashed border-esig bg-transparent   text-esig font-semibold hover:bg-sky-50 transition-all duration-100"
+              onClick={finalizeSale}
+              className=" w-max px-3 py-1 text-sm rounded-md border  border-dashed border-esig bg-transparent   text-esig font-semibold hover:bg-sky-50 transition-all duration-100"
             >
               <div className="flex items-center gap-x-2">
                 <Image
@@ -472,7 +531,7 @@ const SaleStepper = ({ myState, setOpen }) => {
                   style={{ width: 18, height: 18 }}
                   priority
                 />
-                <span>{confirmed ? "Finalizo!" : "Finalizo shitjen!"}</span>
+                <span>Finalizo shitjen!</span>
               </div>
             </button>
           </div>

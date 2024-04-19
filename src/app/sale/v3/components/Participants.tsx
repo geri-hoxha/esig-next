@@ -136,7 +136,7 @@ const Participants: React.FC<IProps> = ({
 
   return (
     <div className="flex flex-col min-w-60 ">
-      <div className="flex items-center text-lg font-semibold text-gray-700">
+      <div className="flex items-center  font-semibold text-gray-700">
         {title}
         <GeriHoxha haveLeader={haveLeader} baseUsers={data} dispatch={dispatch} stateKey={stateKey} percentageKey={percentageKey}/>
       </div>
@@ -158,7 +158,7 @@ const Participants: React.FC<IProps> = ({
       <ul>
         {data.map((user: any, index: number) => {
           return (
-            <li key={index} className="flex items-center gap-2">
+            <li key={index} className="flex items-center gap-2 mb-1">
               {index === 0 && haveLeader ? (
                 <Image
                   src="/svg/star.svg"
@@ -170,7 +170,7 @@ const Participants: React.FC<IProps> = ({
                   priority
                 />
               ) : (
-                <div>-</div>
+                <div>&#x2022;</div>
               )}{" "}
               <span className="truncate max-w-32"> {user?.displayName},</span>
               {percentageKey && (

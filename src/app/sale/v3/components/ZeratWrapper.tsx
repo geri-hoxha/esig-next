@@ -23,8 +23,9 @@ const Item: React.FC<{
       key={item}
       title={
         <div className="flex items-center gap-4">
-          <h2 className="text-xl md:text-2xl">
-            Zerat e polices ( zeri {item} )
+          <h2 className="text-xl md:text-2xl flex items-center gap-2">
+          <span className="text-white bg-esig rounded-full flex items-center justify-center text-base px-2.5  ">{item}</span>
+           <span> Zerat e polices</span>
           </h2>
 
           {item !== 1 && (

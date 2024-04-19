@@ -33,12 +33,15 @@ const Cards = ({ object, objects, setObjects }) => {
   return (
     <div
       className={`cursor-pointer group grid grid-cols-3 parent-card     hover:shadow-md rounded-xl min-h-36  transition-all duration-200 relative ${
-        isHovered ? "bg-red-50 text-esig-error" : "hover:!bg-sky-50  hover:text-esig"
+        isHovered
+          ? "bg-red-50 text-esig-error"
+          : "hover:!bg-sky-50  hover:text-esig"
       }`}
     >
-      <div className=" text-sm z-10 py-4 px-6 col-span-2">
-        <div className="font-semibold   py-2">
-          {object?.displayName}, {object?.taxNumber}
+      <div className=" text-sm  py-4 px-6 col-span-2">
+        <div className="font-semibold flex items-center justify-between  py-2">
+          <span className="max-w-xs truncate block">{object?.displayName}</span>
+          <span className=" ">{object?.taxNumber}</span>
         </div>
         <ul className="flex flex-col gap-y-2">
           {/* <li>
@@ -75,7 +78,7 @@ const Cards = ({ object, objects, setObjects }) => {
       </div>
 
       <div className="flex flex-col col-span-1 justify-center items-end">
-        <div className="flex items-center justify-between">
+        <div className={`flex items-center justify-between h-full rounded-bl-xl w-28  ${isHovered ? 'bg-white ' : ''}`}>
           <Modal
             title="Modali i objekteve te siguruara"
             description="Ketu mund te modikoni klientin e perzgjedhur."
@@ -101,8 +104,12 @@ const Cards = ({ object, objects, setObjects }) => {
           </Modal>
         </div>
 
+        <div className="h-full"></div>
+
         <div
-          className=" "
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="z-10 bg-white w-28 rounded-tl-xl transition-all duration-200 hover:bg-red-50 h-1/2 flex items-center justify-center absolute bottom-0 right-0"
           onClick={() => {
             setObjects([
               ...objects.filter((_object: any) => _object.id !== object.id),
@@ -126,11 +133,7 @@ const Cards = ({ object, objects, setObjects }) => {
             });
           }}
         >
-          <ButtonGeri
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className="text-esig-error  child-button     px-4 !h-12 -mr-1 rounded-l-lg transition-all duration-200"
-          >
+          <ButtonGeri className="text-esig-error  child-button     px-4 !h-12 -mr-1 rounded-l-lg transition-all duration-200">
             <div className="flex items-center gap-x-1  h-auto">
               <Image
                 className="cursor-pointer"

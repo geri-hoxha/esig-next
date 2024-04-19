@@ -59,12 +59,23 @@ const Comments = () => {
           </button>
         </div>
         <div className="flex-shrink-0 mt-0">
-          <button
-            type="submit"
-            className="inline-flex items-center rounded-md bg-esig px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-esig focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-esig"
-          >
-            Ruaj komentin
-          </button>
+
+        <button className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig hover:bg-sky-50 transition-all duration-100">
+                  <div className="flex items-center gap-x-1">
+                    <Image
+                      className="cursor-pointer"
+                      src="/svg/edit.svg"
+                      alt="edit"
+                      width={"0"}
+                      height={"0"}
+                      style={{ width: 20, height: 20 }}
+                      priority
+                    />
+                    <span> Ruaj komentin</span>
+                  </div>
+                </button>
+
+
         </div>
       </div>
     </form>
