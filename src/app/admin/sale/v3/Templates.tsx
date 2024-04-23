@@ -6,11 +6,16 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Templates({ items, onChange, selected, withDesciption }: any) {
+export default function Templates({
+  items,
+  onChange,
+  selected,
+  withDesciption,
+  noRing = false,
+}: any) {
   const [selectedMailingLists, setSelectedMailingLists] = useState(selected);
 
-
-   return (
+  return (
     <RadioGroup
       value={selectedMailingLists}
       onChange={(e) => {
@@ -23,14 +28,20 @@ export default function Templates({ items, onChange, selected, withDesciption }:
         Zgjidh paketen
       </RadioGroup.Label> */}
 
-      <div className={`grid ${withDesciption ? 'grid-cols-1' : 'grid-cols-2'}  gap-y-4 md:gap-y-6 sm:grid-cols-3 gap-x-4`}>
+      <div
+        className={`grid ${
+          withDesciption ? "grid-cols-1" : "grid-cols-2"
+        }  gap-y-4 md:gap-y-6 sm:grid-cols-3 gap-x-4`}
+      >
         {items.map((mailingList: any) => (
           <RadioGroup.Option
             key={mailingList.id}
             value={mailingList}
             className={({ checked }) =>
               classNames(
-                checked ? "border-esig ring-1 sm:ring-2 ring-esig" : "border-gray-300",
+                checked
+                  ? `border-esig ${noRing ? "" : "ring-1 sm:ring-2 ring-esig"} `
+                  : "border-gray-300",
                 "relative flex cursor-pointer rounded-lg border bg-white p-3 md:p-4 shadow-sm focus:outline-none"
               )
             }

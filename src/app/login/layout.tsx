@@ -5,13 +5,10 @@ export const metadata: Metadata = {
   description: "Esig - Sigal core system",
 };
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-  <div className="">
-     {children}</div>
-  )
+  return <div className="bg-black/90  w-full text-white flex items-center justify-center h-screen">{children}</div>;
 }

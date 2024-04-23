@@ -30,9 +30,9 @@ const Others = () => {
   return (
     <div className="flex flex-col gap-2">
       <h3>Periudha e pritjes</h3>
-      <Templates items={waitingPeriods} />
+      <Templates items={waitingPeriods} noRing />
       <h3>Mbulimi territorial</h3>
-      <Templates items={riskAddress} />
+      <Templates items={riskAddress} noRing />
     </div>
   );
 };

@@ -159,7 +159,7 @@ const SaleFooter = () => {
         </button>
         <button
           onClick={() => setOpen(true)}
-          className="inline-flex items-center rounded-md bg-white px-3 py-2   text-sm font-semibold border-2 text-esig border-esig shadow-sm hover:bg-sky-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-esig"
+          className="  inline-flex items-center rounded-md bg-white px-3 py-2   text-sm font-bold ring-esig ring-1 border-2 text-esig border-esig   hover:bg-sky-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-esig"
         >
           <div className="flex items-center gap-x-2">
             <Image
@@ -194,14 +194,14 @@ export default SaleFooter;
 
 const stepsStatic = [
   {
-    name: "Polica po procesohet ne sistem",
+    name: "Polica u procesua nga sistemi!",
     description: "Validim seriali dhe kalkulim primi.",
     status: "complete",
   },
   {
     name: "PDF polices po gjenerohet",
     description: "Duke u perdorur template-i per policat motorrike.",
-    status: "upcoming",
+    status: "current",
     button: "Shiko PDF",
   },
   {
@@ -242,11 +242,15 @@ const SaleStepper = ({ myState, setOpen }) => {
           (step) => step.status === "current"
         );
 
-        if (curretIndex === steps.length - 1) {
+        if (curretIndex === -1 || curretIndex === steps.length - 1) {
           clearInterval(intervalId);
         }
 
-        return steps.map((step, index) => {
+        const x = steps.map((step, index) => {
+          if (step.status === "complete") {
+            return step;
+          }
+
           if (index <= curretIndex) {
             return {
               ...step,
@@ -266,6 +270,8 @@ const SaleStepper = ({ myState, setOpen }) => {
             status: "upcoming",
           };
         });
+
+        return x;
       });
     }, 2000);
 
@@ -291,11 +297,7 @@ const SaleStepper = ({ myState, setOpen }) => {
 
   if (confirmed) {
     return (
-      <div
-        className={`flex flex-col gap-8 p-4 col-span-8 ${
-          confirmed ? "" : "hidden"
-        }`}
-      >
+      <div className={`flex flex-col gap-8 p-4   `}>
         <nav aria-label="Progress">
           <ol role="list" className="overflow-hidden">
             {steps.map((step, stepIdx) => (

@@ -73,6 +73,8 @@ export const ButtonGeri: React.FC<{
 };
 
 export default function Sale() {
+
+  console.log("ome")
   const [baseUsers, setBaseUsers] = useState([]);
 
   useEffect(() => {
@@ -81,15 +83,18 @@ export default function Sale() {
 
   return (
     <>
-      <Home />
-      <div className="flex flex-col  justify-center">
-        <h1 className="text-2xl md:text-3xl font-bold w-max">
-          Shitje produkti TPL
-        </h1>
-        <span className="text-gray-600 text-lg md:text-xl">
-          Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
-        </span>
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col  justify-center">
+          <h1 className="text-2xl md:text-3xl font-bold w-max">
+            Shitje produkti TPL
+          </h1>
+          <span className="text-gray-600 text-lg md:text-xl">
+            Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
+          </span>
+        </div>
+        <Home />
       </div>
+
       <Geri
         items={[
           {

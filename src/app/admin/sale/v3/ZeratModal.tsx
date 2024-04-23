@@ -92,7 +92,12 @@ const Box = ({ name, description, checked, index, setCoverageOpen }: any) => {
                   style={{ width: 15, height: 15 }}
                   priority
                 />
-                <span className="flex items-center gap-1">Modifiko <span className="hidden sm:block">limitet / nenlimitet etc...</span></span>
+                <span className="flex items-center gap-1">
+                  Modifiko{" "}
+                  <span className="hidden sm:block">
+                    limitet / nenlimitet etc...
+                  </span>
+                </span>
               </div>
             </button>
           </div>
@@ -604,7 +609,9 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                 >
                   <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
                 </svg>
-                <span className="flex items-center gap-1">Çaktivizo <span className="hidden sm:block">nenmbulimet</span></span>
+                <span className="flex items-center gap-1">
+                  Çaktivizo <span className="hidden sm:block">nenmbulimet</span>
+                </span>
               </div>
             </ButtonGeri>
           ) : (
@@ -636,7 +643,9 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                 >
                   <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
                 </svg>
-                <span className="flex items-center gap-1">Aktivizo <span className="hidden sm:block">nenmbulimet</span></span>
+                <span className="flex items-center gap-1">
+                  Aktivizo <span className="hidden sm:block">nenmbulimet</span>
+                </span>
               </div>
             </ButtonGeri>
           )}
@@ -653,7 +662,9 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                     style={{ width: 30, height: 30 }}
                     priority
                   />
-                  <span className="flex items-center gap-1">Mbyll <span className="hidden sm:block">modalin</span></span>
+                  <span className="flex items-center gap-1">
+                    Mbyll <span className="hidden sm:block">modalin</span>
+                  </span>
                 </div>
               </button>
             </DrawerClose>
@@ -669,7 +680,9 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
                     style={{ width: 20, height: 20 }}
                     priority
                   />
-                  <span className="flex items-center gap-1">Ruaj <span className="hidden sm:block">dhe apliko</span></span>
+                  <span className="flex items-center gap-1">
+                    Ruaj <span className="hidden sm:block">dhe apliko</span>
+                  </span>
                 </div>
               </button>
             </DrawerClose>
@@ -680,7 +693,7 @@ const Body = ({ setCoverageOpen, openSublimits, setOpenSublimits }: any) => {
   );
 };
 
-const ZeratModal = ({ increment }) => {
+const ZeratModal = ({ increment, children = null }: any) => {
   const [open, setOpen] = useState(false);
 
   const [coverageOpen, setCoverageOpen] = useState(false);
@@ -712,20 +725,22 @@ const ZeratModal = ({ increment }) => {
         width={openSublimits ? "min-w-[80%]" : "min-w-[50%]"}
         back
       >
-        <ButtonGeri className="text-esig hover:bg-sky-50">
-          <div className="flex items-center gap-x-1 text-lg">
-            <Image
-              className="cursor-pointer"
-              src="/svg/edit.svg"
-              alt="edit"
-              width={"0"}
-              height={"0"}
-              style={{ width: 20, height: 20 }}
-              priority
-            />
-            <span>Modifiko mbulimet / Zgjidh pakete</span>
-          </div>
-        </ButtonGeri>
+        {children || (
+          <ButtonGeri className="text-esig hover:bg-sky-50">
+            <div className="flex items-center gap-x-1 text-lg">
+              <Image
+                className="cursor-pointer"
+                src="/svg/edit.svg"
+                alt="edit"
+                width={"0"}
+                height={"0"}
+                style={{ width: 20, height: 20 }}
+                priority
+              />
+              <span>Modifiko mbulimet / Zgjidh pakete</span>
+            </div>
+          </ButtonGeri>
+        )}
       </Modal>
     );
   }
@@ -748,20 +763,22 @@ const ZeratModal = ({ increment }) => {
         setOpenProp={setOpen}
         width={"min-w-[40%]"}
       >
-        <ButtonGeri className="text-esig hover:bg-sky-50">
-          <div className="flex items-center gap-x-1 text-base sm:text-lg">
-            <Image
-              className="cursor-pointer"
-              src="/svg/edit.svg"
-              alt="edit"
-              width={"0"}
-              height={"0"}
-              style={{ width: 20, height: 20 }}
-              priority
-            />
-            <span>Modifiko mbulimet / Zgjidh pakete</span>
-          </div>
-        </ButtonGeri>
+        {children || (
+          <ButtonGeri className="text-esig hover:bg-sky-50">
+            <div className="flex items-center gap-x-1 text-base sm:text-lg">
+              <Image
+                className="cursor-pointer"
+                src="/svg/edit.svg"
+                alt="edit"
+                width={"0"}
+                height={"0"}
+                style={{ width: 20, height: 20 }}
+                priority
+              />
+              <span>Modifiko mbulimet / Zgjidh pakete</span>
+            </div>
+          </ButtonGeri>
+        )}
       </Modal>
     </>
   );

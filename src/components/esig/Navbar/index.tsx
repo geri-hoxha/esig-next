@@ -12,8 +12,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import DrawerContent from "./DrawerContent";
-import Base from "@/app/sale/components/Fields_v2/Base";
 import { useToast } from "@/components/ui/use-toast";
+import Base from "@/app/admin/sale/components/Fields_v2/Base";
 
 // const Currencies = React.lazy(() => import("./Currencies"));
 

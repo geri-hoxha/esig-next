@@ -78,7 +78,11 @@ const Cards = ({ object, objects, setObjects }) => {
       </div>
 
       <div className="flex flex-col col-span-1 justify-center items-end">
-        <div className={`flex items-center justify-between h-full rounded-bl-xl w-28  ${isHovered ? 'bg-white ' : ''}`}>
+        <div
+          className={`flex items-center justify-between h-full rounded-bl-xl w-28  ${
+            isHovered ? "bg-white " : ""
+          }`}
+        >
           <Modal
             title="Modali i objekteve te siguruara"
             description="Ketu mund te modikoni klientin e perzgjedhur."

@@ -1,5 +1,5 @@
 "use client";
-import { removeQueryParam } from "@/app/sale/v3/components/PolicyUsers";
+import { removeQueryParam } from "@/app/admin/sale/v3/components/PolicyUsers";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

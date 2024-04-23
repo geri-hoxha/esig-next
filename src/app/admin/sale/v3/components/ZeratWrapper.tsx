@@ -24,8 +24,10 @@ const Item: React.FC<{
       title={
         <div className="flex items-center gap-4">
           <h2 className="text-xl md:text-2xl flex items-center gap-2">
-          <span className="text-white bg-esig rounded-full flex items-center justify-center text-base px-2.5  ">{item}</span>
-           <span> Zerat e polices</span>
+            <span className="text-white bg-esig rounded-full flex items-center justify-center text-base px-2.5  ">
+              {item}
+            </span>
+            <span> Zerat e polices</span>
           </h2>
 
           {item !== 1 && (
@@ -52,7 +54,7 @@ const Item: React.FC<{
       items={[
         {
           title: "Objektet e siguruara",
-          cols: '1',
+          cols: "1",
           className: "scrollArea max-h-[500px] overflow-y-auto pr-2 pb-2",
           children: <InsuredObjects />,
         },
@@ -62,7 +64,7 @@ const Item: React.FC<{
               <h3 className="hidden sm:block text-lg md:text-xl bg-red-0">
                 Mbulimet e objektit / eve
               </h3>
-              <ZeratModal increment={increment} />
+              {selected && <ZeratModal increment={increment} />}
             </div>
           ),
           cols: "1",
@@ -76,11 +78,40 @@ const Item: React.FC<{
                   <Zerat />
                 </>
               ) : (
-                <div className="flex items-end justify-center h-20">
-                  <div className="hidden md:block border-2 border-gray-400 border-dotted text-gray-600 text-sm px-3 py-1 rounded-md">
-                    Asnje pakete / mbulim i perzgjedhur ...
+                <ZeratModal increment={increment}>
+                  <div className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-36 border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+                    <div className="flex md:hidden items-center gap-x-1 mx-auto py-2">
+                      <svg
+                        className="stroke-esig"
+                        width="14"
+                        height="14"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                      >
+                        <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+                      </svg>
+                      <span className="text-esig">Shto pjesemarres tjeter</span>
+                    </div>
+
+                    <svg
+                      className="stroke-esig hidden md:block"
+                      width="30"
+                      height="30"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                    >
+                      <path d="M14 14v-14h1v14h14v1h-14v14h-1v-14h-14v-1h14z" />
+                    </svg>
                   </div>
-                </div>
+                </ZeratModal>
+
+                // <div className="flex items-end justify-center h-20">
+                //   <div className="hidden md:block border-2 border-gray-400 border-dotted text-gray-600 text-sm px-3 py-1 rounded-md">
+                //     Asnje pakete / mbulim i perzgjedhur ...
+                //   </div>
+                // </div>
               )}
             </>
           ),
@@ -156,7 +187,7 @@ const ZeratWrapper = () => {
         );
       })}
 
-      <div className="flex items-center ">
+      {/* <div className="flex items-center ">
         <div className="border-b w-full h-px border-dashed  border-esig"></div>
         <div
           onClick={addNewItem}
@@ -190,7 +221,7 @@ const ZeratWrapper = () => {
           </div>
         </div>
         <div className="border-b w-full h-px border-dashed  border-esig"></div>
-      </div>
+      </div> */}
     </>
   );
 };
