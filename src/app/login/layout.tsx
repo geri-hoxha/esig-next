@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ProtectedRoute from "../admin/ProtectedRoute";
 
 export const metadata: Metadata = {
   title: "ESIG",
@@ -10,5 +11,9 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="bg-black/90  w-full text-white flex items-center justify-center h-screen">{children}</div>;
+  return (
+    <ProtectedRoute>
+      <div className="bg-esig-surface-30  w-full text-white flex items-center justify-center h-screen">{children}</div>
+    </ProtectedRoute>
+  );
 }

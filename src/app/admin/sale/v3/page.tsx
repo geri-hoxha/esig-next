@@ -74,7 +74,6 @@ export const ButtonGeri: React.FC<{
 
 export default function Sale() {
 
-  console.log("ome")
   const [baseUsers, setBaseUsers] = useState([]);
 
   useEffect(() => {

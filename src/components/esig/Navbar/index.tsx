@@ -14,9 +14,9 @@ import {
 import DrawerContent from "./DrawerContent";
 import { useToast } from "@/components/ui/use-toast";
 import Base from "@/app/admin/sale/components/Fields_v2/Base";
+import Currencies from "./Currencies";
 
-// const Currencies = React.lazy(() => import("./Currencies"));
-
+ 
 const EsigLogo = () => {
   return (
     <Image
@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
   const { toast } = useToast();
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 ">
+    <div className="fixed top-0 left-0 w-full z-50  ">
       <div className="w-full py-1.5 my-0 mx-auto bg-esig flex items-center justify-center text-white font-bold text-sm">
         <span>Development environment</span>
       </div>
@@ -63,9 +63,9 @@ const Navbar: React.FC = () => {
             <EsigLogo />
           </div>
         </div>
-        <Suspense fallback={<></>}>{/* <Currencies /> */}</Suspense>
+        <Currencies />
         <div className="ml-auto flex items-center gap-x-3">
-          <div className="hidden md:block">
+          {/* <div className="hidden md:block">
             <Base
               className="!w-60 !h-10"
               type="select"
@@ -110,7 +110,7 @@ const Navbar: React.FC = () => {
             />
           </div>
           <UserActions />
-          <Balance />
+          <Balance /> */}
         </div>
       </nav>
     </div>

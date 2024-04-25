@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "../../ui/button";
-import request from "@/request";
+import _request from "@/request";
 import { token } from "./Currencies";
 import { CircleDollarSign } from "lucide-react";
 
@@ -17,8 +17,8 @@ export default function Balance() {
     try {
       setLoading(true);
       const [EUR, ALL] = await Promise.all([
-        request("/agency/balance/EUR", token),
-        request("/agency/balance/ALL", token),
+        _request("/agency/balance/EUR", token),
+        _request("/agency/balance/ALL", token),
       ]);
       setBalance([EUR.data || 0, ALL.data || 0]);
     } finally {

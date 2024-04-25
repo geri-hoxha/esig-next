@@ -1,6 +1,6 @@
 import Modal from "@/components/esig/Modal";
 import { token } from "@/components/esig/Navbar/Currencies";
-import request from "@/request";
+import _request from "@/request";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,7 @@ const Preview: React.FC = ({ zoomIn, setZoomInHandler }) => {
   }, []);
 
   const getPolicyPreview = async () => {
-    const response = await request(
+    const response = await _request(
       `/policystandard/print/dc56d580-4ba6-ee11-b9a3-00505692fbbd/false`,
       token,
       {

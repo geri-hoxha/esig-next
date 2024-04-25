@@ -8,7 +8,7 @@ import CustomerDonut from "./CustomerDonut";
 import { Button } from "@/components/ui/button";
 import { ButtonGeri } from "./page";
 import { DrawerClose } from "@/components/ui/drawer";
-import request from "@/request";
+import _request from "@/request";
 import { token } from "@/components/esig/Navbar/Currencies";
 import Spinner from "./components/Spinner";
 import { getQueryParams } from "./components/PolicyUsers";
@@ -42,7 +42,7 @@ const CustomerModal = ({
 
     if (!params.id) return;
 
-    const response = await request(`/customer/${params.id}`, token, {
+    const response = await _request(`/customer/${params.id}`, token, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const CustomerModal = ({
     if (!searchedName) return;
     try {
       setLoading(true);
-      const response = await request("/customer/ag", token, {
+      const response = await _request("/customer/ag", token, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

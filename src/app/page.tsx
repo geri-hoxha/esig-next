@@ -1,5 +1,6 @@
-import General from "./dashboard/general/page";
+import General from "./admin/dashboard/general/page";
 
+ 
 export default async  function Index() {
   return <General />;
 }
