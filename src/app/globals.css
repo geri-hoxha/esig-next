@@ -124,8 +124,6 @@
 
 .driver-active-element {
   padding: 10px 0 0 0;
-  /* sale footer component position fixed overlays our highlighted component: workaround */
-  margin-bottom: 10px;
 }
 
 

@@ -8,6 +8,10 @@ import React, {
   useState,
 } from "react";
 import { IAction, reducer } from "./reducer";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Dayjs } from "dayjs";
 
 interface IParticipantsComponent {
   policyUsers: ReactNode;
@@ -15,7 +19,17 @@ interface IParticipantsComponent {
   policyHolders: ReactNode;
   insurers: ReactNode;
   invoiceRecipients: ReactNode;
+}
 
+interface IFormContext {
+  serial?: string;
+  currencyType?: string;
+  paymentType?: string;
+  startDateUtc?: Dayjs;
+  endDateUtc?: Dayjs;
+  issuedDateUtc?: Dayjs;
+  retroActiveDateUtc?: Dayjs;
+  distributionChannel?: string;
 }
 
 interface ISaleContext {
@@ -78,6 +92,17 @@ type Reducer = (
   action: IAction<ISaleContext>
 ) => ISaleContext;
 
+const formSchema = z.object({
+  serial: z.string().min(1, "Seriali eshte i detyrueshem!"),
+  currencyType:  z.string().min(1, "Monedha eshte i detyrueshem!"),
+  paymentType:  z.string().min(1, "Metoda e pageses eshte e detyrueshme!"),
+  startDateUtc: z.string().datetime().min(1, "Data e fillimit eshte e detyrueshme!"),
+  endDateUtc: z.string().datetime().min(1, "Data e mbarimit eshte e detyrueshme!"),
+  issuedDateUtc: z.string().datetime().min(1, "Data e lëshimit eshte e detyrueshme!"),
+  retroActiveDateUtc: z.string().datetime().min(1, "Data e retrospektive eshte e detyrueshme!"),
+  distributionChannel:  z.string().min(1, "Kanali i shpërndarjes eshte i detyrueshem!"),
+});
+
 // Create a context
 const SaleContext = createContext<IContext>(saleContext);
 
@@ -99,8 +124,16 @@ const SaleProvider = ({ children }: { children: ReactNode }) => {
     },
     [rules]
   );
-  
-  // todo: create a form instance
+
+  const {
+    register,
+    getValues,
+    trigger,
+    formState: { errors },
+  } = useForm<IFormContext>({
+    defaultValues: {},
+    resolver: zodResolver(formSchema),
+  });
 
   return (
     <SaleContext.Provider
@@ -116,4 +149,11 @@ const useSale = () => useContext(SaleContext);
 
 export { SaleProvider, useSale, defaultRules };
 
-export type { ISaleContext, IContext, ParticipantsLimits, IRule, IParticipantsComponent, Reducer };
+export type {
+  ISaleContext,
+  IContext,
+  ParticipantsLimits,
+  IRule,
+  IParticipantsComponent,
+  Reducer,
+};

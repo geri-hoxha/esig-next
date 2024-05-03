@@ -126,7 +126,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-96 items-center justify-center  gap-8  border border-gray-300 shadow-sm  flex flex-col bg-white px-12 py-9 rounded-lg">
+    <div className="w-96 items-center  justify-center  h-fit	  gap-8  border border-gray-300 shadow-sm  flex flex-col bg-white px-12 py-9 rounded-lg">
       <Image
         className="cursor-pointer"
         src="/logo-esig-black.svg"

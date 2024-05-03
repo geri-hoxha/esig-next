@@ -1,4 +1,4 @@
-import { driver } from "driver.js";
+import { Config, DriveStep, State, driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -49,6 +49,21 @@ const Home = () => {
       nextBtnText: "Hapi tjeter",
       prevBtnText: "Kthehu",
       doneBtnText: "Perfundo",
+      onHighlighted: (
+        element: Element | undefined,
+        step: DriveStep,
+        opts: {
+          config: Config;
+          state: State;
+        }
+      ) => {
+        if (step.element === "#insuerersIntro") {
+          window.scrollTo({
+            top: document.body.scrollHeight - window.innerHeight + 70,
+            behavior: 'smooth'
+          });
+        }
+      },
     });
 
     setDriverObj(driverObj);
@@ -63,7 +78,10 @@ const Home = () => {
   }, []);
 
   return (
-    <div onClick={() => driverObj.drive()} className="flex items-center cursor-pointer gap-1 bg hover:bg-sky-100 px-2 py-1 rounded-lg text-esig font-bold">
+    <div
+      onClick={() => driverObj.drive()}
+      className="flex items-center cursor-pointer gap-1 bg hover:bg-sky-100 px-2 py-1 rounded-lg text-esig font-bold"
+    >
       <Image
         className="cursor-pointer"
         src="/svg/question_blue.svg"

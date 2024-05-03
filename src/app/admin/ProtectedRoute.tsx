@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     const isAuthenticated = localStorage.getItem("token"); // Implement this function
 
     if (isAuthenticated) {
-      if (pathname !== "/admin/sale/v3") {
+      if (pathname === "/login") {
         redirect("/admin/sale/v3");
       }
     } else {
