@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Base from "../components/Fields_v2/Base";
 import numeral from "numeral";
-import { DELETE, SET, UPDATE } from "@/context/reducer";
+import { DELETE, SET, UPDATE } from "@/app/admin/policy/context/reducer";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { GridApi } from "ag-grid-enterprise";

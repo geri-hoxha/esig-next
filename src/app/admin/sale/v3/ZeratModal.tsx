@@ -724,6 +724,16 @@ const ZeratModal = ({ increment, children = null }: any) => {
         setOpenProp={setCoverageOpen}
         width={openSublimits ? "min-w-[80%]" : "min-w-[50%]"}
         back
+          //     <div className="w-7 h-7 mr-4 cursor-pointer border-2 border-esig flex items-center justify-center rounded-full bg-sky-50">
+  //     <Image
+  //         src="/svg/left_arrow.svg"
+  //         alt="edit"
+  //         width={"0"}
+  //         height={"0"}
+  //         style={{ width: 30, height: 30 }}
+  //         priority
+  //     />
+  // </div>
       >
         {children || (
           <ButtonGeri className="text-esig hover:bg-sky-50">

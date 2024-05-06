@@ -1,9 +1,8 @@
-import { IAction } from "@/context/reducer";
 import Section from "../Section";
 import { useCoreContext } from "../context";
 import { useReducer } from "react";
 import { CustomerModel } from "../type";
-import { reducer } from "../context/reducer";
+import { IAction, reducer } from "../context/reducer";
 
 export interface IParticipants {
   policyUsers: CustomerModel[];
@@ -18,16 +17,15 @@ type Reducer = (
 ) => IParticipants;
 
 const Participants = () => {
-  const [localParticipants, dispatch] = useReducer<Reducer>(
-    reducer<IParticipants>,
-    {
-      //@ts-ignore
-      policyUsers: [{}],
-      beneficiaries: [],
-      policyHolders: [],
-      invoiceRecipients: [],
-    }
-  );
+  // const [localParticipants, dispatch] = useReducer<Reducer>(
+  //   reducer<IParticipants>,
+  //   {
+  //     policyUsers: [],
+  //     beneficiaries: [],
+  //     policyHolders: [],
+  //     invoiceRecipients: [],
+  //   }
+  // );
 
   return (
     <Section
@@ -36,7 +34,7 @@ const Participants = () => {
           cols: "1",
           title: "Perdoruesit e polices",
           children: (
-            <PolicyUsers data={localParticipants["policyUsers"]} dispatch={dispatch}  />
+            <PolicyUsers data={localParticipants.policyUsers} dispatch={dispatch}  />
           ),
         },
         ...(data.policyUsers.length === 0

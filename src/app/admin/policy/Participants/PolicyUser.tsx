@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Modal from "@/components/esig/Modal";
-import React, { Dispatch, useEffect } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 import { ButtonGeri } from "../page";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
@@ -17,17 +16,26 @@ import {
   IAction,
 } from "../context/reducer";
 import { IParticipants } from "./";
+import Modal from "../components/Modal";
+import CustomerModal, { formSchemaCustomer } from "../CustomerModal";
+import _request from "@/request";
+import { token } from "@/components/esig/Navbar/Currencies";
 
-interface IProps {
-  data: CustomerModel[];
-  dispatch: Dispatch<IAction<IParticipants>>;
-}
 
-const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
-  const { data: coreData, dispatch: dispatchCore } = useCoreContext();
+type MapperParticipants = {
+  [K in keyof IParticipants]: { customerId: string }[];
+};
+
+const PolicyUsers: React.FC = () => {
+
+  const { data, dispatch } = useCoreContext();
 
   const { policyUsers, policyHolders, beneficiaries, invoiceRecipients } =
-    coreData;
+    data;
+
+  const [selectedParticipantId, setSelectedParticipantId] = useState<string>('');
+
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     // empty object to show first input (leader)
@@ -36,172 +44,77 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
 
   const { toast } = useToast();
 
-  const participants: { [key: symbol]: { customerId: string }[] } = {
+  const mapperParticipants: MapperParticipants = {
     policyUsers,
     policyHolders,
     beneficiaries,
     invoiceRecipients,
   };
 
-  const addPolicyUserHandler = (values: CustomerModel) => {
+  const participantsIteration = (dispatcher: (key: keyof IParticipants, participant: { customerId: string }[]) => void) => {
 
-    Object.keys(participants).forEach((key) => {
+    for (const key in mapperParticipants) {
+      // Asserting the type of `key` as `keyof MapperParticipants`
+      const typedKey = key as keyof MapperParticipants;
+
+      dispatcher(typedKey, mapperParticipants[typedKey]);
+    }
+  }
+
+  const addPolicyUserHandler = (values: CustomerModel) => {
+    participantsIteration((key) => {
       dispatch({
         type: CREATE,
         payload: {
           key,
-          item: {
-            customerId: values.id,
-          },
-        },
-      });
-    });
-
-  };
-
-  const onParticipantUpdate = (values: any, id: string | undefined) => {
-    // update
-    if (id) {
-      dispatch({
-        type: UPDATE,
-        payload: {
-          identifier: {
-            value: id,
-          },
-          key: "policyUsers",
           item: values,
         },
       });
-
-      dispatch({
-        type: UPDATE,
-        payload: {
-          identifier: {
-            value: id,
-          },
-          key: "beneficiaries",
-          item: values,
-        },
-      });
-
-      dispatch({
-        type: UPDATE,
-        payload: {
-          identifier: {
-            value: id,
-          },
-          key: "policyHolders",
-          item: values,
-        },
-      });
-
-      dispatch({
-        type: UPDATE,
-        payload: {
-          identifier: {
-            value: id,
-          },
-          key: "invoiceRecipients",
-          item: values,
-        },
-      });
-      return;
-    }
-
-    // add
-    dispatch({
-      type: CREATE,
-      payload: {
-        key: "policyUsers",
-        item: values,
-      },
-    });
-    dispatch({
-      type: CREATE,
-      payload: {
-        key: "beneficiaries",
-        item: values,
-      },
-    });
-    dispatch({
-      type: CREATE,
-      payload: {
-        key: "policyHolders",
-        item: values,
-      },
-    });
-    dispatch({
-      type: CREATE,
-      payload: {
-        key: "invoiceRecipients",
-        item: values,
-      },
     });
   };
 
-  const onParticipantDelete = (user: any) => {
-    const { id } = user;
-    dispatch({
-      type: DELETE,
-      payload: {
-        key: "policyUsers",
-        identifier: {
-          value: id,
+  const updatePolicyUserHandler = (values: CustomerModel) => {
+    participantsIteration((key) => {
+      dispatch({
+        type: UPDATE,
+        payload: {
+          identifier: {
+            value: values.id,
+          },
+          key,
+          item: values,
         },
-      },
-    });
-    dispatch({
-      type: DELETE,
-      payload: {
-        key: "beneficiaries",
-        identifier: {
-          value: id,
+      });
+    })
+  };
+
+  const deletePolicyUserHandler = (values: CustomerModel) => {
+    participantsIteration((key) => {
+      dispatch({
+        type: DELETE,
+        payload: {
+          key,
+          identifier: {
+            value: values.id,
+          },
         },
-      },
-    });
-    dispatch({
-      type: DELETE,
-      payload: {
-        key: "policyHolders",
-        identifier: {
-          value: id,
-        },
-      },
-    });
-    dispatch({
-      type: DELETE,
-      payload: {
-        key: "invoiceRecipients",
-        identifier: {
-          value: id,
-        },
-      },
-    });
+      });
+    })
 
     toast({
-      title: `Pjesemarresi: ${user.displayName} u fshi nga lista!`,
+      title: `Pjesemarresi: ${values.displayName} u fshi nga lista!`,
       description: "Klikoni 'Undo' nese ishte gabimisht.",
       action: (
         <ToastAction
           className="bg-esig text-white hover:bg-esig-fluorite"
           onClick={() => {
             // using the power of closures
-            dispatch({
-              type: SET,
-              payload: { key: "policyUsers", item: data },
-            });
-            dispatch({
-              type: SET,
-              payload: { key: "invoiceRecipients", item: data },
-            });
-            dispatch({
-              type: SET,
-              payload: { key: "beneficiaries", item: data },
-            });
-            dispatch({
-              type: SET,
-              payload: { key: "policyHolders", item: data },
-            });
+            participantsIteration((key, participant) => {
+              dispatch({
+                type: SET,
+                payload: { key, item: participant },
+              });
+            })
           }}
           altText="Goto schedule to undo"
         >
@@ -210,6 +123,26 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
       ),
     });
   };
+
+  const defaultValuesPromise = async () => {
+    const response = await _request(`/customer/${selectedParticipantId}`, token, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  }
+
+  const onOkHandler = () => {
+
+  }
+  const onCancelHandler = () => {
+
+  }
 
   const footer = (
     <>
@@ -234,10 +167,6 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
       </div>
     </>
   );
-
-  const setSelectedPolicyUser = (id: string) => {
-    pushQueryParams({ id });
-  };
 
   return (
     <>
@@ -362,6 +291,19 @@ const PolicyUsers: React.FC<IProps> = ({ data, dispatch }) => {
           <span>Polica arriti maksimumin e perdorueve</span>
         </div>
       )}
+
+
+      <Modal
+        title="Modali i perdoruesve te polices"
+        description="Krijoni ose perditesoni listen e klienteve ne Esig"
+        open={open}
+        onOk={onOkHandler}
+        onCancel={onCancelHandler}
+        formSchema={formSchemaCustomer}
+        defaultValues={defaultValuesPromise}
+      >
+        <CustomerModal footer={<></>} />
+      </Modal>
     </>
   );
 };
