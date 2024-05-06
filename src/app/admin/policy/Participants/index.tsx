@@ -3,6 +3,7 @@ import { useCoreContext } from "../context";
 import { useReducer } from "react";
 import { CustomerModel } from "../type";
 import { IAction, reducer } from "../context/reducer";
+import PolicyUsers from "./PolicyUser";
 
 export interface IParticipants {
   policyUsers: CustomerModel[];

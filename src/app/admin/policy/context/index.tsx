@@ -20,7 +20,7 @@ const defaultRequest = {
   agencyId: "",
   underwriterId: "",
   intermediaryId: "",
-  //    items: [],
+  items: [],
   beneficiaries: [],
   insurers: [],
   policyHolders: [],
@@ -30,6 +30,8 @@ const defaultRequest = {
   distributionChannel: "",
   productId: "",
   metadata: {},
+  policyInstallments: [],
+  policyRenewalRequests: []
 } as IssueRequest;
 
 const defaultUi = {

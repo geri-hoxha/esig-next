@@ -63,7 +63,7 @@ export interface PolicyParticipantInvoiceRecipientRequest {
     invoiceSplitPercentage: number;
     customerId: string;
 }
- 
+
 export interface PolicyParticipantInsurerRequest {
     ownershipPercentage: number;
     isLeader: boolean;
@@ -73,6 +73,58 @@ export interface PolicyParticipantInsurerRequest {
 export interface BeginRequest {
     productId: string;
     metadata: { [key: string]: any; };
+}
+
+
+export interface PolicyItemInsuredObjectRequest {
+    id: string;
+    objectType: string;
+    object: any;
+    objectValue: number;
+}
+
+export interface LimitRecord {
+    enabled: boolean;
+    value: number | null;
+    limitType: string | null;
+    minValue: number | null;
+    maxValue: number | null;
+}
+
+export interface PolicyItemCoverageRequest {
+    premium: number;
+    insuredAmount: number;
+    franchiseLimit: LimitRecord | null;
+    deductibleLimit: LimitRecord | null;
+    eventLimit: LimitRecord | null;
+    personLimit: LimitRecord | null;
+    periodLimit: LimitRecord | null;
+    productCoverageId: string;
+}
+
+
+export interface PolicyItemRequest {
+    text: string;
+    issuedDateUtc: Dayjs | null;
+    startDateUtc: Dayjs;
+    endDateUtc: Dayjs | null;
+    productTemplateId: string;
+    insuredObjects: PolicyItemInsuredObjectRequest[];
+    coverages: PolicyItemCoverageRequest[];
+    riskAddresses: Address[];
+}
+
+export interface PolicyRenewalRequest {
+    index: number;
+    startDateUtc: Dayjs;
+    endDateUtc: Dayjs;
+    premium: number;
+    sumInsured: number;
+}
+
+export interface PolicyInstallmentRequest {
+    installmentDateOffset: Dayjs;
+    amount: number;
 }
 
 export interface IssueRequest extends BeginRequest {
@@ -91,7 +143,7 @@ export interface IssueRequest extends BeginRequest {
     agencyId: string;
     underwriterId: string | null;
     intermediaryId: string | null;
-    // items: PolicyItemRequest[];
+    items: PolicyItemRequest[];
     beneficiaries: PolicyParticipantBeneficiaryRequest[];
     insurers: PolicyParticipantInsurerRequest[];
     policyHolders: PolicyParticipantPolicyHolderRequest[];
@@ -99,8 +151,8 @@ export interface IssueRequest extends BeginRequest {
     policyUsers: PolicyParticipantPolicyUserRequest[];
     paymentType: string;
     distributionChannel: string;
-    // policyInstallments: PolicyInstallmentRequest[];
-    // policyRenewalRequests: PolicyRenewalRequest[];
+    policyInstallments: PolicyInstallmentRequest[];
+    policyRenewalRequests: PolicyRenewalRequest[];
 }
 
 export interface IUi {
