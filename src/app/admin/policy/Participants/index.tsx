@@ -34,7 +34,7 @@ const Participants = () => {
           cols: "1",
           title: "Perdoruesit e polices",
           children: (
-            <PolicyUsers data={localParticipants.policyUsers} dispatch={dispatch}  />
+            <PolicyUsers  />
           ),
         },
         ...(data.policyUsers.length === 0
