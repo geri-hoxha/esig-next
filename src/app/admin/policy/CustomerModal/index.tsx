@@ -14,6 +14,7 @@ import Spinner from "./components/Spinner";
 import { useFormContext } from "react-hook-form";
 import { CustomerModel } from "@/types";
 import { z } from "zod";
+import Table from "./Table";
 
 interface IProps {
     id: string;
@@ -36,7 +37,7 @@ const CustomerModal: React.FC<IProps> = ({
     return (
         <div className="grid grid-cols-12 gap-4">
             <div className="col-span-12 md:col-span-4">
-               
+               <Table />
             </div>
 
             <div className="col-span-12 md:col-span-8 md:border-l-2 border-dashed pl-4">
