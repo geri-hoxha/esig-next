@@ -1,32 +1,16 @@
+'use client';
+
 import Section from "../Section";
-import { useCoreContext } from "../context";
-import { useReducer } from "react";
-import { CustomerModel } from "../type";
-import { IAction, reducer } from "../context/reducer";
+import { IParticipants, useCoreContext } from "../context";
+import List from "./List";
 import PolicyUsers from "./PolicyUser";
 
-export interface IParticipants {
-  policyUsers: CustomerModel[];
-  beneficiaries: CustomerModel[];
-  policyHolders: CustomerModel[];
-  invoiceRecipients: CustomerModel[];
+export   function isPolicyHolder(user: any): user is IParticipants["policyUsers"] {
+  return "isLeader" in user;
 }
 
-type Reducer = (
-  state: IParticipants,
-  action: IAction<IParticipants>
-) => IParticipants;
-
 const Participants = () => {
-  // const [localParticipants, dispatch] = useReducer<Reducer>(
-  //   reducer<IParticipants>,
-  //   {
-  //     policyUsers: [],
-  //     beneficiaries: [],
-  //     policyHolders: [],
-  //     invoiceRecipients: [],
-  //   }
-  // );
+  const { data } = useCoreContext();
 
   return (
     <Section
@@ -34,9 +18,7 @@ const Participants = () => {
         {
           cols: "1",
           title: "Perdoruesit e polices",
-          children: (
-            <PolicyUsers  />
-          ),
+          children: <PolicyUsers />,
         },
         ...(data.policyUsers.length === 0
           ? []
@@ -48,27 +30,20 @@ const Participants = () => {
                 children: (
                   <div
                     className="grid grid-cols-1 md:grid-cols-3 gap-4 min-w-max"
-                    key={data["policyUsers"].length}
+                    key={data.policyUsers.length}
                   >
-                    <Participants
+                    <List
                       title="Policembajtesit"
-                      data={data["policyHolders"]}
-                      dispatch={dispatch}
                       percentageKey="ownershipPercentage"
-                      haveLeader
                       stateKey="policyHolders"
                     />
-                    <Participants
+                    <List
                       title="Perfituesit"
-                      dispatch={dispatch}
-                      data={data["beneficiaries"]}
                       stateKey="beneficiaries"
                       percentageKey="ownershipPercentage"
                     />
-                    <Participants
+                    <List
                       title="Te faturarit"
-                      dispatch={dispatch}
-                      data={data["invoiceRecipients"]}
                       stateKey="invoiceRecipients"
                       percentageKey="invoiceSplitPercentage"
                     />

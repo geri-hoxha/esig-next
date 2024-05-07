@@ -1,8 +1,33 @@
+'use client'
+
 import { Dispatch, createContext, useContext } from "react";
 import { IAction, reducer } from "./reducer";
 import { ReactNode, useReducer } from "react";
-import { IUi, IssueRequest } from "../type";
+import {
+  CustomerModel,
+  IUi,
+  IssueRequest,
+  PolicyParticipantBeneficiaryRequest,
+  PolicyParticipantInsurerRequest,
+  PolicyParticipantInvoiceRecipientRequest,
+  PolicyParticipantPolicyHolderRequest,
+  PolicyParticipantPolicyUserRequest,
+} from "../type";
 import dayjs from "dayjs";
+
+ 
+
+export interface OverwrittenIssueRequest extends IssueRequest {
+  beneficiaries: (PolicyParticipantBeneficiaryRequest & CustomerModel)[];
+  insurers: (PolicyParticipantInsurerRequest & CustomerModel)[];
+  policyHolders: (PolicyParticipantPolicyHolderRequest & CustomerModel)[];
+  invoiceRecipients: (PolicyParticipantInvoiceRecipientRequest &
+    CustomerModel)[];
+  policyUsers: (PolicyParticipantPolicyUserRequest & CustomerModel)[];
+}
+
+export interface IParticipants extends Pick<OverwrittenIssueRequest, 'beneficiaries' | 'insurers' | 'policyHolders' | 'invoiceRecipients' | 'policyUsers'> {
+}
 
 const defaultRequest = {
   serial: "",
@@ -31,8 +56,9 @@ const defaultRequest = {
   productId: "",
   metadata: {},
   policyInstallments: [],
-  policyRenewalRequests: []
-} as IssueRequest;
+  policyRenewalRequests: [],
+} as OverwrittenIssueRequest;
+
 
 const defaultUi = {
   premium: 0,
@@ -42,8 +68,8 @@ const defaultUi = {
 };
 
 interface ICoreContext {
-  data: IssueRequest;
-  dispatch: Dispatch<IAction<IssueRequest>>;
+  data: OverwrittenIssueRequest;
+  dispatch: Dispatch<IAction<OverwrittenIssueRequest>>;
   ui: IUi;
   dispatchUi: Dispatch<IAction<IUi>>;
 }
@@ -62,7 +88,7 @@ export default function CoreContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const [data, dispatch] = useReducer(reducer<IssueRequest>, defaultRequest);
+  const [data, dispatch] = useReducer(reducer<OverwrittenIssueRequest>, defaultRequest);
 
   const [rules, dispatchRules] = useReducer(reducer<{}>, {});
 

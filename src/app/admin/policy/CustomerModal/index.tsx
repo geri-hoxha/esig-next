@@ -1,47 +1,37 @@
+'use client';
+
 import Image from "next/image";
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { ButtonGeri } from "./page";
-import { DrawerClose } from "@/components/ui/drawer";
 import _request from "@/request";
 import { useFormContext } from "react-hook-form";
-import { z } from "zod";
+import { ZodRawShape, z } from "zod";
 import Table from "./Table";
 import Input from "../components/Input";
 import Checkbox from "../components/Checkbox";
 import CustomerDonut from "../../sale/v3/CustomerDonut";
 import {
   CustomerModel,
-  PolicyParticipantBeneficiaryRequest,
-  PolicyParticipantInvoiceRecipientRequest,
-  PolicyParticipantPolicyHolderRequest,
-  PolicyParticipantPolicyUserRequest,
 } from "../type";
 
 interface IProps {
   id: string;
-  footerConfiguration: {
-    node: ReactNode;
-    fieldName:
-      | keyof PolicyParticipantPolicyHolderRequest
-      | keyof PolicyParticipantBeneficiaryRequest
-      | keyof PolicyParticipantPolicyUserRequest
-      | keyof PolicyParticipantInvoiceRecipientRequest;
-    validation: {
-      required: boolean;
-      errorMessage: string | ReactNode;
-    };
-  };
+  children: ReactNode;
 }
 
-export const formSchemaCustomer = z.object({
-  taxNumber: z.string().min(1, "NUID eshte i detyrueshem!"),
-  displayName: z.string().min(1, "Emri eshte i detyrueshem!"),
-  contactType: z.string().min(1, "Lloji i kontaktit eshte i detyrueshem!"),
-});
-
-const CustomerModal: React.FC<IProps> = ({ id, footerConfiguration }) => {
+export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
+  return z.object({
+    taxNumber: z.string().min(1, "NUID eshte i detyrueshem!"),
+    displayName: z.string().min(1, "Emri eshte i detyrueshem!"),
+    contactType: z.string().min(1, "Lloji i kontaktit eshte i detyrueshem!"),
+    ...argSchema,
+  });
+};
+const CustomerModal: React.FC<IProps> = ({ id, children }) => {
+  console.log(useFormContext)
   const { watch, register } = useFormContext<CustomerModel>();
+
+  console.log(watch)
   const customerId = watch("id");
 
   return (
@@ -52,7 +42,7 @@ const CustomerModal: React.FC<IProps> = ({ id, footerConfiguration }) => {
 
       <div className="col-span-12 md:col-span-8 md:border-l-2 border-dashed pl-4">
         {!!customerId ? (
-          <div className=" flex items-center mb-4  h-8">
+          <div className="flex items-center mb-4 h-8">
             <span className="text-lg flex items-center ">
               {" "}
               Te dhenat e klientit:{" "}
@@ -61,7 +51,7 @@ const CustomerModal: React.FC<IProps> = ({ id, footerConfiguration }) => {
               </div>
             </span>
 
-            <ButtonGeri className="text-esig hover:bg-sky-50">
+            <Button className="text-esig hover:bg-sky-50">
               <div className="flex items-center gap-x-1">
                 <Image
                   className="cursor-pointer"
@@ -74,7 +64,7 @@ const CustomerModal: React.FC<IProps> = ({ id, footerConfiguration }) => {
                 />
                 <span>Shiko te gjitha</span>
               </div>
-            </ButtonGeri>
+            </Button>
           </div>
         ) : (
           <div className="mb-4 h-8 text-sm text-gray-600 flex items-center gap-2">
@@ -116,62 +106,7 @@ const CustomerModal: React.FC<IProps> = ({ id, footerConfiguration }) => {
         </div>
       </div>
 
-      <div className="col-span-12  border-t-2 border-dashed">
-        <div className="flex flex-col md:flex-row gap-4 md:items-center justify-between pt-4">
-         
-          <div className="flex items-center gap-4 w-full">
-            {throwWarning ? (
-              <>
-                <Image
-                  className="cursor-pointer"
-                  src="/svg/question.svg"
-                  alt="edit"
-                  width={"0"}
-                  height={"0"}
-                  style={{ width: 30, height: 20 }}
-                  priority
-                />
-              </>
-            ) : null}
-            {footer}
-            {throwWarning && (
-              <span className="text-esig-error w-full text-sm">
-                Plotesoni konfigurimin per pjesemarresin!
-              </span>
-            )}
-          </div>
-          
-          <div className="flex items-center gap-4 ml-auto">
-            <DrawerClose asChild>
-              <Button
-                className="w-max sm:w-full"
-                variant="outline"
-                onClick={() => {
-                  setRowData([]);
-                  setValues(null);
-                  setSeachedName(undefined);
-                }}
-              >
-                Anullo veprimin
-              </Button>
-            </DrawerClose>
-            <div
-              onClick={() => {
-                if (throwWarning === false) {
-                  setThrowWarning(true);
-                  return;
-                }
-                onSave(values);
-              }}
-              asChild
-            >
-              <Button variant="default" className="w-max sm:w-full">
-                Ruaj dhe apliko
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className="col-span-12  border-t-2 border-dashed">{children}</div>
     </div>
   );
 };

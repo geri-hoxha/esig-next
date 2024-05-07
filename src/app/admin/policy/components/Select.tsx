@@ -1,4 +1,8 @@
+'use client'
+
 import React, { LegacyRef, ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
+import ErrorMessage from "./ErrorMessage";
 
 export interface IOptions {
   key: string;
@@ -33,6 +37,10 @@ const Select = React.forwardRef(
       options = [],
       ...register
     }: Partial<ISelect> = props;
+
+    const {
+      formState: { errors },
+    } = useFormContext<Record<string, any>>();
 
     let iconDiv;
     let pl10 = "";
@@ -75,6 +83,7 @@ const Select = React.forwardRef(
               );
             })}
           </select>
+          <ErrorMessage error={errors[name ?? '']} />
         </div>
       </div>
     );

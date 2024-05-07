@@ -1,4 +1,8 @@
+'use client'
+
 import React, { HTMLInputTypeAttribute, LegacyRef, ReactNode } from "react";
+import ErrorMessage from "./ErrorMessage";
+import { useFormContext } from "react-hook-form";
 
 export interface IInput {
   name: string;
@@ -28,6 +32,8 @@ const Input = React.forwardRef(
       type = "text",
       ...register
     }: Partial<IInput> = props;
+
+    const { formState: {errors} } = useFormContext<Record<string, any>>();
 
     let iconDiv;
 
@@ -73,6 +79,8 @@ const Input = React.forwardRef(
               {suffix}
             </div>
           )}
+
+          <ErrorMessage error={errors[name ?? '']} />
         </div>
       </div>
     );

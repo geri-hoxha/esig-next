@@ -1,39 +1,46 @@
 "use client";
 
 import Image from "next/image";
-import React, { Dispatch, useEffect, useState } from "react";
-import { ButtonGeri } from "../page";
+import React, { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { useCoreContext } from "../context";
-import { CustomerModel, IssueRequest } from "../type";
-import {
-  MASS_UPDATE,
-  CREATE,
-  DELETE,
-  SET,
-  UPDATE,
-  IAction,
-} from "../context/reducer";
-import { IParticipants } from "./";
+import { IParticipants, useCoreContext } from "../context";
+import { CustomerModel } from "../type";
+import { CREATE, DELETE, SET, UPDATE } from "../context/reducer";
 import Modal from "../components/Modal";
-import CustomerModal, { formSchemaCustomer } from "../CustomerModal";
+import CustomerModal, { getFormSchemaCustomer } from "../CustomerModal";
 import _request from "@/request";
 import { token } from "@/components/esig/Navbar/Currencies";
-
+import { PolicyParticipantPolicyUserRequest } from "@/types";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import Input from "../components/Input";
+import { ExtraChargeFooter } from "./ModalFooter";
 
 type MapperParticipants = {
-  [K in keyof IParticipants]: { customerId: string }[];
+  [K in keyof IParticipants]: (
+    | { customerId: string }
+    | { insurerId: string }
+  )[];
 };
 
-const PolicyUsers: React.FC = () => {
+const formSchema = getFormSchemaCustomer({
+  extraCharge: z.string(),
+});
 
+const PolicyUsers: React.FC = () => {
   const { data, dispatch } = useCoreContext();
 
-  const { policyUsers, policyHolders, beneficiaries, invoiceRecipients } =
-    data;
+  const {
+    policyUsers,
+    policyHolders,
+    beneficiaries,
+    invoiceRecipients,
+    insurers,
+  } = data;
 
-  const [selectedParticipantId, setSelectedParticipantId] = useState<string>('');
+  const [selectedParticipantId, setSelectedParticipantId] =
+    useState<string>("");
 
   const [open, setOpen] = useState<boolean>(false);
 
@@ -49,17 +56,22 @@ const PolicyUsers: React.FC = () => {
     policyHolders,
     beneficiaries,
     invoiceRecipients,
+    insurers,
   };
 
-  const participantsIteration = (dispatcher: (key: keyof IParticipants, participant: { customerId: string }[]) => void) => {
-
+  const participantsIteration = (
+    dispatcher: (
+      key: keyof IParticipants,
+      participant: ({ customerId: string } | { insurerId: string })[]
+    ) => void
+  ) => {
     for (const key in mapperParticipants) {
       // Asserting the type of `key` as `keyof MapperParticipants`
       const typedKey = key as keyof MapperParticipants;
 
       dispatcher(typedKey, mapperParticipants[typedKey]);
     }
-  }
+  };
 
   const addPolicyUserHandler = (values: CustomerModel) => {
     participantsIteration((key) => {
@@ -85,10 +97,12 @@ const PolicyUsers: React.FC = () => {
           item: values,
         },
       });
-    })
+    });
   };
 
-  const deletePolicyUserHandler = (values: CustomerModel) => {
+  const deletePolicyUserHandler = (
+    values: PolicyParticipantPolicyUserRequest & CustomerModel
+  ) => {
     participantsIteration((key) => {
       dispatch({
         type: DELETE,
@@ -99,7 +113,7 @@ const PolicyUsers: React.FC = () => {
           },
         },
       });
-    })
+    });
 
     toast({
       title: `Pjesemarresi: ${values.displayName} u fshi nga lista!`,
@@ -114,7 +128,7 @@ const PolicyUsers: React.FC = () => {
                 type: SET,
                 payload: { key, item: participant },
               });
-            })
+            });
           }}
           altText="Goto schedule to undo"
         >
@@ -125,89 +139,76 @@ const PolicyUsers: React.FC = () => {
   };
 
   const defaultValuesPromise = async () => {
-    const response = await _request(`/customer/${selectedParticipantId}`, token, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    if(!selectedParticipantId) return {}
+
+    const response = await _request(
+      `/customer/${selectedParticipantId}`,
+      token,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     return response.data;
-  }
+  };
 
-  const onOkHandler = () => {
+  const onOkHandler = (values: CustomerModel) => {
+    
+    if (selectedParticipantId) {
+      updatePolicyUserHandler(values);
+    } else {
+      addPolicyUserHandler(values);
+    }
 
-  }
+    onCancelHandler();
+  };
+  
   const onCancelHandler = () => {
+    setOpen(false);
 
-  }
-
-  const footer = (
-    <>
-      <div className="flex items-center grow shrink-0">
-        <div className="mr-2 text-gray-700 font-semibold text-sm ">
-          Tarife shtese:
-        </div>
-        <div className="">
-          <RadioGroup
-            options={[
-              {
-                id: "3",
-                title: "Po",
-              },
-              {
-                id: "4",
-                title: "Jo",
-              },
-            ]}
-          />
-        </div>
-      </div>
-    </>
-  );
+    setSelectedParticipantId("");
+  };
 
   return (
     <>
-      {data.map((user: any, index: number) => {
-        return (
-          <div className="flex items-center">
-            <Base
-              label={index === 0 ? "Lideri *" : ` Perdoruesi ${index + 1}`}
-              name="serial"
-              value={user?.displayName}
-              suffix={
-                index === 1 ? (
-                  <div className=" flex items-center justify-center gap-2">
-                    <Image
-                      className="cursor-pointer"
-                      src="/svg/chart_up.svg"
-                      alt="edit"
-                      width={"0"}
-                      height={"0"}
-                      style={{ width: 20, height: 20 }}
-                      priority
-                    />
-                    <span className="text-black text-xs"> Tarife shtese</span>
-                  </div>
-                ) : (
-                  ""
-                )
-              }
-            />
-            <Modal
-              title="Modali i pjesemarresve"
-              description="Ketu mund te modikoni klientin e perzgjedhur."
-              body={
-                <CustomerModal
-                  onSave={(values) => onParticipantUpdate(values, user.id)}
-                  footer={footer}
-                />
-              }
-              noButtons
-            >
-              <div onClick={() => setSelectedPolicyUser(user.id)}>
+      {policyUsers.map(
+        (
+          user: PolicyParticipantPolicyUserRequest & CustomerModel,
+          index: number
+        ) => {
+          return (
+            <div className="flex items-center">
+              <Input
+                label={index === 0 ? "Lideri *" : ` Perdoruesi ${index + 1}`}
+                value={user?.displayName}
+                suffix={
+                  !!user.extraCharge && (
+                    <div className=" flex items-center justify-center gap-2">
+                      <Image
+                        className="cursor-pointer"
+                        src="/svg/chart_up.svg"
+                        alt="edit"
+                        width={"0"}
+                        height={"0"}
+                        style={{ width: 20, height: 20 }}
+                        priority
+                      />
+                      <span className="text-black text-xs"> Tarife shtese</span>
+                    </div>
+                  )
+                }
+              />
+              <div
+                onClick={() => {
+                  setOpen(true);
+                  setSelectedParticipantId(user.id);
+                }}
+              >
                 <button className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig hover:bg-sky-50 transition-all duration-100">
                   <div className="flex items-center gap-x-1">
                     <Image
@@ -223,61 +224,57 @@ const PolicyUsers: React.FC = () => {
                   </div>
                 </button>
               </div>
-            </Modal>
 
-            {index !== 0 && (
-              <div>
-                <button
-                  onClick={() => {
-                    onParticipantDelete(user);
-                  }}
-                  className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig-error hover:bg-red-50 transition-all duration-100"
-                >
-                  <div className="flex items-center gap-x-1">
-                    <Image
-                      src="/svg/close.svg"
-                      alt="edit"
-                      width={"0"}
-                      height={"0"}
-                      style={{ width: 20, height: 20 }}
-                      priority
-                    />
-                    <span>Fshij</span>
-                  </div>
-                </button>
-              </div>
-            )}
+              {index !== 0 && (
+                <div>
+                  <Button
+                    onClick={() => {
+                      deletePolicyUserHandler(user);
+                    }}
+                    className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig-error hover:bg-red-50 transition-all duration-100"
+                  >
+                    <div className="flex items-center gap-x-1">
+                      <Image
+                        src="/svg/close.svg"
+                        alt="edit"
+                        width={"0"}
+                        height={"0"}
+                        style={{ width: 20, height: 20 }}
+                        priority
+                      />
+                      <span>Fshij</span>
+                    </div>
+                  </Button>
+                </div>
+              )}
+            </div>
+          );
+        }
+      )}
+
+      {policyUsers.length < 3 ? (
+        <Button
+          onClick={() => {
+            setOpen(true);
+          }}
+          className="text-esig hover:bg-sky-50 !text-base !w-full"
+          icon={
+            <svg
+              className="stroke-esig"
+              width="14"
+              height="14"
+              xmlns="http://www.w3.org/2000/svg"
+              fillRule="evenodd"
+              clipRule="evenodd"
+            >
+              <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+            </svg>
+          }
+        >
+          <div className="flex items-center gap-x-1 mx-auto">
+            <span>Shto perdorues tjeter</span>
           </div>
-        );
-      })}
-
-      {data.length < 3 ? (
-        <div className="w-full">
-          <Modal
-            title="Modali i pjesemarresve"
-            description="Ketu mund te modikoni klientin e perzgjedhur."
-            body={
-              <CustomerModal onSave={addPolicyUserHandler} footer={footer} />
-            }
-            noButtons
-          >
-            <ButtonGeri className="text-esig hover:bg-sky-50 !text-base !w-full">
-              <div className="flex items-center gap-x-1 mx-auto">
-                <svg
-                  className="stroke-esig"
-                  width="14"
-                  height="14"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                >
-                  <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
-                </svg>
-                <span>Shto perdorues tjeter</span>
-              </div>
-            </ButtonGeri>
-          </Modal>
-        </div>
+        </Button>
       ) : (
         <div className="flex items-center justify-center text-gray-600 gap-2 text-sm">
           <Image
@@ -292,17 +289,18 @@ const PolicyUsers: React.FC = () => {
         </div>
       )}
 
-
       <Modal
         title="Modali i perdoruesve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         open={open}
         onOk={onOkHandler}
         onCancel={onCancelHandler}
-        formSchema={formSchemaCustomer}
+        formSchema={formSchema}
         defaultValues={defaultValuesPromise}
       >
-        <CustomerModal footer={<></>} />
+        <CustomerModal id={selectedParticipantId}>
+          <ExtraChargeFooter />
+        </CustomerModal>
       </Modal>
     </>
   );

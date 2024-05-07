@@ -1,12 +1,13 @@
+'use client'
+
 import Image from "next/image";
 import Input from "../components/Input";
 import Checkbox from "../components/Checkbox";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import AgGrid from "@/components/ag/Ag-grid";
 import { CustomerModel } from "../type";
-import { RowClickedEvent } from "ag-grid-enterprise";
-import { ColDef } from "ag-grid-community";
+import { RowClickedEvent, ColDef } from "ag-grid-enterprise";
 import _request from "@/request";
 import { token } from "@/components/esig/Navbar/Currencies";
 import { useFormContext } from "react-hook-form";
@@ -64,12 +65,21 @@ const Table: React.FC = () => {
 
   const [searchedValue, setSeachedValue] = useState<string>("");
 
-  const onSearchChange = (event: ChangeEvent) => {
+  useEffect(() => {
+    return () => {
+      setRowData([]);
+      setSeachedValue("");
+      reset();
+    };
+  });
+
+  const onSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
     setSeachedValue(event.target.value);
   };
 
-  const radioGroupChange = (event) => {
+  const radioGroupChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
     setRadioGroup(event.target.value);
   };
 

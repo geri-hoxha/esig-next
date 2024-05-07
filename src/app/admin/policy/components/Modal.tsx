@@ -22,8 +22,9 @@ import {
 } from "@/components/ui/drawer";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode, useEffect, useState } from "react";
-import { DefaultValues, FieldValues, FormProvider, useForm } from "react-hook-form";
+import { DefaultValues, FieldValues, useForm } from "react-hook-form";
 import { ZodRawShape, z } from "zod";
+import FormProvider from "../context/FormProvider";
 
 type AsyncDefaultValues<TFieldValues> = (payload?: unknown) => Promise<TFieldValues>;
 
@@ -33,7 +34,7 @@ interface IProps<T> {
     children: ReactNode;
     open: boolean;
     width: string;
-    onOk: () => void | Promise<void>;
+    onOk: (values: T extends FieldValues ? T : FieldValues) => void | Promise<void>;
     onCancel: () => void;
     onReleaseClose: (open: boolean) => void;
     formSchema: z.ZodObject<ZodRawShape>;
@@ -75,7 +76,10 @@ function Modal<T>({
 
     const onSaveClick = async () => {
         setShow(false);
-        await onOk()
+
+        const fieldsValues = form.getValues();
+
+        await onOk(fieldsValues)
     }
 
     if (isDesktop) {

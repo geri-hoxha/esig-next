@@ -1,4 +1,14 @@
-import { ChangeEventHandler, HTMLInputTypeAttribute, LegacyRef, ReactNode, forwardRef } from "react";
+'use client'
+
+import {
+  ChangeEventHandler,
+  HTMLInputTypeAttribute,
+  LegacyRef,
+  ReactNode,
+  forwardRef,
+} from "react";
+import { useFormContext } from "react-hook-form";
+import ErrorMessage from "./ErrorMessage";
 
 interface IProps {
   id: string;
@@ -21,13 +31,17 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
       value,
       defaultChecked = false,
       checked,
-      type = 'checkbox',
+      type = "checkbox",
       ...register
     }: Partial<IProps>,
     ref: LegacyRef<HTMLInputElement> | undefined
   ) => {
+    const {
+      formState: { errors },
+    } = useFormContext<Record<string, any>>();
+
     return (
-      <div className="flex items-center cursor-pointer">
+      <div className="relative flex items-center cursor-pointer">
         <input
           id={id}
           name={name}
@@ -48,6 +62,7 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
             {children}
           </label>
         )}
+        <ErrorMessage error={errors[name ?? ""]} />
       </div>
     );
   }
