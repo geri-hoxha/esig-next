@@ -139,7 +139,7 @@ const PolicyUsers: React.FC = () => {
   };
 
   const defaultValuesPromise = async () => {
-    if(!selectedParticipantId) return {}
+    if (!selectedParticipantId) return {};
 
     const response = await _request(
       `/customer/${selectedParticipantId}`,
@@ -158,7 +158,6 @@ const PolicyUsers: React.FC = () => {
   };
 
   const onOkHandler = (values: CustomerModel) => {
-    
     if (selectedParticipantId) {
       updatePolicyUserHandler(values);
     } else {
@@ -167,7 +166,7 @@ const PolicyUsers: React.FC = () => {
 
     onCancelHandler();
   };
-  
+
   const onCancelHandler = () => {
     setOpen(false);
 
@@ -182,10 +181,14 @@ const PolicyUsers: React.FC = () => {
           index: number
         ) => {
           return (
-            <div className="flex items-center">
+            <div className="flex items-center" key={index}>
               <Input
                 label={index === 0 ? "Lideri *" : ` Perdoruesi ${index + 1}`}
                 value={user?.displayName}
+                onClick={() => {
+                  setOpen(true);
+                  setSelectedParticipantId(user.id ?? '');
+                }}
                 suffix={
                   !!user.extraCharge && (
                     <div className=" flex items-center justify-center gap-2">
@@ -203,27 +206,27 @@ const PolicyUsers: React.FC = () => {
                   )
                 }
               />
-              <div
+
+              <button
                 onClick={() => {
                   setOpen(true);
-                  setSelectedParticipantId(user.id);
+                  setSelectedParticipantId(user.id ?? '');
                 }}
+                className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig hover:bg-sky-50 transition-all duration-100"
               >
-                <button className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig hover:bg-sky-50 transition-all duration-100">
-                  <div className="flex items-center gap-x-1">
-                    <Image
-                      className="cursor-pointer"
-                      src="/svg/edit.svg"
-                      alt="edit"
-                      width={"0"}
-                      height={"0"}
-                      style={{ width: 20, height: 20 }}
-                      priority
-                    />
-                    <span>Zgjidh</span>
-                  </div>
-                </button>
-              </div>
+                <div className="flex items-center gap-x-1">
+                  <Image
+                    className="cursor-pointer"
+                    src="/svg/edit.svg"
+                    alt="edit"
+                    width={"0"}
+                    height={"0"}
+                    style={{ width: 20, height: 20 }}
+                    priority
+                  />
+                  <span>Zgjidh</span>
+                </div>
+              </button>
 
               {index !== 0 && (
                 <div>
@@ -252,7 +255,7 @@ const PolicyUsers: React.FC = () => {
         }
       )}
 
-      {policyUsers.length < 3 ? (
+      {data.policyUsers.filter((user) => user.id).length > 1 && (
         <Button
           onClick={() => {
             setOpen(true);
@@ -271,24 +274,25 @@ const PolicyUsers: React.FC = () => {
             </svg>
           }
         >
-          <div className="flex items-center gap-x-1 mx-auto">
+          <div className="flex items-center gap-x-1 mx-auto text-white">
             <span>Shto perdorues tjeter</span>
           </div>
         </Button>
-      ) : (
-        <div className="flex items-center justify-center text-gray-600 gap-2 text-sm">
-          <Image
-            src="/svg/info.svg"
-            alt="edit"
-            width={"0"}
-            height={"0"}
-            style={{ width: 17, height: 17 }}
-            priority
-          />
-          <span>Polica arriti maksimumin e perdorueve</span>
-        </div>
       )}
 
+      {/* 
+        <div className="flex items-center justify-center text-gray-600 gap-2 text-sm">
+                  <Image
+                    src="/svg/info.svg"
+                    alt="edit"
+                    width={"0"}
+                    height={"0"}
+                    style={{ width: 17, height: 17 }}
+                    priority
+                  />
+                  <span>Polica arriti maksimumin e perdorueve</span>
+                </div>
+        */}
       <Modal
         title="Modali i perdoruesve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"

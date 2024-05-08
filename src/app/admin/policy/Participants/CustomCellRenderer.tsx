@@ -7,16 +7,18 @@ import numeral from "numeral";
 import { isPolicyHolder } from ".";
 import { IParticipantsList, ParticipantWithPercentage } from "./List";
 import { useCoreContext } from "../context";
-import { DELETE } from "../context/reducer";
+import { DELETE, SET, UPDATE } from "../context/reducer";
 import { Toast } from "@/components/ui/use-toast";
 import { ToastActionElement, ToastProps } from "@/components/ui/toast";
+import { ToastAction } from "@/components/ui/toast";
+import { SortableParticipant } from "./SortableTable";
 
 type ToasterToast = ToastProps & {
-  id: string
-  title?: React.ReactNode
-  description?: React.ReactNode
-  action?: ToastActionElement
-}
+  id: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: ToastActionElement;
+};
 
 interface IProps extends IParticipantsList {
   node: IRowNode<CustomerModel>;
@@ -25,7 +27,9 @@ interface IProps extends IParticipantsList {
     id: string;
     dismiss: () => void;
     update: (props: ToasterToast) => void;
-}
+  };
+  rowData: SortableParticipant[];
+  setRowData: React.Dispatch<React.SetStateAction<SortableParticipant[]>>;
 }
 
 const CustomCellRenderer: React.FC<IProps> = ({
@@ -34,18 +38,19 @@ const CustomCellRenderer: React.FC<IProps> = ({
   percentageKey,
   stateKey,
   toast,
+  rowData,
+  setRowData,
   ...others
 }) => {
-
   const { data: coreData, dispatch } = useCoreContext();
 
   const [percentage, setPercentage] = useState<number>(
     (data as ParticipantWithPercentage)[percentageKey]
   );
-  console.log(others)
 
- 
-  const deleteParticipant = (data: any) => {
+  console.log(others);
+
+  const deleteParticipant = (data: CustomerModel) => {
     dispatch({
       type: DELETE,
       payload: {
@@ -53,10 +58,6 @@ const CustomCellRenderer: React.FC<IProps> = ({
         identifier: { value: data.id },
       },
     });
-
-    const leaderParticipant = rowData.at(0);
-
-    const x = [...rowData].filter((item) => item.id !== data.id);
 
     toast({
       title: `Pjesemarresi: ${data.displayName} u fshi nga lista!`,
@@ -68,7 +69,7 @@ const CustomCellRenderer: React.FC<IProps> = ({
             // using the power of closures
             dispatch({
               type: SET,
-              payload: { key: stateKey, item: baseUsers },
+              payload: { key: stateKey, item: coreData[stateKey] },
             });
 
             setRowData(rowData);
@@ -80,13 +81,28 @@ const CustomCellRenderer: React.FC<IProps> = ({
       ),
     });
 
-    const sum = x.reduce((accumulator, currentValue, index) => {
-      if (index === 0) return 0;
-      return accumulator + currentValue[percentageKey];
-    }, 0);
+    const leaderParticipant = rowData.at(0);
 
-    const users2 = x.map((item: any) => {
-      if (item.id === leaderParticipant.id) {
+    // remove the deleted one
+    const cleanedUpParticipants = [...rowData].filter(
+      (item) => item.id !== data.id
+    );
+
+    // find the new sum
+    const sum = cleanedUpParticipants.reduce(
+      (accumulator, currentValue, index) => {
+        if (index === 0) return 0;
+        return (
+          accumulator +
+          (currentValue as ParticipantWithPercentage)[percentageKey]
+        );
+      },
+      0
+    );
+
+    // calculate percentage for leader
+    const updatedParticipants = cleanedUpParticipants.map((item: any) => {
+      if (item.id === leaderParticipant?.id) {
         return {
           ...leaderParticipant,
           [percentageKey]: 1 - sum,
@@ -96,6 +112,7 @@ const CustomCellRenderer: React.FC<IProps> = ({
       return item;
     });
 
+    // update first participant (leader) on context
     dispatch({
       type: UPDATE,
       payload: {
@@ -104,30 +121,28 @@ const CustomCellRenderer: React.FC<IProps> = ({
           ...leaderParticipant,
           [percentageKey]: 1 - sum,
         },
-        identifier: { value: leaderParticipant.id },
+        identifier: { value: leaderParticipant?.id ?? "" },
       },
     });
 
-    setRowData(users2);
+    // update local state
+    setRowData(updatedParticipants);
   };
-  
-
 
   const onPercentageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    
-
-    const value = Number(e.target.value ?? 0) / 100;
+    const value = Number(event.target.value ?? 0) / 100;
 
     const leaderParticipant = rowData.at(0);
 
-    if (value > leaderParticipant?.[percentageKey]) {
+    if (value > (leaderParticipant as ParticipantWithPercentage)[percentageKey]) {
       return toast({
         variant: "destructive",
         title: `Perqindja nuk mund te jete me e madhe se perqindja e liderit!`,
       });
     }
 
-    const users = rowData.map((item: any) => {
+    // update the one participant that changed
+    const updatedGrid = rowData.map((item: any) => {
       if (item.id === data.id) {
         return {
           ...item,
@@ -138,13 +153,13 @@ const CustomCellRenderer: React.FC<IProps> = ({
       return item;
     });
 
-    const sum = users.reduce((accumulator, currentValue, index) => {
+    const sum = updatedGrid.reduce((accumulator, currentValue, index) => {
       if (index === 0) return 0;
       return accumulator + currentValue[percentageKey];
     }, 0);
 
-    const users2 = users.map((item: any) => {
-      if (item.id === leaderParticipant.id) {
+    const updatedLeaderParticipant = updatedGrid.map((item: any) => {
+      if (item.id === leaderParticipant?.id) {
         return {
           ...leaderParticipant,
           [percentageKey]: 1 - sum,
@@ -154,18 +169,15 @@ const CustomCellRenderer: React.FC<IProps> = ({
       return item;
     });
 
-    setRowData(users2);
+    setRowData(updatedLeaderParticipant);
 
     dispatch({
       type: SET,
       payload: {
         key: stateKey,
-        item: users2,
+        item: updatedLeaderParticipant,
       },
     });
-
-
-
 
     // Remove all non-digit characters from the input for robustness
     const rawNumbers = event.target.value.replace(/\D/g, "");
@@ -192,7 +204,6 @@ const CustomCellRenderer: React.FC<IProps> = ({
             <span className="text-esig font-bold pl-2">Lider</span>
           </div>
         )}
-
         <div className="flex items-center justify-between gap-4  mt-2 mb-4 ">
           <span className="font-bold text-lg text-gray-600 truncate w-3/5">
             {data.displayName}
@@ -200,7 +211,7 @@ const CustomCellRenderer: React.FC<IProps> = ({
 
           {node.rowIndex !== 0 && (
             <button
-              onClick={() => deleteParticipant(data.id)}
+              onClick={() => deleteParticipant(data)}
               className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig-error hover:bg-red-50 transition-all duration-100"
             >
               <div className="flex items-center gap-x-1">

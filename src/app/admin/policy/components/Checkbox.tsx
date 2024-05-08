@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   ChangeEventHandler,
@@ -40,6 +40,11 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
       formState: { errors },
     } = useFormContext<Record<string, any>>();
 
+    const getAtributtes = () => {
+      if (typeof checked === "undefined") return { defaultChecked };
+      return { checked };
+    };
+
     return (
       <div className="relative flex items-center cursor-pointer">
         <input
@@ -47,8 +52,7 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
           name={name}
           type={type}
           value={value}
-          defaultChecked={defaultChecked}
-          checked={checked}
+          {...getAtributtes()}
           onChange={onChange}
           className="h-4 w-4 border-gray-300 text-esig focus:ring-esig"
           ref={ref}

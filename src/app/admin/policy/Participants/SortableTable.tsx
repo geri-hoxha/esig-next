@@ -13,7 +13,7 @@ import {
   RowHeightParams,
 } from "ag-grid-enterprise";
 
-interface SortableParticipant extends CustomerModel {
+export interface SortableParticipant extends CustomerModel {
   rowHeight?: number | null;
 }
 
@@ -80,11 +80,13 @@ const SortableTable: React.FC<IParticipantsList> = ({
             field: "displayName",
             rowDrag: true,
             flex: 1,
-            // cellRenderer: CustomCellRenderer,
+            cellRenderer: CustomCellRenderer,
             cellRendererParams: {
               percentageKey,
               stateKey,
               toast,
+              rowData,
+              setRowData
             },
           },
         ]}

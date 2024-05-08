@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useFormContext } from "react-hook-form";
 import { CustomerModel, PolicyParticipantPolicyUserRequest } from "../type";
@@ -12,19 +12,17 @@ const ExtraChargeFooter = ({}) => {
   >();
 
   return (
-    <div className="flex items-center gap-4 w-full">
-      <div className="flex items-center grow shrink-0">
-        <div className="mr-2 text-gray-700 font-semibold text-sm ">
-          Tarife shtese:
-        </div>
-        <div className="">
-          <Checkbox id="yes" type="radio" {...register("extraCharge")}>
-            <>PO</>
-          </Checkbox>
-          <Checkbox id="no" type="radio" {...register("extraCharge")}>
-            <>JO</>
-          </Checkbox>
-        </div>
+    <div className="flex items-center w-full grow shrink-0 h-full">
+      <div className="mr-2 text-gray-700 font-semibold text-sm">
+        Tarife shtese:
+      </div>
+      <div className="flex items-center gap-4">
+        <Checkbox id="yes" type="radio" {...register("extraCharge")}>
+          <>PO</>
+        </Checkbox>
+        <Checkbox id="no" type="radio" {...register("extraCharge")}>
+          <>JO</>
+        </Checkbox>
       </div>
     </div>
   );

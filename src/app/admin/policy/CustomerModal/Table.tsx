@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
 import Image from "next/image";
 import Input from "../components/Input";
 import Checkbox from "../components/Checkbox";
 import { ChangeEvent, useEffect, useState } from "react";
 import Loader from "../components/Loader";
-import AgGrid from "@/components/ag/Ag-grid";
+import AgGrid, { FilterModel, getAgPayload } from "@/components/ag/Ag-grid";
 import { CustomerModel } from "../type";
 import { RowClickedEvent, ColDef } from "ag-grid-enterprise";
 import _request from "@/request";
@@ -59,7 +59,9 @@ const Table: React.FC = () => {
 
   const [rowData, setRowData] = useState<CustomerModel[]>([]);
 
-  const [radioGroup, setRadioGroup] = useState<string>("");
+  const [radioGroup, setRadioGroup] = useState<
+    "searchWithName" | "searchWithNipt"
+  >("searchWithName");
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -71,20 +73,43 @@ const Table: React.FC = () => {
       setSeachedValue("");
       reset();
     };
-  });
+  }, []);
 
   const onSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     setSeachedValue(event.target.value);
   };
 
   const radioGroupChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
-    setRadioGroup(event.target.value);
+    setSeachedValue("");
+    setRadioGroup(event.target.value as "searchWithName" | "searchWithNipt");
   };
 
   const onRowClicked = (params: RowClickedEvent<CustomerModel>) => {
     reset(params.data); // update your defaultValues && form values
+  };
+
+  const getFilterModel = () => {
+    if (radioGroup === "searchWithName") {
+      return {
+        searchName: {
+          filterType: "text",
+          type: "contains",
+          filter: searchedValue,
+        },
+      };
+    }
+
+    if (radioGroup === "searchWithNipt") {
+      return {
+        taxNumber: {
+          filterType: "text",
+          type: "equals",
+          filter: searchedValue,
+        },
+      };
+    }
+
+    return {};
   };
 
   const onSearchClick = async () => {
@@ -100,18 +125,9 @@ const Table: React.FC = () => {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          startRow: 0,
-          endRow: 100,
-          filterModel: {
-            searchName: {
-              filterType: "text",
-              type: "contains",
-              filter: searchedValue,
-            },
-          },
-          sortModel: [],
-        }),
+        body: getAgPayload(
+          getFilterModel() as { [key: string]: Partial<FilterModel> }
+        ),
       });
 
       setRowData(response.data);
@@ -122,27 +138,32 @@ const Table: React.FC = () => {
 
   return (
     <div className="flex flex-col  gap-4">
-      <Checkbox
-        type="radio"
-        id="search"
-        defaultChecked
-        value="searchWithName"
-        checked={radioGroup === "searchWithName"}
-        onChange={radioGroupChange}
-      >
-        <>Kerko me emer</>
-      </Checkbox>
-      <Checkbox
-        type="radio"
-        id="search"
-        value="searchWithNipt"
-        checked={radioGroup === "searchWithNipt"}
-        onChange={radioGroupChange}
-      >
-        <>Kerko me Nipt</>
-      </Checkbox>
+      <div className="flex items-center gap-4">
+        <Checkbox
+          type="radio"
+          id="searchWithName"
+          value="searchWithName"
+          checked={radioGroup === "searchWithName"}
+          onChange={radioGroupChange}
+        >
+          <>Kerko me emer</>
+        </Checkbox>
+        <Checkbox
+          type="radio"
+          id="searchWithNipt"
+          value="searchWithNipt"
+          checked={radioGroup === "searchWithNipt"}
+          onChange={radioGroupChange}
+        >
+          <>Kerko me Nipt</>
+        </Checkbox>
+      </div>
       <div className="flex items-center gap-2 mt-2">
-        <Input label="Emri / Nipt i klientit" onChange={onSearchChange} />
+        <Input
+          value={searchedValue}
+          label="Emri / Nipt i klientit"
+          onChange={onSearchChange}
+        />
         <div className="bg-esig p-2 rounded-md" onClick={onSearchClick}>
           <Image
             className="cursor-pointer"

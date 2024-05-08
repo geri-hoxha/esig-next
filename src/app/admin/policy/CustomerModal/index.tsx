@@ -28,10 +28,8 @@ export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
   });
 };
 const CustomerModal: React.FC<IProps> = ({ id, children }) => {
-  console.log(useFormContext)
   const { watch, register } = useFormContext<CustomerModel>();
 
-  console.log(watch)
   const customerId = watch("id");
 
   return (
@@ -106,7 +104,7 @@ const CustomerModal: React.FC<IProps> = ({ id, children }) => {
         </div>
       </div>
 
-      <div className="col-span-12  border-t-2 border-dashed">{children}</div>
+      <div className="col-span-12 h-14 border-t-2 border-dashed">{children}</div>
     </div>
   );
 };

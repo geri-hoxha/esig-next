@@ -2,10 +2,11 @@ import FormProvider from "./context/FormProvider";
 import Tutorial from "./components/Tutorial";
 import Form from "./Form";
 import Participants from "./Participants";
+import CoreContextProvider from "./context";
 
 export default function Policy() {
   return (
-    <>
+    <CoreContextProvider>
       <div className="flex items-start justify-between">
         <div className="flex flex-col  justify-center">
           <h1 className="text-2xl md:text-3xl font-bold w-max">
@@ -24,6 +25,6 @@ export default function Policy() {
 
       <Participants />
 
-    </>
+    </CoreContextProvider>
   );
 }

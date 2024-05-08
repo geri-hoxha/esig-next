@@ -20,7 +20,7 @@ const Participants = () => {
           title: "Perdoruesit e polices",
           children: <PolicyUsers />,
         },
-        ...(data.policyUsers.length === 0
+        ...(data.policyUsers.filter((user) => user.id).length === 0
           ? []
           : [
               {

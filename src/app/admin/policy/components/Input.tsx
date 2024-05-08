@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import React, { HTMLInputTypeAttribute, LegacyRef, ReactNode } from "react";
+import React, { HTMLInputTypeAttribute, LegacyRef, MouseEventHandler, ReactNode } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { useFormContext } from "react-hook-form";
 
@@ -12,6 +12,7 @@ export interface IInput {
   className: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   value: string;
+  onClick: MouseEventHandler<HTMLInputElement>;
   suffix: ReactNode;
   readOnly: boolean;
   type: HTMLInputTypeAttribute;
@@ -30,10 +31,11 @@ const Input = React.forwardRef(
       readOnly = false,
       suffix,
       type = "text",
+      onClick,
       ...register
     }: Partial<IInput> = props;
 
-    const { formState: {errors} } = useFormContext<Record<string, any>>();
+    const formContext = useFormContext<Record<string, any>>();
 
     let iconDiv;
 
@@ -61,6 +63,7 @@ const Input = React.forwardRef(
           </label>
           {iconDiv}
           <input
+          onClick={onClick}
             type={type}
             name={name}
             id={name}
@@ -80,7 +83,9 @@ const Input = React.forwardRef(
             </div>
           )}
 
-          <ErrorMessage error={errors[name ?? '']} />
+          {formContext?.formState && (
+            <ErrorMessage error={formContext.formState.errors[name ?? ""]} />
+          )}
         </div>
       </div>
     );

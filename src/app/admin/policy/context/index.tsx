@@ -1,6 +1,6 @@
 'use client'
 
-import { Dispatch, createContext, useContext } from "react";
+import { Dispatch, createContext, useContext, useEffect } from "react";
 import { IAction, reducer } from "./reducer";
 import { ReactNode, useReducer } from "react";
 import {
@@ -15,7 +15,6 @@ import {
 } from "../type";
 import dayjs from "dayjs";
 
- 
 
 export interface OverwrittenIssueRequest extends IssueRequest {
   beneficiaries: (PolicyParticipantBeneficiaryRequest & CustomerModel)[];
@@ -93,6 +92,10 @@ export default function CoreContextProvider({
   const [rules, dispatchRules] = useReducer(reducer<{}>, {});
 
   const [ui, dispatchUi] = useReducer(reducer<IUi>, defaultUi);
+
+  useEffect(() => {
+    console.log(data)
+  }, [JSON.stringify(data)])
 
   return (
     <CoreContext.Provider
