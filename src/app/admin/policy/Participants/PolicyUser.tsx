@@ -13,7 +13,6 @@ import _request from "@/request";
 import { token } from "@/components/esig/Navbar/Currencies";
 import { PolicyParticipantPolicyUserRequest } from "@/types";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import Input from "../components/Input";
 import { ExtraChargeFooter } from "./ModalFooter";
 
@@ -187,7 +186,7 @@ const PolicyUsers: React.FC = () => {
                 value={user?.displayName}
                 onClick={() => {
                   setOpen(true);
-                  setSelectedParticipantId(user.id ?? '');
+                  setSelectedParticipantId(user.id ?? "");
                 }}
                 suffix={
                   !!user.extraCharge && (
@@ -207,48 +206,23 @@ const PolicyUsers: React.FC = () => {
                 }
               />
 
-              <button
+              <Button
                 onClick={() => {
                   setOpen(true);
-                  setSelectedParticipantId(user.id ?? '');
+                  setSelectedParticipantId(user.id ?? "");
                 }}
-                className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig hover:bg-sky-50 transition-all duration-100"
               >
-                <div className="flex items-center gap-x-1">
-                  <Image
-                    className="cursor-pointer"
-                    src="/svg/edit.svg"
-                    alt="edit"
-                    width={"0"}
-                    height={"0"}
-                    style={{ width: 20, height: 20 }}
-                    priority
-                  />
-                  <span>Zgjidh</span>
-                </div>
-              </button>
-
+                Zgjidh
+              </Button>
               {index !== 0 && (
-                <div>
-                  <Button
-                    onClick={() => {
-                      deletePolicyUserHandler(user);
-                    }}
-                    className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig-error hover:bg-red-50 transition-all duration-100"
-                  >
-                    <div className="flex items-center gap-x-1">
-                      <Image
-                        src="/svg/close.svg"
-                        alt="edit"
-                        width={"0"}
-                        height={"0"}
-                        style={{ width: 20, height: 20 }}
-                        priority
-                      />
-                      <span>Fshij</span>
-                    </div>
-                  </Button>
-                </div>
+                <Button
+                variant={''}
+                  onClick={() => {
+                    deletePolicyUserHandler(user);
+                  }}
+                >
+                  Fshij
+                </Button>
               )}
             </div>
           );
