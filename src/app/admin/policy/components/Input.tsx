@@ -1,6 +1,11 @@
 "use client";
 
-import React, { HTMLInputTypeAttribute, LegacyRef, MouseEventHandler, ReactNode } from "react";
+import React, {
+  HTMLInputTypeAttribute,
+  LegacyRef,
+  MouseEventHandler,
+  ReactNode,
+} from "react";
 import ErrorMessage from "./ErrorMessage";
 import { useFormContext } from "react-hook-form";
 
@@ -63,7 +68,7 @@ const Input = React.forwardRef(
           </label>
           {iconDiv}
           <input
-          onClick={onClick}
+            onClick={onClick}
             type={type}
             name={name}
             id={name}
@@ -74,6 +79,7 @@ const Input = React.forwardRef(
             }`}
             placeholder={placeholder}
             readOnly={readOnly}
+            
             {...register}
             ref={ref}
           />

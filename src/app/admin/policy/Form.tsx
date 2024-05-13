@@ -5,6 +5,7 @@ import Input from "./components/Input";
 import { IFormContext } from "./context/FormProvider";
 import Section from "./Section";
 import Select from "./components/Select";
+import MaskedInput from "react-text-mask";
 
 const Form = () => {
   const { register } = useFormContext<IFormContext>();
@@ -75,10 +76,45 @@ const Form = () => {
             title: "Data",
             children: (
               <>
-                <Input {...register("startDateUtc")} label="Data e fillimit" type="date" />
-                <Input {...register("endDateUtc")} label="Data e perfundimit" type="date" />
-                <Input {...register("issueDateUtc")} label="Data e leshimit" type="date" />
-                <Input {...register("retroactiveDateUtc")} label="Data e retroaktive" type="date" />
+                <Input
+                  {...register("startDateUtc")}
+                  label="Data e fillimit"
+                  type="date"
+                />
+                <Input
+                  {...register("endDateUtc")}
+                  label="Data e perfundimit"
+                  type="date"
+                />
+                <Input
+                  {...register("issueDateUtc")}
+                  label="Data e leshimit"
+                  type="date"
+                />
+                <Input
+                  {...register("retroactiveDateUtc")}
+                  label="Data e retroaktive"
+                  type="date"
+                />
+
+                <MaskedInput
+                  mask={[
+                    /\d/,
+                    /\d/,
+                    "/",
+                    /\d/,
+                    /\d/,
+                    "/",
+                    /\d/,
+                    /\d/,
+                    /\d/,
+                    /\d/,
+                  ]}
+                  className="form-control"
+                  placeholder="DD/MM/YYYY"
+                  guide={false}
+                  showMask={true}
+                />
               </>
             ),
           },

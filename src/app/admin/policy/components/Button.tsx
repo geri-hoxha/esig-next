@@ -1,40 +1,47 @@
 import Image from "next/image";
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "danger";
+  variant?: "" | "edit" | "danger";
+  icon?: ReactNode;
+  iconSrc?: string;
 }
 
 const Button: React.FC<IProps> = ({
-  variant = "default",
+  variant = "",
   className,
   children,
+  icon = null,
+  iconSrc = undefined,
+  type = "button",
   ...props
 }) => {
   return (
     <button
-      className={`px-1.5 py-1 text-sm rounded-md bg-transparent border-none transition-all duration-100 ${
-        variant === "default"
+      className={`mx-1.5 px-1.5 py-1 text-sm rounded-md   transition-all duration-100 ${
+        variant === "danger"
+          ? "text-esig-error hover:bg-red-50"
+          : variant === "edit"
           ? "text-esig hover:bg-sky-50"
-          : "text-esig-error hover:bg-red-50"
+          : ""
       } ${className}`}
       {...props}
+      type={type}
     >
-      <div className="flex items-center gap-x-1">
-        {variant === "default" ? (
-          <Image
-            className="cursor-pointer"
-            src="/svg/edit.svg"
-            alt="edit"
-            width={"0"}
-            height={"0"}
-            style={{ width: 20, height: 20 }}
-            priority
-          />
+      <div className="w-max flex items-center gap-x-1.5">
+        {icon ? (
+          icon
         ) : (
           <Image
-            src="/svg/close.svg"
-            alt="edit"
+            className="cursor-pointer"
+            src={`${
+              !!iconSrc
+                ? iconSrc
+                : variant === "edit"
+                ? "/svg/edit.svg"
+                : "/svg/close.svg"
+            }`}
+            alt=":("
             width={"0"}
             height={"0"}
             style={{ width: 20, height: 20 }}

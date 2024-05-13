@@ -31,7 +31,7 @@ export interface IParticipants extends Pick<OverwrittenIssueRequest, 'beneficiar
 const defaultRequest = {
   serial: "",
   text: "",
-  currencyType: "",
+  currencyType: "EUR",
   issueDateUtc: dayjs(),
   startDateUtc: dayjs(),
   endDateUtc: dayjs(),

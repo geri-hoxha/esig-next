@@ -53,7 +53,7 @@ export default function _FormProvider({ children }: { children: ReactNode }) {
       paymentType: "CASH",
       startDateUtc: dayjs().add(20, "days").format("YYYY-MM-DD"),
       endDateUtc: dayjs().subtract(1, "months").format("YYYY-MM-DD"),
-      issueDateUtc: dayjs().subtract(4, "months").format("YYYY-MM-DD"),
+      issueDateUtc: null,
       retroactiveDateUtc: dayjs().format("YYYY-MM-DD"),
       distributionChannel: "",
     },

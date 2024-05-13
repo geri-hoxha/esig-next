@@ -15,6 +15,7 @@ import { PolicyParticipantPolicyUserRequest } from "@/types";
 import { z } from "zod";
 import Input from "../components/Input";
 import { ExtraChargeFooter } from "./ModalFooter";
+import Button from "../components/Button";
 
 type MapperParticipants = {
   [K in keyof IParticipants]: (
@@ -172,6 +173,10 @@ const PolicyUsers: React.FC = () => {
     setSelectedParticipantId("");
   };
 
+  const lengthOfValidPolicyUsers = data.policyUsers.filter(
+    (user) => user.id
+  ).length;
+
   return (
     <>
       {policyUsers.map(
@@ -207,6 +212,7 @@ const PolicyUsers: React.FC = () => {
               />
 
               <Button
+                variant="edit"
                 onClick={() => {
                   setOpen(true);
                   setSelectedParticipantId(user.id ?? "");
@@ -216,7 +222,7 @@ const PolicyUsers: React.FC = () => {
               </Button>
               {index !== 0 && (
                 <Button
-                variant={''}
+                  variant={"danger"}
                   onClick={() => {
                     deletePolicyUserHandler(user);
                   }}
@@ -228,13 +234,13 @@ const PolicyUsers: React.FC = () => {
           );
         }
       )}
-
-      {data.policyUsers.filter((user) => user.id).length > 1 && (
+      {/* and lower than the maxDefault from rule (context) */}
+      {lengthOfValidPolicyUsers > 1 && (
         <Button
+          variant="edit"
           onClick={() => {
             setOpen(true);
           }}
-          className="text-esig hover:bg-sky-50 !text-base !w-full"
           icon={
             <svg
               className="stroke-esig"
@@ -248,25 +254,24 @@ const PolicyUsers: React.FC = () => {
             </svg>
           }
         >
-          <div className="flex items-center gap-x-1 mx-auto text-white">
-            <span>Shto perdorues tjeter</span>
-          </div>
+          <span>Shto perdorues tjeter</span>
         </Button>
       )}
-
-      {/* 
+      {/*  the maxDefault from rule (context) */}
+      {lengthOfValidPolicyUsers > 3 && (
         <div className="flex items-center justify-center text-gray-600 gap-2 text-sm">
-                  <Image
-                    src="/svg/info.svg"
-                    alt="edit"
-                    width={"0"}
-                    height={"0"}
-                    style={{ width: 17, height: 17 }}
-                    priority
-                  />
-                  <span>Polica arriti maksimumin e perdorueve</span>
-                </div>
-        */}
+          <Image
+            src="/svg/info.svg"
+            alt="edit"
+            width={"0"}
+            height={"0"}
+            style={{ width: 17, height: 17 }}
+            priority
+          />
+          <span>Polica arriti maksimumin e perdorueve</span>
+        </div>
+      )}
+
       <Modal
         title="Modali i perdoruesve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
@@ -275,10 +280,9 @@ const PolicyUsers: React.FC = () => {
         onCancel={onCancelHandler}
         formSchema={formSchema}
         defaultValues={defaultValuesPromise}
+        footer={<ExtraChargeFooter />}
       >
-        <CustomerModal id={selectedParticipantId}>
-          <ExtraChargeFooter />
-        </CustomerModal>
+        <CustomerModal id={selectedParticipantId} />
       </Modal>
     </>
   );

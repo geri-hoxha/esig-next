@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
 import _request from "@/request";
 import { useFormContext } from "react-hook-form";
 import { ZodRawShape, z } from "zod";
@@ -10,13 +9,13 @@ import Table from "./Table";
 import Input from "../components/Input";
 import Checkbox from "../components/Checkbox";
 import CustomerDonut from "../../sale/v3/CustomerDonut";
-import {
-  CustomerModel,
-} from "../type";
+import { CustomerModel } from "../type";
+import Button from "../components/Button";
+import { DrawerClose } from "@/components/ui/drawer";
 
 interface IProps {
   id: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
@@ -27,7 +26,7 @@ export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
     ...argSchema,
   });
 };
-const CustomerModal: React.FC<IProps> = ({ id, children }) => {
+const CustomerModal: React.FC<IProps> = ({ id }) => {
   const { watch, register } = useFormContext<CustomerModel>();
 
   const customerId = watch("id");
@@ -49,20 +48,7 @@ const CustomerModal: React.FC<IProps> = ({ id, children }) => {
               </div>
             </span>
 
-            <Button className="text-esig hover:bg-sky-50">
-              <div className="flex items-center gap-x-1">
-                <Image
-                  className="cursor-pointer"
-                  src="/svg/edit.svg"
-                  alt="edit"
-                  width={"0"}
-                  height={"0"}
-                  style={{ width: 20, height: 20 }}
-                  priority
-                />
-                <span>Shiko te gjitha</span>
-              </div>
-            </Button>
+            <Button variant="edit">Shiko te gjitha</Button>
           </div>
         ) : (
           <div className="mb-4 h-8 text-sm text-gray-600 flex items-center gap-2">
@@ -104,7 +90,8 @@ const CustomerModal: React.FC<IProps> = ({ id, children }) => {
         </div>
       </div>
 
-      <div className="col-span-12 h-14 border-t-2 border-dashed">{children}</div>
+ 
+
     </div>
   );
 };

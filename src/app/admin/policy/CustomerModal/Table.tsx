@@ -11,6 +11,11 @@ import { RowClickedEvent, ColDef } from "ag-grid-enterprise";
 import _request from "@/request";
 import { token } from "@/components/esig/Navbar/Currencies";
 import { useFormContext } from "react-hook-form";
+import dayjs from "dayjs";
+
+const searchWithNipt = "searchWithNipt";
+
+const searchWithName = "searchWithName";
 
 const columnDefs: ColDef<CustomerModel>[] = [
   {
@@ -60,8 +65,8 @@ const Table: React.FC = () => {
   const [rowData, setRowData] = useState<CustomerModel[]>([]);
 
   const [radioGroup, setRadioGroup] = useState<
-    "searchWithName" | "searchWithNipt"
-  >("searchWithName");
+    "searchWithNipt" | "searchWithName"
+  >(searchWithName);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -85,11 +90,18 @@ const Table: React.FC = () => {
   };
 
   const onRowClicked = (params: RowClickedEvent<CustomerModel>) => {
-    reset(params.data); // update your defaultValues && form values
+    if (!params.data) return;
+    
+    const formattedData = {
+      ...params.data,
+      birthday: !!params.data.birthday ?  dayjs(params.data.birthday)?.format("YYYY-MM-DD") : null,
+    };
+
+    reset(formattedData); // update your defaultValues && form values
   };
 
   const getFilterModel = () => {
-    if (radioGroup === "searchWithName") {
+    if (radioGroup === searchWithName) {
       return {
         searchName: {
           filterType: "text",
@@ -99,7 +111,7 @@ const Table: React.FC = () => {
       };
     }
 
-    if (radioGroup === "searchWithNipt") {
+    if (radioGroup === searchWithNipt) {
       return {
         taxNumber: {
           filterType: "text",
@@ -141,18 +153,18 @@ const Table: React.FC = () => {
       <div className="flex items-center gap-4">
         <Checkbox
           type="radio"
-          id="searchWithName"
-          value="searchWithName"
-          checked={radioGroup === "searchWithName"}
+          id={searchWithName}
+          value={searchWithName}
+          checked={radioGroup === searchWithName}
           onChange={radioGroupChange}
         >
           <>Kerko me emer</>
         </Checkbox>
         <Checkbox
           type="radio"
-          id="searchWithNipt"
-          value="searchWithNipt"
-          checked={radioGroup === "searchWithNipt"}
+          id={searchWithNipt}
+          value={searchWithNipt}
+          checked={radioGroup === searchWithNipt}
           onChange={radioGroupChange}
         >
           <>Kerko me Nipt</>
@@ -163,6 +175,7 @@ const Table: React.FC = () => {
           value={searchedValue}
           label="Emri / Nipt i klientit"
           onChange={onSearchChange}
+          className={`${radioGroup === searchWithNipt ? "uppercase" : ""}`}
         />
         <div className="bg-esig p-2 rounded-md" onClick={onSearchClick}>
           <Image
@@ -178,7 +191,7 @@ const Table: React.FC = () => {
       </div>
       <Loader loading={loading}>
         <AgGrid<CustomerModel>
-          className="h-[150px] md:h-[350px]"
+          className="h-[150px] md:h-[400px]"
           rowSelection="single"
           domLayout="normal"
           onRowClicked={onRowClicked}

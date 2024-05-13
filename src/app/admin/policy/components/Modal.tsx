@@ -1,7 +1,6 @@
 "use client";
 
 import { removeQueryParam } from "@/app/admin/sale/v3/components/PolicyUsers";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +28,7 @@ import {
   FormProvider,
 } from "react-hook-form";
 import { ZodRawShape, z } from "zod";
+import Button from "./Button";
 
 type AsyncDefaultValues<TFieldValues> = (
   payload?: unknown
@@ -40,6 +40,7 @@ interface IProps<T> {
   children: ReactNode;
   open: boolean;
   width: string;
+  footer?: ReactNode;
   onOk: (
     values: T extends FieldValues ? T : FieldValues
   ) => void | Promise<void>;
@@ -58,6 +59,7 @@ function Modal<T>({
   children = null,
   open = true,
   width = "min-w-[70%]",
+  footer = null,
   onOk = () => {},
   onCancel = () => {},
   onReleaseClose = () => {},
@@ -91,20 +93,20 @@ function Modal<T>({
     setShow(false);
     const result = await form.trigger(); // Trigger validation for all fields
 
-    console.log(form.formState.errors)
-    console.log(result)
+    console.log(form.formState.errors);
+    console.log(result);
     const fieldsValues = form.getValues();
 
     await onOk(fieldsValues);
   };
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     console.log(data);
   };
 
-  const onError = data=> {
-    console.log(data)
-  }
+  const onError = (data) => {
+    console.log(data);
+  };
 
   if (isDesktop) {
     return (
@@ -130,18 +132,34 @@ function Modal<T>({
             </DialogHeader>
           </div>
           <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit, onError)}>{children}</form>
+            <form onSubmit={form.handleSubmit(onSubmit, onError)}>
+              {children}
+            </form>
+            <div className="w-full border-t-2 border-dashed ">
+              <div className="flex items-center justify-between  mt-4">
+                {footer}
+                <div className="flex items-center w-max ml-auto gap-x-2  ">
+                  <DrawerClose asChild>
+                    <Button
+                      variant="danger"
+                      onClick={onCancelClick}
+                      className="border border-esig-error py-1"
+                    >
+                      Anullo veprimin
+                    </Button>
+                  </DrawerClose>
+                  <Button
+                    type="submit"
+                    iconSrc="/svg/check_no_border.svg"
+                    className="border border-esig"
+                    variant="edit"
+                  >
+                    Ruaj dhe apliko
+                  </Button>
+                </div>
+              </div>
+            </div>
           </FormProvider>
-          <div className="flex items-center w-max ml-auto gap-x-2 absolute bottom-3 right-3">
-            <DrawerClose asChild>
-              <Button variant="outline" onClick={onCancelClick}>
-                Anullo veprimin
-              </Button>
-            </DrawerClose>
-            <Button variant="default" type="submit"  >
-              Ruaj dhe apliko
-            </Button>
-          </div>
         </DialogContent>
       </Dialog>
     );
@@ -175,7 +193,7 @@ function Modal<T>({
         <FormProvider {...form}>
           <form>{children}</form>
         </FormProvider>
-        <DrawerFooter className="pt-2">
+        {/* <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline" onClick={onCancelClick}>
               Anullo veprimin
@@ -184,7 +202,7 @@ function Modal<T>({
           <Button variant="default" onClick={onSaveClick}>
             Ruaj dhe apliko
           </Button>
-        </DrawerFooter>
+        </DrawerFooter> */}
       </DrawerContent>
     </Drawer>
   );

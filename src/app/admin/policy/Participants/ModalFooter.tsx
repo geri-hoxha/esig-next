@@ -5,16 +5,21 @@ import { CustomerModel, PolicyParticipantPolicyUserRequest } from "../type";
 import Checkbox from "../components/Checkbox";
 import Input from "../components/Input";
 import { ParticipantWithPercentage } from "./List";
+import { useCoreContext } from "../context";
 
 const ExtraChargeFooter = ({}) => {
+  const { data } = useCoreContext();
   const { register } = useFormContext<
     CustomerModel & PolicyParticipantPolicyUserRequest
   >();
 
   return (
-    <div className="flex items-center w-full grow shrink-0 h-full">
-      <div className="mr-2 text-gray-700 font-semibold text-sm">
-        Tarife shtese:
+    <div className="flex items-center  h-full pl-4">
+      <div className="list-item mr-4 text-gray-700 font-semibold text-base uppercase ">
+        Tarife shtese{" "}
+        <span className="text-esig-success">
+          &#40;+20 {data.currencyType}&#41;
+        </span>
       </div>
       <div className="flex items-center gap-4">
         <Checkbox id="yes" type="radio" {...register("extraCharge")}>
