@@ -15,12 +15,9 @@ const ExtraChargeFooter = ({}) => {
 
   return (
     <div className="flex items-center  h-full pl-4">
-      <div className="list-item mr-4 text-gray-700 font-semibold text-base uppercase ">
+      <div className="list-item mr-4 text-esig font-semibold text-base  ">
         Tarife shtese{" "}
-        <span className="text-esig-success">
-          &#40;+20 {data.currencyType}&#41;
-        </span>
-      </div>
+       </div>
       <div className="flex items-center gap-4">
         <Checkbox id="yes" type="radio" {...register("extraCharge")}>
           <>PO</>

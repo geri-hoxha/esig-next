@@ -46,7 +46,7 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
     };
 
     return (
-      <div className="relative flex items-center cursor-pointer">
+      <div className="relative flex items-center ">
         <input
           id={id}
           name={name}
@@ -61,7 +61,7 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
         {children && (
           <label
             htmlFor={id}
-            className="ml-3 block text-sm font-medium leading-6 text-gray-900"
+            className="ml-1.5 block text-sm font-medium leading-6 text-gray-900"
           >
             {children}
           </label>

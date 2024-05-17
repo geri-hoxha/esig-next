@@ -5,7 +5,6 @@ import Input from "./components/Input";
 import { IFormContext } from "./context/FormProvider";
 import Section from "./Section";
 import Select from "./components/Select";
-import MaskedInput from "react-text-mask";
 
 const Form = () => {
   const { register } = useFormContext<IFormContext>();
@@ -95,25 +94,6 @@ const Form = () => {
                   {...register("retroactiveDateUtc")}
                   label="Data e retroaktive"
                   type="date"
-                />
-
-                <MaskedInput
-                  mask={[
-                    /\d/,
-                    /\d/,
-                    "/",
-                    /\d/,
-                    /\d/,
-                    "/",
-                    /\d/,
-                    /\d/,
-                    /\d/,
-                    /\d/,
-                  ]}
-                  className="form-control"
-                  placeholder="DD/MM/YYYY"
-                  guide={false}
-                  showMask={true}
                 />
               </>
             ),
