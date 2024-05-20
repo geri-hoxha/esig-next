@@ -28,7 +28,7 @@ const Button: React.FC<IProps> = ({
       {...props}
       type={type}
     >
-      <div className="w-max flex items-center gap-x-1.5">
+      <div className="flex items-center gap-x-1.5 justify-center">
         {icon ? (
           icon
         ) : (

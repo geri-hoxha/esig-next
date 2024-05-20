@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import _request from "@/request";
 import { useFormContext } from "react-hook-form";
 import { ZodRawShape, z } from "zod";
@@ -12,6 +12,9 @@ import CustomerDonut from "../../sale/v3/CustomerDonut";
 import { CustomerModel } from "../type";
 import Button from "../components/Button";
 import { DrawerClose } from "@/components/ui/drawer";
+import Select, { IOptions } from "../components/Select";
+import { token } from "@/components/esig/Navbar/Currencies";
+import useOrganizationEnums from "./useOrganizationEnums";
 
 interface IProps {
   id: string;
@@ -29,7 +32,30 @@ export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
 const CustomerModal: React.FC<IProps> = ({ id }) => {
   const { watch, register } = useFormContext<CustomerModel>();
 
+  const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
+
+  const { optionsList, loading } = useOrganizationEnums();
+
+  useEffect(() => {
+    getOptions();
+  }, []);
+
+  const getOptions = async () => {
+    const data = await _request("/enum/ContactType", token, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    setContactTypeOptions(data);
+  };
+
   const customerId = watch("id");
+
+  const contactType = watch("contactType");
 
   return (
     <div className="grid grid-cols-12 gap-4">
@@ -66,32 +92,76 @@ const CustomerModal: React.FC<IProps> = ({ id }) => {
 
         <div className="grid grid-cols-2 gap-4 mb-4">
           <Input {...register("taxNumber")} label="Nipt i klientit" />
-          <Input {...register("displayName")} label="Emri i plote" />
-          <Input {...register("contactType")} label="Lloji i kontaktit" />
           <Input {...register("phoneNumber")} label="Numri i telefonit" />
+          <Input {...register("displayName")} label="Emri i plote" />
+          <Input {...register("email")} label="Email" />
+          <Select
+            {...register("contactType")}
+            label="Lloji i kontaktit"
+            options={contactTypeOptions}
+          />
+          <Checkbox {...register("isLocal")}>
+            <>{watch("isLocal") ? "Shqiptar" : "I huaj"}</>
+          </Checkbox>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="grid col-span-2 md:col-span-1 grid-cols-2 md:grid-cols-1 gap-4">
-            <Input {...register("email")} label="Email" />
-            <Input {...register("genderType")} label="Gjinia" />
-            <Input {...register("contactType")} label="Lloji i kontaktit" />
-            <Input {...register("phoneNumber")} label="Numri i telefonit" />
-            <Input {...register("fathersName")} label="Atesia" />
-            <Input {...register("birthday")} label="Ditelindja" type="date" />
+          <div className="grid col-span-2 md:col-span-1 grid-cols-2 md:grid-cols-1 gap-4 h-max">
+            {contactType === "Person" ? (
+              <>
+                <Input {...register("genderType")} label="Gjinia" />
+                <Input {...register("fathersName")} label="Atesia" />
+                <Input
+                  {...register("birthday")}
+                  label="Ditelindja"
+                  type="date"
+                />
+              </>
+            ) : contactType === "Organization" ? (
+              <>
+                <Input
+                  {...register("businessDescription")}
+                  label="Përshkrimi i biznesit"
+                />
+                <Input {...register("administrator")} label="Administratori" />
 
-            <Checkbox {...register("isLocal")}>
-              <>{watch("isLocal") ? "Shqiptar" : "I huaj"}</>
-            </Checkbox>
+                <div className="col-span-1">
+                  <Select
+                    {...register("organizationLegalFormType")}
+                    options={optionsList.LegalFormType}
+                    label="Lloji i formës ligjore"
+                  />
+                </div>
+                <div className="col-span-1">
+                  <Select
+                    {...register("organizationBusinessSizeType")}
+                    options={optionsList.BusinessSizeType}
+                    label="Lloji i madhësisë së biznesit"
+                  />
+                </div>
+
+                <Select
+                  {...register("organizationOwnershipType")}
+                  options={optionsList.OwnershipType}
+                  label="Lloji i pronarit"
+                />
+                <Select
+                  {...register("organizationSectorType")}
+                  options={optionsList.SectorType}
+                  label="Lloji i sektorit"
+                />
+
+                <Checkbox {...register("isActive")}>
+                  <>{watch("isActive") ? "Aktiv" : "Jo-Aktiv"}</>
+                </Checkbox>
+              </>
+            ) : null}
           </div>
           <div className="hidden md:block h-72">
             <CustomerDonut />
           </div>
         </div>
       </div>
-
- 
-
     </div>
   );
 };

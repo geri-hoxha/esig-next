@@ -19,6 +19,7 @@ interface IProps {
   onChange: ChangeEventHandler<HTMLInputElement>;
   checked: boolean;
   type: HTMLInputTypeAttribute;
+  noErrorMessage: boolean;
 }
 
 const Checkbox: React.FC<Partial<IProps>> = forwardRef(
@@ -31,6 +32,7 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
       value,
       defaultChecked = false,
       checked,
+      noErrorMessage = false,
       type = "checkbox",
       ...register
     }: Partial<IProps>,
@@ -66,7 +68,7 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
             {children}
           </label>
         )}
-        <ErrorMessage error={errors[name ?? ""]} />
+        {noErrorMessage ? null : <ErrorMessage error={errors[name ?? ""]} />}
       </div>
     );
   }

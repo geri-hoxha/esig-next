@@ -7,17 +7,14 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode, useEffect, useState } from "react";
@@ -70,11 +67,14 @@ function Modal<T>({
 
   const [show, setShow] = useState(open);
 
+ 
   const form = useForm<T extends FieldValues ? T : FieldValues>({
     defaultValues,
     resolver: zodResolver(formSchema),
   });
 
+
+  console.log(form.getValues())
   useEffect(() => {
     setShow(open);
   }, [open]);
@@ -85,27 +85,26 @@ function Modal<T>({
   }, []);
 
   const onCancelClick = () => {
-    setShow(false);
+    closeModalAndResetForm();
+
     onCancel();
   };
 
-  const onSaveClick = async () => {
+  const onSubmit = async () => {
+    const values = form.getValues();
+
+    await onOk(values);
+
+    closeModalAndResetForm();
+  };
+
+  const closeModalAndResetForm = () => {
     setShow(false);
-    const result = await form.trigger(); // Trigger validation for all fields
 
-    console.log(form.formState.errors);
-    console.log(result);
-    const fieldsValues = form.getValues();
+    form.reset(undefined);
 
-    await onOk(fieldsValues);
-  };
-
-  const onSubmit = (data) => {
-    console.log(data);
-  };
-
-  const onError = (data) => {
-    console.log(data);
+    // in any case
+    removeQueryParam("id");
   };
 
   if (isDesktop) {
@@ -114,10 +113,7 @@ function Modal<T>({
         open={show}
         onOpenChange={(open) => {
           if (!open) {
-            onCancel();
-
-            // in any case
-            removeQueryParam("id");
+            onCancelClick();
           }
         }}
       >
@@ -132,9 +128,64 @@ function Modal<T>({
             </DialogHeader>
           </div>
           <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit, onError)}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               {children}
+              <div className="w-full border-t-2 border-dashed ">
+                <div className="flex items-center justify-between  mt-4">
+                  {footer}
+                  <div className="flex items-center w-max ml-auto gap-x-2  ">
+                    <DrawerClose asChild>
+                      <Button
+                        variant="danger"
+                        onClick={onCancelClick}
+                        className="border border-esig-error py-1"
+                      >
+                        Anullo veprimin
+                      </Button>
+                    </DrawerClose>
+                    <Button
+                      type="submit"
+                      iconSrc="/svg/check_no_border.svg"
+                      className="border border-esig"
+                      variant="edit"
+                    >
+                      Ruaj dhe apliko
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </form>
+          </FormProvider>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return (
+    <Drawer
+      open={show}
+      onOpenChange={(open) => {
+        if (!open) {
+          onCancelClick();
+        }
+      }}
+      onRelease={(event, open) => {
+        onReleaseClose(open);
+      }}
+    >
+      {/* <DrawerTrigger asChild> </DrawerTrigger> */}
+      <DrawerContent className="px-4 relative">
+        <div className="flex items-center md:pb-2 mb-3 md:mb-0 border-gray-300 border-b-2 border-dashed">
+          <DrawerHeader className="text-left">
+            <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription className="text-gray-600">
+              {description}
+            </DrawerDescription>
+          </DrawerHeader>
+        </div>
+        <FormProvider {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            {children}
             <div className="w-full border-t-2 border-dashed ">
               <div className="flex items-center justify-between  mt-4">
                 {footer}
@@ -159,50 +210,8 @@ function Modal<T>({
                 </div>
               </div>
             </div>
-          </FormProvider>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Drawer
-      open={show}
-      onOpenChange={(open) => {
-        if (!open) {
-          onCancel();
-
-          // in any case
-          removeQueryParam("id");
-        }
-      }}
-      onRelease={(event, open) => {
-        onReleaseClose(open);
-      }}
-    >
-      {/* <DrawerTrigger asChild> </DrawerTrigger> */}
-      <DrawerContent className="px-4 relative">
-        <div className="flex items-center md:pb-2 mb-3 md:mb-0 border-gray-300 border-b-2 border-dashed">
-          <DrawerHeader className="text-left">
-            <DrawerTitle>{title}</DrawerTitle>
-            <DrawerDescription className="text-gray-600">
-              {description}
-            </DrawerDescription>
-          </DrawerHeader>
-        </div>
-        <FormProvider {...form}>
-          <form>{children}</form>
+          </form>
         </FormProvider>
-        {/* <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline" onClick={onCancelClick}>
-              Anullo veprimin
-            </Button>
-          </DrawerClose>
-          <Button variant="default" onClick={onSaveClick}>
-            Ruaj dhe apliko
-          </Button>
-        </DrawerFooter> */}
       </DrawerContent>
     </Drawer>
   );

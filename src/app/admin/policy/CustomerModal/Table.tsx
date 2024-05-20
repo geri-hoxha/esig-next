@@ -116,7 +116,7 @@ const Table: React.FC = () => {
         taxNumber: {
           filterType: "text",
           type: "equals",
-          filter: searchedValue,
+          filter: searchedValue.toUpperCase(),
         },
       };
     }
@@ -191,12 +191,15 @@ const Table: React.FC = () => {
       </div>
       <Loader loading={loading}>
         <AgGrid<CustomerModel>
-          className="h-[150px] md:h-[400px]"
+          className="h-[150px] md:h-[370px]"
           rowSelection="single"
           domLayout="normal"
           onRowClicked={onRowClicked}
           rowData={rowData}
           columnDefs={columnDefs}
+          defaultColDef={{
+            resizable: false
+          }}
         />
       </Loader>
     </div>

@@ -56,8 +56,8 @@ const Input = React.forwardRef(
     }
 
     return (
-      <div className="w-full">
-        <div className="relative rounded-md shadow-sm">
+      <div className="w-full relative">
+        <div className=" rounded-md shadow-sm">
           <label
             htmlFor={name}
             className={`absolute -top-3 left-2 inline-block rounded-md  px-1 text-xs font-medium text-gray-900 ${
@@ -79,20 +79,19 @@ const Input = React.forwardRef(
             }`}
             placeholder={placeholder}
             readOnly={readOnly}
-            
             {...register}
             ref={ref}
           />
           {suffix && (
-            <div className="absolute text-gray-500 h-[calc(100%-4px)] mr-0.5 flex items-center justify-center px-2 border-l-2 rounded-r-md  top-0.5 right-0 font-medium text-sm">
+            <div className="absolute z-10 bg-sky-50 text-gray-500 h-[calc(100%-4px)] mr-0.5 flex items-center justify-center px-2 border-l-2 rounded-r-md  top-0.5 right-0 font-medium text-sm">
               {suffix}
             </div>
           )}
-
-          {formContext?.formState && (
-            <ErrorMessage error={formContext.formState.errors[name ?? ""]} />
-          )}
         </div>
+
+        {formContext?.formState && (
+          <ErrorMessage error={formContext.formState.errors[name ?? ""]} />
+        )}
       </div>
     );
   }

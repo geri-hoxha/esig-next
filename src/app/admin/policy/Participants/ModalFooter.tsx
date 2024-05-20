@@ -9,23 +9,41 @@ import { useCoreContext } from "../context";
 
 const ExtraChargeFooter = ({}) => {
   const { data } = useCoreContext();
-  const { register } = useFormContext<
-    CustomerModel & PolicyParticipantPolicyUserRequest
-  >();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<CustomerModel & PolicyParticipantPolicyUserRequest>();
 
   return (
-    <div className="flex items-center  h-full pl-4">
-      <div className="list-item mr-4 text-esig font-semibold text-base  ">
+    <div className="flex items-center  h-full pl-4 gap-4">
+      <div className="list-item  text-esig font-semibold text-base  ">
         Tarife shtese{" "}
-       </div>
+      </div>
       <div className="flex items-center gap-4">
-        <Checkbox id="yes" type="radio" {...register("extraCharge")}>
+        <Checkbox
+          noErrorMessage
+          value={"true"}
+          id="true"
+          type="radio"
+          {...register("extraCharge")}
+        >
           <>PO</>
         </Checkbox>
-        <Checkbox id="no" type="radio" {...register("extraCharge")}>
+        <Checkbox
+          noErrorMessage
+          value={"false"}
+          id="false"
+          type="radio"
+          {...register("extraCharge")}
+        >
           <>JO</>
         </Checkbox>
       </div>
+      {errors.extraCharge && (
+        <span className="text-esig-error text-md font-semibold     ">
+          <>...zgjidhni nje opsion!</>
+        </span>
+      )}
     </div>
   );
 };

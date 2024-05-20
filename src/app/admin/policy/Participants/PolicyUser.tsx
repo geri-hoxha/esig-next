@@ -25,7 +25,7 @@ type MapperParticipants = {
 };
 
 const formSchema = getFormSchemaCustomer({
-  extraCharge: z.string(),
+  extraCharge: z.enum(["true", "false"]).optional(),
 });
 
 const PolicyUsers: React.FC = () => {
@@ -45,9 +45,29 @@ const PolicyUsers: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    // empty object to show first input (leader)
-    dispatch({ type: CREATE, payload: { key: "policyUsers", item: {} } });
+    createEmptyPolicyUser();
   }, []);
+
+  const createEmptyPolicyUser = () => {
+    // empty object to show first input (leader)
+    dispatch({
+      type: CREATE,
+      payload: { key: "policyUsers", item: { empty: "empty" } },
+    });
+  };
+
+  const deleteEmptyPolicyUser = () => {
+    dispatch({
+      type: DELETE,
+      payload: {
+        key: "policyUsers",
+        identifier: {
+          key: "empty",
+          value: "empty",
+        },
+      },
+    });
+  };
 
   const { toast } = useToast();
 
@@ -74,6 +94,8 @@ const PolicyUsers: React.FC = () => {
   };
 
   const addPolicyUserHandler = (values: CustomerModel) => {
+    deleteEmptyPolicyUser();
+
     participantsIteration((key) => {
       dispatch({
         type: CREATE,
@@ -154,10 +176,15 @@ const PolicyUsers: React.FC = () => {
       }
     );
 
-    return response.data;
+    return {
+      ...response.data,
+      contactType: "Person",
+    };
   };
 
   const onOkHandler = (values: CustomerModel) => {
+    console.log(values);
+
     if (selectedParticipantId) {
       updatePolicyUserHandler(values);
     } else {
@@ -234,8 +261,9 @@ const PolicyUsers: React.FC = () => {
           );
         }
       )}
+
       {/* and lower than the maxDefault from rule (context) */}
-      {lengthOfValidPolicyUsers > 1 && (
+      {lengthOfValidPolicyUsers >= 1 && lengthOfValidPolicyUsers <= 3 && (
         <Button
           variant="edit"
           onClick={() => {
@@ -257,8 +285,8 @@ const PolicyUsers: React.FC = () => {
           <span>Shto perdorues tjeter</span>
         </Button>
       )}
-      {/*  the maxDefault from rule (context) */}
-      {lengthOfValidPolicyUsers > 3 && (
+      {/* the maxDefault from rule (context) */}
+      {lengthOfValidPolicyUsers >= 3 && (
         <div className="flex items-center justify-center text-gray-600 gap-2 text-sm">
           <Image
             src="/svg/info.svg"

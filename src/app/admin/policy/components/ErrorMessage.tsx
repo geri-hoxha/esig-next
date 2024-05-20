@@ -8,7 +8,7 @@ const ErrorMessage: React.FC<IProps> = ({ error }) => {
   if (!error) return;
 
   return (
-    <span className="text-esig-error text-xs absolute left-0 top-full">
+    <span className="text-esig-error text-xs   left-0 top-full mb-4">
       <>{error.message}</>
     </span>
   );
