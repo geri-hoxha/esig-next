@@ -16,6 +16,7 @@ import { z } from "zod";
 import Input from "../components/Input";
 import { ExtraChargeFooter } from "./ModalFooter";
 import Button from "../components/Button";
+import { json } from "stream/consumers";
 
 type MapperParticipants = {
   [K in keyof IParticipants]: (
@@ -178,17 +179,15 @@ const PolicyUsers: React.FC = () => {
 
     return {
       ...response.data,
-      contactType: "Person",
+      contactType: "",
     };
   };
 
-  const onOkHandler = (values: CustomerModel) => {
-    console.log(values);
-
+  const onOkHandler = async (values: CustomerModel | {}) => {
     if (selectedParticipantId) {
-      updatePolicyUserHandler(values);
+      updatePolicyUserHandler(values as CustomerModel);
     } else {
-      addPolicyUserHandler(values);
+      addPolicyUserHandler(values as CustomerModel);
     }
 
     onCancelHandler();
@@ -204,6 +203,11 @@ const PolicyUsers: React.FC = () => {
     (user) => user.id
   ).length;
 
+  const onEditClick = (user: CustomerModel) => {
+    setOpen(true);
+    setSelectedParticipantId(user.id ?? "");
+  };
+
   return (
     <>
       {policyUsers.map(
@@ -216,10 +220,7 @@ const PolicyUsers: React.FC = () => {
               <Input
                 label={index === 0 ? "Lideri *" : ` Perdoruesi ${index + 1}`}
                 value={user?.displayName}
-                onClick={() => {
-                  setOpen(true);
-                  setSelectedParticipantId(user.id ?? "");
-                }}
+                onClick={() => onEditClick(user)}
                 suffix={
                   !!user.extraCharge && (
                     <div className=" flex items-center justify-center gap-2">
@@ -237,14 +238,7 @@ const PolicyUsers: React.FC = () => {
                   )
                 }
               />
-
-              <Button
-                variant="edit"
-                onClick={() => {
-                  setOpen(true);
-                  setSelectedParticipantId(user.id ?? "");
-                }}
-              >
+              <Button variant="edit" onClick={() => onEditClick(user)}>
                 Zgjidh
               </Button>
               {index !== 0 && (
@@ -300,7 +294,7 @@ const PolicyUsers: React.FC = () => {
         </div>
       )}
 
-      <Modal
+      <Modal<CustomerModel>
         title="Modali i perdoruesve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         open={open}
@@ -308,7 +302,7 @@ const PolicyUsers: React.FC = () => {
         onCancel={onCancelHandler}
         formSchema={formSchema}
         defaultValues={defaultValuesPromise}
-        footer={<ExtraChargeFooter />}
+        // footer={<ExtraChargeFooter />}
       >
         <CustomerModal id={selectedParticipantId} />
       </Modal>

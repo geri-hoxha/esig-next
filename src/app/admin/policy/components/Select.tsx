@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { LegacyRef, ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
@@ -83,7 +83,7 @@ const Select = React.forwardRef(
               );
             })}
           </select>
-          <ErrorMessage error={errors[name ?? '']} />
+          <ErrorMessage error={errors[name ?? ""]} />
         </div>
       </div>
     );

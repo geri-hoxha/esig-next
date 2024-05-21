@@ -32,7 +32,7 @@ const Input = React.forwardRef(
       icon = undefined,
       className = "",
       onChange,
-      value,
+      value = undefined,
       readOnly = false,
       suffix,
       type = "text",
@@ -55,6 +55,11 @@ const Input = React.forwardRef(
       pl10 = "pl-10";
     }
 
+    const getInputAttr = () => {
+      if (!!name) return { name };
+      return {value};
+    };
+
     return (
       <div className="w-full relative">
         <div className=" rounded-md shadow-sm">
@@ -70,9 +75,8 @@ const Input = React.forwardRef(
           <input
             onClick={onClick}
             type={type}
-            name={name}
             id={name}
-            value={value}
+            {...getInputAttr()}
             onChange={onChange}
             className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-esig sm:text-sm sm:leading-6 ${className} ${
               readOnly ? "bg-gray-100" : ""

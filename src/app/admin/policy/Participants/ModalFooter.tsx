@@ -5,10 +5,8 @@ import { CustomerModel, PolicyParticipantPolicyUserRequest } from "../type";
 import Checkbox from "../components/Checkbox";
 import Input from "../components/Input";
 import { ParticipantWithPercentage } from "./List";
-import { useCoreContext } from "../context";
 
 const ExtraChargeFooter = ({}) => {
-  const { data } = useCoreContext();
   const {
     register,
     formState: { errors },

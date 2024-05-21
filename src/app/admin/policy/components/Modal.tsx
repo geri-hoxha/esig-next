@@ -26,6 +26,7 @@ import {
 } from "react-hook-form";
 import { ZodRawShape, z } from "zod";
 import Button from "./Button";
+import { CustomerModel, PolicyParticipantPolicyUserRequest } from "../type";
 
 type AsyncDefaultValues<TFieldValues> = (
   payload?: unknown
@@ -38,9 +39,7 @@ interface IProps<T> {
   open: boolean;
   width: string;
   footer?: ReactNode;
-  onOk: (
-    values: T extends FieldValues ? T : FieldValues
-  ) => void | Promise<void>;
+  onOk: (values: T | {}) => void | Promise<void>;
   onCancel: () => void;
   onReleaseClose: (open: boolean) => void;
   formSchema: z.ZodObject<ZodRawShape>;
@@ -67,14 +66,11 @@ function Modal<T>({
 
   const [show, setShow] = useState(open);
 
- 
   const form = useForm<T extends FieldValues ? T : FieldValues>({
     defaultValues,
     resolver: zodResolver(formSchema),
   });
 
-
-  console.log(form.getValues())
   useEffect(() => {
     setShow(open);
   }, [open]);
@@ -91,17 +87,28 @@ function Modal<T>({
   };
 
   const onSubmit = async () => {
-    const values = form.getValues();
+    const values: FieldValues = form.getValues();
 
-    await onOk(values);
+    for (const key in values) {
+      const value = values[key];
+
+      if (key === ("extraCharge" as keyof PolicyParticipantPolicyUserRequest)) {
+        values[key] = value === "true";
+      }
+    }
+
+    console.log(values)
 
     closeModalAndResetForm();
+
+    await onOk(values);
   };
 
   const closeModalAndResetForm = () => {
+    console.log('ome')
     setShow(false);
 
-    form.reset(undefined);
+    form.reset({} as any);
 
     // in any case
     removeQueryParam("id");
@@ -128,7 +135,9 @@ function Modal<T>({
             </DialogHeader>
           </div>
           <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit, (data) => {
+              console.log(data)
+            })}>
               {children}
               <div className="w-full border-t-2 border-dashed ">
                 <div className="flex items-center justify-between  mt-4">

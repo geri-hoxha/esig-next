@@ -47,14 +47,18 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
       return { checked };
     };
 
+    const getInputAttr = () => {
+      if (!!value) return { value };
+      return {name};
+    };
+
     return (
       <div className="relative flex items-center ">
         <input
           id={id}
-          name={name}
           type={type}
-          value={value}
           {...getAtributtes()}
+          {...getInputAttr()}
           onChange={onChange}
           className="h-4 w-4 border-gray-300 text-esig focus:ring-esig"
           ref={ref}
