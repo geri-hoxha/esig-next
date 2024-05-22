@@ -23,10 +23,10 @@ interface IProps {
 
 export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
   return z.object({
-    taxNumber: z.string().min(1, "NUID eshte i detyrueshem!"),
-    displayName: z.string().min(1, "Emri eshte i detyrueshem!"),
-    contactType: z.string().min(1, "Lloji i kontaktit eshte i detyrueshem!"),
-    ...argSchema,
+    // taxNumber: z.string().min(1, "NUID eshte i detyrueshem!"),
+    // displayName: z.string().min(1, "Emri eshte i detyrueshem!"),
+    // contactType: z.string().min(1, "Lloji i kontaktit eshte i detyrueshem!"),
+    // ...argSchema,
   });
 };
 const CustomerModal: React.FC<IProps> = ({ id }) => {
@@ -60,7 +60,7 @@ const CustomerModal: React.FC<IProps> = ({ id }) => {
   return (
     <div className="grid grid-cols-12 gap-4">
       <div className="col-span-12 md:col-span-4">
-        {/* <Table /> */}
+        <Table />
       </div>
 
       <div className="col-span-12 md:col-span-8 md:border-l-2 border-dashed pl-4">
@@ -91,7 +91,7 @@ const CustomerModal: React.FC<IProps> = ({ id }) => {
         )}
 
         <div className="grid grid-cols-2 gap-4 mb-4">
-          {/* <Input {...register("taxNumber")} label="Nipt i klientit" />
+          <Input {...register("taxNumber")} label="Nipt i klientit" />
           <Input {...register("phoneNumber")} label="Numri i telefonit" />
           <Input {...register("displayName")} label="Emri i plote" />
           <Input {...register("email")} label="Email" />
@@ -102,7 +102,7 @@ const CustomerModal: React.FC<IProps> = ({ id }) => {
           />
           <Checkbox {...register("isLocal")}>
             <>{watch("isLocal") ? "Shqiptar" : "I huaj"}</>
-          </Checkbox> */}
+          </Checkbox>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
@@ -119,7 +119,7 @@ const CustomerModal: React.FC<IProps> = ({ id }) => {
               </>
             ) : contactType === "Organization" ? (
               <>
-                <Input
+                {/* <Input
                   {...register("businessDescription")}
                   label="Përshkrimi i biznesit"
                 />
@@ -153,12 +153,12 @@ const CustomerModal: React.FC<IProps> = ({ id }) => {
 
                 <Checkbox {...register("isActive")}>
                   <>{watch("isActive") ? "Aktiv" : "Jo-Aktiv"}</>
-                </Checkbox>
+                </Checkbox> */}
               </>
             ) : null}
           </div>
           <div className="hidden md:block h-72">
-            {/* <CustomerDonut /> */}
+            <CustomerDonut />
           </div>
         </div>
       </div>

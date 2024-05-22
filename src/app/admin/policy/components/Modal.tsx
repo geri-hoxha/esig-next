@@ -105,7 +105,6 @@ function Modal<T>({
   };
 
   const closeModalAndResetForm = () => {
-    console.log('ome')
     setShow(false);
 
     form.reset({} as any);

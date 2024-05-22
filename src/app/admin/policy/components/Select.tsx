@@ -9,17 +9,11 @@ export interface IOptions {
   value: string;
 }
 
-export interface ISelect {
-  name: string;
+export interface ISelect extends React.InputHTMLAttributes<HTMLSelectElement> {
   label: string;
-  placeholder: string;
   icon: ReactNode;
-  className: string;
-  options?: IOptions[];
-  onChange: React.ChangeEventHandler<HTMLSelectElement>;
-  value: string;
   suffix: ReactNode;
-  readOnly: boolean;
+  options: IOptions[];
 }
 
 const Select = React.forwardRef(

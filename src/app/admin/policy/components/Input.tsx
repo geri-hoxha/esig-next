@@ -1,26 +1,16 @@
 "use client";
 
 import React, {
-  HTMLInputTypeAttribute,
   LegacyRef,
-  MouseEventHandler,
   ReactNode,
 } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { useFormContext } from "react-hook-form";
 
-export interface IInput {
-  name: string;
-  label: string;
-  placeholder: string;
+export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
   icon: ReactNode;
-  className: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  value: string;
-  onClick: MouseEventHandler<HTMLInputElement>;
   suffix: ReactNode;
-  readOnly: boolean;
-  type: HTMLInputTypeAttribute;
+  label: string;
 }
 
 const Input = React.forwardRef(
@@ -57,7 +47,7 @@ const Input = React.forwardRef(
 
     const getInputAttr = () => {
       if (!!name) return { name };
-      return {value};
+      return { value };
     };
 
     return (
@@ -101,4 +91,4 @@ const Input = React.forwardRef(
   }
 );
 
-export default Input;
+export default Input;0

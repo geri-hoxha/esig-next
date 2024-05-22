@@ -1,24 +1,13 @@
 "use client";
 
 import {
-  ChangeEventHandler,
-  HTMLInputTypeAttribute,
   LegacyRef,
-  ReactNode,
   forwardRef,
 } from "react";
 import { useFormContext } from "react-hook-form";
 import ErrorMessage from "./ErrorMessage";
 
-interface IProps {
-  id: string;
-  name: string;
-  children: ReactNode;
-  defaultChecked: boolean;
-  value: string | number;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  checked: boolean;
-  type: HTMLInputTypeAttribute;
+interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   noErrorMessage: boolean;
 }
 
@@ -31,6 +20,7 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
       onChange,
       value,
       defaultChecked = false,
+      defaultValue,
       checked,
       noErrorMessage = false,
       type = "checkbox",
@@ -43,13 +33,13 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
     } = useFormContext<Record<string, any>>();
 
     const getAtributtes = () => {
-      if (typeof checked === "undefined") return { defaultChecked };
+      if (!!defaultChecked) return { defaultChecked };
       return { checked };
     };
 
     const getInputAttr = () => {
-      if (!!value) return { value };
-      return {name};
+      if (!!name) return { name };
+      return { value };
     };
 
     return (
