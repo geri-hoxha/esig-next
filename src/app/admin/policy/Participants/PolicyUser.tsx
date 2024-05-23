@@ -219,7 +219,7 @@ const PolicyUsers: React.FC = () => {
             <div className="flex items-center" key={index}>
               <Input
                 label={index === 0 ? "Lideri *" : ` Perdoruesi ${index + 1}`}
-                value={user?.displayName}
+                value={user?.displayName || " "}
                 onClick={() => onEditClick(user)}
                 suffix={
                   !!user.extraCharge && (
@@ -302,7 +302,7 @@ const PolicyUsers: React.FC = () => {
         onCancel={onCancelHandler}
         formSchema={formSchema}
         defaultValues={defaultValuesPromise}
-        // footer={<ExtraChargeFooter />}
+        footer={<ExtraChargeFooter />}
       >
         <CustomerModal id={selectedParticipantId} />
       </Modal>

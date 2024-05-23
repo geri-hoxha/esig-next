@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useState } from "react";
 import { CustomerModel } from "../type";
@@ -12,6 +11,7 @@ import { z } from "zod";
 import _request from "@/request";
 import { token } from "@/components/esig/Navbar/Currencies";
 import SortableTable from "./SortableTable";
+import Button from "../components/Button";
 
 const ParticipantModal: React.FC<IParticipantsList> = ({
   stateKey,
@@ -34,13 +34,13 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
 
   const closeCustomerModal = () => setCustomerModal(false);
 
-  const onOkHandler = (values: CustomerModel) => {
-    if (selectedParticipantId) {
+  const onOkHandler = (values: CustomerModel | {}) => {
+    if ("id" in values && selectedParticipantId) {
       dispatch({
         type: UPDATE,
         payload: {
           identifier: {
-            value: values.id,
+            value: values["id"],
           },
           key: stateKey,
           item: values,
@@ -97,10 +97,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
       >
         <>
           <div className="flex flex-col gap-4">
-            <SortableTable
-               stateKey={stateKey}
-               percentageKey={percentageKey}
-            />
+            <SortableTable stateKey={stateKey} percentageKey={percentageKey} />
           </div>
           <Button
             className="text-esig hover:bg-sky-50 !text-base !w-full"
@@ -148,19 +145,12 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
 
   return (
     <>
-      <Button onClick={openPrimaryModal} className="text-esig hover:bg-sky-50">
-        <div className="flex items-center gap-x-1">
-          <Image
-            className="cursor-pointer"
-            src="/svg/edit.svg"
-            alt="edit"
-            width={"0"}
-            height={"0"}
-            style={{ width: 20, height: 20 }}
-            priority
-          />
-          <span>Ndrysho</span>
-        </div>
+      <Button
+        variant="edit"
+        onClick={openPrimaryModal}
+        className="text-esig hover:bg-sky-50"
+      >
+        <span>Ndrysho</span>
       </Button>
     </>
   );

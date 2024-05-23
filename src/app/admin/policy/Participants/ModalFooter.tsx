@@ -20,18 +20,18 @@ const ExtraChargeFooter = ({}) => {
       <div className="flex items-center gap-4">
         <Checkbox
           noErrorMessage
-          value={"true"}
           id="true"
           type="radio"
+          value="true"
           {...register("extraCharge")}
         >
           <>PO</>
         </Checkbox>
         <Checkbox
           noErrorMessage
-          value={"false"}
           id="false"
           type="radio"
+          value="false"
           {...register("extraCharge")}
         >
           <>JO</>

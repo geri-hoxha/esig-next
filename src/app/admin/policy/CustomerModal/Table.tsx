@@ -60,7 +60,7 @@ const columnDefs: ColDef<CustomerModel>[] = [
 ];
 
 const Table: React.FC = () => {
-  const { reset, getFieldState } = useFormContext<CustomerModel>();
+  const { reset } = useFormContext<CustomerModel>();
 
   const [rowData, setRowData] = useState<CustomerModel[]>([]);
 
@@ -81,7 +81,7 @@ const Table: React.FC = () => {
   }, []);
 
   const onSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSeachedValue(event.target.value);
+    setSeachedValue(event.target.value || "");
   };
 
   const radioGroupChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -92,30 +92,14 @@ const Table: React.FC = () => {
   const onRowClicked = (params: RowClickedEvent<CustomerModel>) => {
     if (!params.data) return;
 
-    const geri = {};
+    const formattedData = {
+      ...params.data,
+      birthday: !!params.data.birthday
+        ? dayjs(params.data.birthday)?.format("YYYY-MM-DD")
+        : null,
+    };
 
-    for (const key in params.data) {
-      if (key === "birthday") {
-        geri["birthday"] = !!params.data.birthday
-          ? dayjs(params.data.birthday)?.format("YYYY-MM-DD")
-          : '';
-
-        continue;
-      }
-
-      if(key === 'address') {
-        geri['address'] = {}
-
-        continue;
-      }
-
-      geri[key] = params.data[key] === null ? "" : params.data[key];
-    }
-
- console.log(geri)
-
- console.log(form)
-    reset(geri); // update your defaultValues && form values
+    reset(formattedData); // update your defaultValues && form values
   };
 
   const getFilterModel = () => {
@@ -169,7 +153,7 @@ const Table: React.FC = () => {
   return (
     <div className="flex flex-col  gap-4">
       <div className="flex items-center gap-4">
-        {/* <Checkbox
+        <Checkbox
           type="radio"
           id={searchWithName}
           value={searchWithName}
@@ -186,15 +170,16 @@ const Table: React.FC = () => {
           onChange={radioGroupChange}
         >
           <>Kerko me Nipt</>
-        </Checkbox> */}
+        </Checkbox>
       </div>
       <div className="flex items-center gap-2 mt-2">
-        {/* <Input
+        <Input
           value={searchedValue}
+          name="searchedValue"
           label="Emri / Nipt i klientit"
           onChange={onSearchChange}
           className={`${radioGroup === searchWithNipt ? "uppercase" : ""}`}
-        /> */}
+        />
         <div className="bg-esig p-2 rounded-md" onClick={onSearchClick}>
           <Image
             className="cursor-pointer"

@@ -48,8 +48,6 @@ const CustomCellRenderer: React.FC<IProps> = ({
     (data as ParticipantWithPercentage)[percentageKey]
   );
 
-  console.log(others);
-
   const deleteParticipant = (data: CustomerModel) => {
     dispatch({
       type: DELETE,

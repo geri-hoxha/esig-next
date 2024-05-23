@@ -1,11 +1,9 @@
 "use client";
 
 import numeral from "numeral";
-import GeriHoxha from "../../sale/v3/GeriHoxha";
 import { useEffect, useState } from "react";
 import { IParticipants, useCoreContext } from "../context";
 import { SET } from "../context/reducer";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import {
   CustomerModel,
@@ -16,6 +14,7 @@ import {
 } from "../type";
 import ParticipantModal from "./ParticipantModal";
 import { isPolicyHolder } from ".";
+import Button from "../components/Button";
 
 export interface IParticipantsList {
   stateKey: keyof IParticipants;
@@ -118,21 +117,18 @@ const List: React.FC<IParticipantsList & { title: string }> = ({
         {title}
         <ParticipantModal percentageKey={percentageKey} stateKey={stateKey} />
       </div>
-      <Button className="text-esig hover:bg-sky-50" onClick={onToggle}>
-        <div className="flex items-center gap-x-1">
-          <Image
-            src="/svg/refresh.svg"
-            alt="edit"
-            width={"0"}
-            height={"0"}
-            style={{ width: 20, height: 20 }}
-            priority
-          />
+      {data.length > 1 && (
+        <Button
+          className="w-max mx-0"
+          iconSrc="/svg/refresh.svg"
+          variant="edit"
+          onClick={onToggle}
+        >
           <span className="ml-0">
             {splitPercentage ? "Vetem lideri" : "Ne menyre te barabarte"}
           </span>
-        </div>
-      </Button>
+        </Button>
+      )}
       <ul>
         {data.map((user, index: number) => {
           return (

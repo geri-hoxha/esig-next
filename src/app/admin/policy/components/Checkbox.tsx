@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  LegacyRef,
-  forwardRef,
-} from "react";
+import { LegacyRef, forwardRef } from "react";
 import { useFormContext } from "react-hook-form";
 import ErrorMessage from "./ErrorMessage";
 
@@ -37,18 +34,14 @@ const Checkbox: React.FC<Partial<IProps>> = forwardRef(
       return { checked };
     };
 
-    const getInputAttr = () => {
-      if (!!name) return { name };
-      return { value };
-    };
-
     return (
       <div className="relative flex items-center ">
         <input
           id={id}
           type={type}
+          name={name}
+          value={value}
           {...getAtributtes()}
-          {...getInputAttr()}
           onChange={onChange}
           className="h-4 w-4 border-gray-300 text-esig focus:ring-esig"
           ref={ref}

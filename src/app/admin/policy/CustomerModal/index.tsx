@@ -23,14 +23,14 @@ interface IProps {
 
 export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
   return z.object({
-    // taxNumber: z.string().min(1, "NUID eshte i detyrueshem!"),
-    // displayName: z.string().min(1, "Emri eshte i detyrueshem!"),
-    // contactType: z.string().min(1, "Lloji i kontaktit eshte i detyrueshem!"),
-    // ...argSchema,
+    taxNumber: z.string().min(1, "NUID eshte i detyrueshem!"),
+    displayName: z.string().min(1, "Emri eshte i detyrueshem!"),
+    contactType: z.string().min(1, "Lloji i kontaktit eshte i detyrueshem!"),
+    ...argSchema,
   });
 };
 const CustomerModal: React.FC<IProps> = ({ id }) => {
-  const { watch, register } = useFormContext<CustomerModel>();
+  const { watch, register, setValue } = useFormContext<CustomerModel>();
 
   const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
 
@@ -41,7 +41,7 @@ const CustomerModal: React.FC<IProps> = ({ id }) => {
   }, []);
 
   const getOptions = async () => {
-    const data = await _request("/enum/ContactType", token, {
+    const data: IOptions[] = await _request("/enum/ContactType", token, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -51,6 +51,8 @@ const CustomerModal: React.FC<IProps> = ({ id }) => {
     });
 
     setContactTypeOptions(data);
+
+    setValue('contactType', data.at(0)?.value ?? '' )
   };
 
   const customerId = watch("id");
@@ -119,41 +121,40 @@ const CustomerModal: React.FC<IProps> = ({ id }) => {
               </>
             ) : contactType === "Organization" ? (
               <>
-                {/* <Input
+                <Input
                   {...register("businessDescription")}
                   label="Përshkrimi i biznesit"
                 />
                 <Input {...register("administrator")} label="Administratori" />
 
-                <div className="col-span-1">
+                <hr className="my-3" />
+                <div className="grid grid-cols-2 gap-4 ">
                   <Select
                     {...register("organizationLegalFormType")}
                     options={optionsList.LegalFormType}
                     label="Lloji i formës ligjore"
                   />
-                </div>
-                <div className="col-span-1">
                   <Select
                     {...register("organizationBusinessSizeType")}
                     options={optionsList.BusinessSizeType}
                     label="Lloji i madhësisë së biznesit"
                   />
-                </div>
 
-                <Select
-                  {...register("organizationOwnershipType")}
-                  options={optionsList.OwnershipType}
-                  label="Lloji i pronarit"
-                />
-                <Select
-                  {...register("organizationSectorType")}
-                  options={optionsList.SectorType}
-                  label="Lloji i sektorit"
-                />
+                  <Select
+                    {...register("organizationOwnershipType")}
+                    options={optionsList.OwnershipType}
+                    label="Lloji i pronarit"
+                  />
+                  <Select
+                    {...register("organizationSectorType")}
+                    options={optionsList.SectorType}
+                    label="Lloji i sektorit"
+                  />
+                </div>
 
                 <Checkbox {...register("isActive")}>
                   <>{watch("isActive") ? "Aktiv" : "Jo-Aktiv"}</>
-                </Checkbox> */}
+                </Checkbox>
               </>
             ) : null}
           </div>

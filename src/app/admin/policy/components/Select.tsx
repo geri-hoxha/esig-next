@@ -49,11 +49,11 @@ const Select = React.forwardRef(
     }
 
     return (
-      <div className="w-full">
-        <div className="relative rounded-md shadow-sm">
+      <div className="w-full relative">
+        <div className=" rounded-md shadow-sm">
           <label
             htmlFor={name}
-            className={`absolute -top-3 left-2 inline-block rounded-md  px-1 text-xs font-medium text-gray-900 ${
+            className={`absolute truncate w-auto -top-3 left-2 inline-block rounded-md  px-1 text-xs font-medium text-gray-900 ${
               readOnly ? "bg-gray-100" : "bg-white"
             }`}
           >
@@ -77,8 +77,8 @@ const Select = React.forwardRef(
               );
             })}
           </select>
-          <ErrorMessage error={errors[name ?? ""]} />
         </div>
+        <ErrorMessage error={errors[name ?? ""]} />
       </div>
     );
   }

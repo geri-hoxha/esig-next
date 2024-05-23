@@ -1,9 +1,6 @@
 "use client";
 
-import React, {
-  LegacyRef,
-  ReactNode,
-} from "react";
+import React, { LegacyRef, ReactNode } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { useFormContext } from "react-hook-form";
 
@@ -21,8 +18,8 @@ const Input = React.forwardRef(
       placeholder,
       icon = undefined,
       className = "",
-      onChange,
-      value = undefined,
+      onChange = () => {},
+      value = '',
       readOnly = false,
       suffix,
       type = "text",
@@ -47,7 +44,8 @@ const Input = React.forwardRef(
 
     const getInputAttr = () => {
       if (!!name) return { name };
-      return { value };
+      if (!!value) return { value };
+      return {};
     };
 
     return (
@@ -91,4 +89,4 @@ const Input = React.forwardRef(
   }
 );
 
-export default Input;0
+export default Input;

@@ -17,7 +17,15 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode, useEffect, useState } from "react";
+import {
+  EventHandler,
+  KeyboardEvent,
+  KeyboardEventHandler,
+  ReactNode,
+  SyntheticEvent,
+  useEffect,
+  useState,
+} from "react";
 import {
   DefaultValues,
   FieldValues,
@@ -89,6 +97,8 @@ function Modal<T>({
   const onSubmit = async () => {
     const values: FieldValues = form.getValues();
 
+    console.log(values)
+
     for (const key in values) {
       const value = values[key];
 
@@ -96,8 +106,6 @@ function Modal<T>({
         values[key] = value === "true";
       }
     }
-
-    console.log(values)
 
     closeModalAndResetForm();
 
@@ -113,6 +121,12 @@ function Modal<T>({
     removeQueryParam("id");
   };
 
+  const handleEnterPress: KeyboardEventHandler = (event) => {
+    if (event.key === "Enter" || event.key == "Space") {
+      onSubmit();
+    }
+  };
+
   if (isDesktop) {
     return (
       <Dialog
@@ -124,7 +138,7 @@ function Modal<T>({
         }}
       >
         {/* <DialogTrigger asChild></DialogTrigger> */}
-        <DialogContent className={width}>
+        <DialogContent onKeyDown={handleEnterPress} className={width}>
           <div className="flex items-center pb-2 border-gray-300 border-b-2 border-dashed">
             <DialogHeader>
               <DialogTitle className="text-xl">{title}</DialogTitle>
@@ -134,9 +148,7 @@ function Modal<T>({
             </DialogHeader>
           </div>
           <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit, (data) => {
-              console.log(data)
-            })}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               {children}
               <div className="w-full border-t-2 border-dashed ">
                 <div className="flex items-center justify-between  mt-4">
