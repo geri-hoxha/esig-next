@@ -16,7 +16,7 @@ export default function Layout({
     <ProtectedRoute>
       <div className="w-full text-white flex items-center justify-center h-screen  relative overflow-x-hidden  ">
         <div
-          className="absolute top-0 left-72 w-screen h-screen object-cover bg-right 	"
+          className="absolute top-0 left-0 w-full h-screen object-cover 	"
           style={{ backgroundImage: "url(/bg_logo_v6.png)" }}
         ></div>
         {/* <Image
@@ -28,7 +28,7 @@ export default function Layout({
           unoptimized
         /> */}
         <div className="grid w-full h-full grid-cols-12">
-          <div className="col-span-5 z-50 flex bg-gray-300/60 items-center justify-center">
+          <div className="col-span-5 z-50 flex bg-gray-600/60 items-center justify-center">
             {children}
           </div>
           <div className="col-span-7"></div>
