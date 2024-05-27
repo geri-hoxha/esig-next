@@ -174,7 +174,7 @@ const Participants: React.FC<IProps> = ({
               )}{" "}
               <span className="truncate max-w-32"> {user?.displayName},</span>
               {percentageKey && (
-                <span>{numeral(user[percentageKey]).format(`0${user[percentageKey] === 0 ? '' : '.0'}%`)}</span>
+                <span>{numeral(user?.[percentageKey]).format(`0${user?.[percentageKey] === 0 ? '' : '.0'}%`)}</span>
               )}
             </li>
           );

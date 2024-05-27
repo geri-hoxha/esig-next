@@ -234,7 +234,7 @@ const PolicyUsers: React.FC = () => {
                         style={{ width: 20, height: 20 }}
                         priority
                       />
-                      <span className="text-esig font-medium text-xs"> Tarife shtese</span>
+                      <span className="text-black text-xs"> Me tarife shtese</span>
                     </div>
                   )
                 }

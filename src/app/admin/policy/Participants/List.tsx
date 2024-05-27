@@ -155,7 +155,7 @@ const List: React.FC<IParticipantsList & { title: string }> = ({
               ) : (
                 <div>&#x2022;</div>
               )}{" "}
-              <span className="truncate max-w-32"> {user?.displayName},</span>
+              <span className="truncate max-w-32"> {user?.displayName}</span>
               {percentageKey in user && !!percentageKey && (
                 <span>
                   {numeral(
