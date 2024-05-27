@@ -75,7 +75,7 @@ const Input = React.forwardRef(
             ref={ref}
           />
           {suffix && (
-            <div className="absolute z-10 bg-sky-50 text-gray-500 h-[calc(100%-4px)] mr-0.5 flex items-center justify-center px-2 border-l-2 rounded-r-md  top-0.5 right-0 font-medium text-sm">
+            <div className="absolute z-10 bg-white  text-gray-500 h-[calc(100%-4px)] mr-0.5 flex items-center justify-center px-2 border-l-2 rounded-r-md  top-0.5 right-0 font-medium text-sm">
               {suffix}
             </div>
           )}

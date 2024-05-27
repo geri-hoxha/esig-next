@@ -38,7 +38,7 @@ const ExtraChargeFooter = ({}) => {
         </Checkbox>
       </div>
       {errors.extraCharge && (
-        <span className="text-esig-error text-md font-semibold     ">
+        <span className="text-esig-error text-sm font-semibold animate-bounce">
           <>...zgjidhni nje opsion!</>
         </span>
       )}

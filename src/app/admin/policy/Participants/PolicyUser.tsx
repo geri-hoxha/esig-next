@@ -221,6 +221,7 @@ const PolicyUsers: React.FC = () => {
                 label={index === 0 ? "Lideri *" : ` Perdoruesi ${index + 1}`}
                 value={user?.displayName || " "}
                 onClick={() => onEditClick(user)}
+                className={`${!!user.extraCharge ? 'pr-32' : ''}`}
                 suffix={
                   !!user.extraCharge && (
                     <div className=" flex items-center justify-center gap-2">
@@ -233,7 +234,7 @@ const PolicyUsers: React.FC = () => {
                         style={{ width: 20, height: 20 }}
                         priority
                       />
-                      <span className="text-black text-xs"> Tarife shtese</span>
+                      <span className="text-esig font-medium text-xs"> Tarife shtese</span>
                     </div>
                   )
                 }

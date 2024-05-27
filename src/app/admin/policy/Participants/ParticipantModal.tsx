@@ -16,20 +16,21 @@ import Button from "../components/Button";
 const ParticipantModal: React.FC<IParticipantsList> = ({
   stateKey,
   percentageKey,
+  primaryModal,
+  setPrimaryModal
 }) => {
   const { dispatch } = useCoreContext();
 
   const [selectedParticipantId, setSelectedParticipantId] =
     useState<string>("");
 
-  const [primaryModal, setPrimaryModal] = useState<boolean>(false);
 
   const [customerModal, setCustomerModal] = useState<boolean>(false);
+ 
+ 
 
-  const openPrimaryModal = () => setPrimaryModal(true);
 
-  const closeMainModal = () => setPrimaryModal(false);
-
+ 
   const openCustomerModal = () => setCustomerModal(true);
 
   const closeCustomerModal = () => setCustomerModal(false);
@@ -61,7 +62,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
 
   const onCancelHandler = () => {
     closeCustomerModal();
-    openPrimaryModal();
+    setPrimaryModal(true);
   };
 
   const defaultValuesPromise = async () => {
@@ -87,10 +88,32 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
     [percentageKey]: z.string(),
   });
 
-  if (primaryModal) {
+  if (customerModal) {
     return (
       <Modal
+        title="Modali i pjesemarresve te polices"
+        description="Krijoni ose perditesoni listen e klienteve ne Esig"
+        open
+        setOpen={setCustomerModal}
+        onOk={onOkHandler}
+        onCancel={onCancelHandler}
+        formSchema={formSchema}
+        defaultValues={defaultValuesPromise}
+      >
+        <CustomerModal id={selectedParticipantId}>
+          <PercentageFooter percentageKey={percentageKey} />
+        </CustomerModal>
+      </Modal>
+    );
+  }
+
+
+  return (
+    <>
+
+      <Modal
         open={primaryModal}
+        setOpen={setPrimaryModal}
         title="Modali i pjesemarresve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         width={"min-w-[25%]"}
@@ -103,7 +126,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
             className="text-esig hover:bg-sky-50 !text-base !w-full"
             onClick={() => {
               openCustomerModal();
-              closeMainModal();
+              setPrimaryModal(false);
             }}
           >
             <div className="flex items-center gap-x-1 mx-auto">
@@ -122,38 +145,10 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
           </Button>
         </>
       </Modal>
-    );
-  }
-
-  if (customerModal) {
-    return (
-      <Modal
-        title="Modali i pjesemarresve te polices"
-        description="Krijoni ose perditesoni listen e klienteve ne Esig"
-        open={customerModal}
-        onOk={onOkHandler}
-        onCancel={onCancelHandler}
-        formSchema={formSchema}
-        defaultValues={defaultValuesPromise}
-      >
-        <CustomerModal id={selectedParticipantId}>
-          <PercentageFooter percentageKey={percentageKey} />
-        </CustomerModal>
-      </Modal>
-    );
-  }
-
-  return (
-    <>
-      <Button
-        variant="edit"
-        onClick={openPrimaryModal}
-        className="text-esig hover:bg-sky-50"
-      >
-        <span>Ndrysho</span>
-      </Button>
     </>
+
   );
+
 };
 
 export default ParticipantModal;

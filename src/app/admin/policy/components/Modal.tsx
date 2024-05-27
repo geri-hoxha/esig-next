@@ -45,6 +45,7 @@ interface IProps<T> {
   description: string;
   children: ReactNode;
   open: boolean;
+  setOpen: (open: boolean) => void;
   width: string;
   footer?: ReactNode;
   onOk: (values: T | {}) => void | Promise<void>;
@@ -52,8 +53,8 @@ interface IProps<T> {
   onReleaseClose: (open: boolean) => void;
   formSchema: z.ZodObject<ZodRawShape>;
   defaultValues:
-    | DefaultValues<T extends FieldValues ? T : FieldValues>
-    | AsyncDefaultValues<T extends FieldValues ? T : FieldValues>;
+  | DefaultValues<T extends FieldValues ? T : FieldValues>
+  | AsyncDefaultValues<T extends FieldValues ? T : FieldValues>;
 }
 
 // generic for the form fields
@@ -62,26 +63,21 @@ function Modal<T>({
   description = "",
   children = null,
   open = true,
+  setOpen = () => { },
   width = "min-w-[70%]",
   footer = null,
-  onOk = () => {},
-  onCancel = () => {},
-  onReleaseClose = () => {},
+  onOk = () => { },
+  onCancel = () => { },
+  onReleaseClose = () => { },
   formSchema = z.object({}),
   defaultValues,
 }: Partial<IProps<T>>) {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
-  const [show, setShow] = useState(open);
-
   const form = useForm<T extends FieldValues ? T : FieldValues>({
     defaultValues,
     resolver: zodResolver(formSchema),
   });
-
-  useEffect(() => {
-    setShow(open);
-  }, [open]);
 
   useEffect(() => {
     const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
@@ -113,7 +109,7 @@ function Modal<T>({
   };
 
   const closeModalAndResetForm = () => {
-    setShow(false);
+    setOpen(false);
 
     form.reset({} as any);
 
@@ -130,8 +126,10 @@ function Modal<T>({
   if (isDesktop) {
     return (
       <Dialog
-        open={show}
+        open={open}
         onOpenChange={(open) => {
+          setOpen(open);
+
           if (!open) {
             onCancelClick();
           }
@@ -183,8 +181,9 @@ function Modal<T>({
 
   return (
     <Drawer
-      open={show}
+      open={open}
       onOpenChange={(open) => {
+        setOpen(open)
         if (!open) {
           onCancelClick();
         }
