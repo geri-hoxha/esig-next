@@ -199,11 +199,11 @@ const CustomCellRenderer: React.FC<IProps> = ({
               style={{ width: 20, height: 20 }}
               priority
             />
-            <span className="text-esig font-bold pl-2">Lider</span>
+            <span className="text-esig text-lg font-bold pl-2">Lider</span>
           </div>
         )}
         <div className="flex items-center justify-between gap-4  mt-2 mb-4 ">
-          <span className="font-bold text-lg text-gray-600 truncate w-3/5">
+          <span className="font-bold text-lg text-gray-600 truncate">
             {data.displayName}
           </span>
 

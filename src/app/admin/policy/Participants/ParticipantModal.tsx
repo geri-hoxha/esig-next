@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { CustomerModel } from "../type";
 import Modal from "../components/Modal";
 import CustomerModal, { getFormSchemaCustomer } from "../CustomerModal";
@@ -16,21 +16,16 @@ import Button from "../components/Button";
 const ParticipantModal: React.FC<IParticipantsList> = ({
   stateKey,
   percentageKey,
-  primaryModal,
-  setPrimaryModal
 }) => {
   const { dispatch } = useCoreContext();
 
   const [selectedParticipantId, setSelectedParticipantId] =
     useState<string>("");
 
+  const [primaryModal, setPrimaryModal] = useState<boolean>(false);
 
   const [customerModal, setCustomerModal] = useState<boolean>(false);
- 
- 
 
-
- 
   const openCustomerModal = () => setCustomerModal(true);
 
   const closeCustomerModal = () => setCustomerModal(false);
@@ -94,7 +89,9 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
         title="Modali i pjesemarresve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         open
-        setOpen={setCustomerModal}
+        setOpen={useCallback((arg: boolean) => {
+          setCustomerModal(arg);
+        }, [])}
         onOk={onOkHandler}
         onCancel={onCancelHandler}
         formSchema={formSchema}
@@ -107,48 +104,56 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
     );
   }
 
-
   return (
     <>
-
       <Modal
         open={primaryModal}
-        setOpen={setPrimaryModal}
+        setOpen={useCallback((arg: boolean) => {
+          setPrimaryModal(arg);
+        }, [])}
         title="Modali i pjesemarresve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         width={"min-w-[25%]"}
       >
-        <>
           <div className="flex flex-col gap-4">
             <SortableTable stateKey={stateKey} percentageKey={percentageKey} />
-          </div>
-          <Button
-            className="text-esig hover:bg-sky-50 !text-base !w-full"
-            onClick={() => {
-              openCustomerModal();
-              setPrimaryModal(false);
-            }}
-          >
-            <div className="flex items-center gap-x-1 mx-auto">
-              <svg
-                className="stroke-esig"
-                width="14"
-                height="14"
-                xmlns="http://www.w3.org/2000/svg"
-                fillRule="evenodd"
-                clipRule="evenodd"
-              >
-                <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
-              </svg>
+
+            <Button
+              variant="edit"
+              onClick={() => {
+                openCustomerModal();
+                setPrimaryModal(false);
+              }}
+              className="mx-auto w-full"
+              icon={
+                <svg
+                  className="stroke-esig"
+                  width="14"
+                  height="14"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                >
+                  <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+                </svg>
+              }
+            >
               <span>Shto pjesemarres tjeter</span>
-            </div>
-          </Button>
-        </>
+            </Button>
+          </div>
       </Modal>
+
+      <Button
+        variant="edit"
+        onClick={() => {
+          setPrimaryModal(true);
+        }}
+        className="text-esig hover:bg-sky-50"
+      >
+        <span>Ndrysho</span>
+      </Button>
     </>
-
   );
-
 };
 
 export default ParticipantModal;

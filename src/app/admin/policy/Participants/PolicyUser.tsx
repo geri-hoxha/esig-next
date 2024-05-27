@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { IParticipants, useCoreContext } from "../context";
@@ -187,7 +187,11 @@ const PolicyUsers: React.FC = () => {
     if (selectedParticipantId) {
       updatePolicyUserHandler(values as CustomerModel);
     } else {
-      addPolicyUserHandler(values as CustomerModel);
+      // isLeader true only for the first one
+      addPolicyUserHandler({
+        ...values,
+        isLeader: policyUsers.length === 0,
+      } as CustomerModel);
     }
 
     onCancelHandler();
@@ -221,7 +225,7 @@ const PolicyUsers: React.FC = () => {
                 label={index === 0 ? "Lideri *" : ` Perdoruesi ${index + 1}`}
                 value={user?.displayName || " "}
                 onClick={() => onEditClick(user)}
-                className={`${!!user.extraCharge ? 'pr-32' : ''}`}
+                className={`${!!user.extraCharge ? "pr-32" : ""}`}
                 suffix={
                   !!user.extraCharge && (
                     <div className=" flex items-center justify-center gap-2">
@@ -234,7 +238,10 @@ const PolicyUsers: React.FC = () => {
                         style={{ width: 20, height: 20 }}
                         priority
                       />
-                      <span className="text-black text-xs"> Me tarife shtese</span>
+                      <span className="text-esig text-xs">
+                        {" "}
+                        Me tarife shtese
+                      </span>
                     </div>
                   )
                 }
@@ -299,6 +306,9 @@ const PolicyUsers: React.FC = () => {
         title="Modali i perdoruesve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         open={open}
+        setOpen={useCallback((arg: boolean) => {
+          setOpen(arg);
+        }, [])}
         onOk={onOkHandler}
         onCancel={onCancelHandler}
         formSchema={formSchema}

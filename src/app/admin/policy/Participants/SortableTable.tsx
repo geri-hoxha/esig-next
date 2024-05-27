@@ -98,7 +98,7 @@ const SortableTable: React.FC<IParticipantsList> = ({
         onRowDragEnd={onRowDragEnd}
         getRowStyle={(params) => {
           if (params.node.rowIndex === 0 && isPolicyHolder(params.data)) {
-            return { background: "#E8F5FE" };
+            return { background: "#D0E9FC" };
           }
           return { background: "#fff" };
         }}

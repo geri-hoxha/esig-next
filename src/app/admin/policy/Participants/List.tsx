@@ -43,8 +43,6 @@ const List: React.FC<IParticipantsList & { title: string }> = ({
 
   const [splitPercentage, setSplitPercentage] = useState<boolean>(false);
 
-  const [primaryModal, setPrimaryModal] = useState<boolean>(false);
- 
   const data = coreData[stateKey];
 
   useEffect(() => {
@@ -117,14 +115,8 @@ const List: React.FC<IParticipantsList & { title: string }> = ({
     <div className="flex flex-col min-w-60 ">
       <div className="flex items-center  font-semibold text-gray-700">
         {title}
-        <Button
-        variant="edit"
-        onClick={() => {setPrimaryModal(true)}}
-        className="text-esig hover:bg-sky-50"
-      >
-        <span>Ndrysho</span>
-      </Button>
-        <ParticipantModal primaryModal={primaryModal} setPrimaryModal={setPrimaryModal} percentageKey={percentageKey} stateKey={stateKey} />
+
+        <ParticipantModal percentageKey={percentageKey} stateKey={stateKey} />
       </div>
       {data.length > 1 && (
         <Button

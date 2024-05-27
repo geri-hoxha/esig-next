@@ -156,7 +156,7 @@ function Modal<T>({
                       <Button
                         variant="danger"
                         onClick={onCancelClick}
-                        className="border border-esig-error py-1"
+                        className="border border-dashed border-esig-error py-1"
                       >
                         Anullo veprimin
                       </Button>
@@ -164,7 +164,7 @@ function Modal<T>({
                     <Button
                       type="submit"
                       iconSrc="/svg/check_no_border.svg"
-                      className="border border-esig"
+                      className="border border-dashed border-esig"
                       variant="edit"
                     >
                       Ruaj dhe apliko
@@ -213,7 +213,7 @@ function Modal<T>({
                     <Button
                       variant="danger"
                       onClick={onCancelClick}
-                      className="border border-esig-error py-1"
+                      className="border border-dashed border-esig-error py-1"
                     >
                       Anullo veprimin
                     </Button>
@@ -221,7 +221,7 @@ function Modal<T>({
                   <Button
                     type="submit"
                     iconSrc="/svg/check_no_border.svg"
-                    className="border border-esig"
+                    className="border border-dashed border-esig"
                     variant="edit"
                   >
                     Ruaj dhe apliko

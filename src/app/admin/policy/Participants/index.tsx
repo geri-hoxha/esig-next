@@ -5,7 +5,7 @@ import { IParticipants, useCoreContext } from "../context";
 import List from "./List";
 import PolicyUsers from "./PolicyUser";
 
-export   function isPolicyHolder(user: any): user is IParticipants["policyUsers"] {
+export function isPolicyHolder(user: any): user is IParticipants["policyUsers"] {
   return "isLeader" in user;
 }
 

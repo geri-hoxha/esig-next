@@ -19,7 +19,7 @@ const Input = React.forwardRef(
       icon = undefined,
       className = "",
       onChange = () => {},
-      value = '',
+      value = "",
       readOnly = false,
       suffix,
       type = "text",
@@ -54,7 +54,7 @@ const Input = React.forwardRef(
           <label
             htmlFor={name}
             className={`absolute -top-3 left-2 inline-block rounded-md  px-1 text-xs font-medium text-gray-900 ${
-              readOnly ? "bg-gray-100" : "bg-white"
+              readOnly ? "bg-gray-100/60" : "bg-white"
             }`}
           >
             {label}
@@ -67,7 +67,7 @@ const Input = React.forwardRef(
             {...getInputAttr()}
             onChange={onChange}
             className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-esig sm:text-sm sm:leading-6 ${className} ${
-              readOnly ? "bg-gray-100" : ""
+              readOnly ? "bg-gray-100/60" : "bg-white"
             }`}
             placeholder={placeholder}
             readOnly={readOnly}
@@ -75,7 +75,11 @@ const Input = React.forwardRef(
             ref={ref}
           />
           {suffix && (
-            <div className="absolute z-10 bg-white  text-gray-500 h-[calc(100%-4px)] mr-0.5 flex items-center justify-center px-2 border-l-2 rounded-r-md  top-0.5 right-0 font-medium text-sm">
+            <div
+              className={`absolute z-10  ${
+                readOnly ? "bg-gray-100/60" : "bg-white"
+              }  text-gray-500 h-[calc(100%-4px)] mr-0.5 flex items-center justify-center px-2 border-l-2 rounded-r-md  top-0.5 right-0 font-medium text-sm`}
+            >
               {suffix}
             </div>
           )}
