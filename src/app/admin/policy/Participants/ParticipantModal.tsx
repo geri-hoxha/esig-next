@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useCallback, useState } from "react";
 import { CustomerModel } from "../type";
 import Modal from "../components/Modal";
@@ -19,9 +18,6 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
 }) => {
   const { dispatch } = useCoreContext();
 
-  const [selectedParticipantId, setSelectedParticipantId] =
-    useState<string>("");
-
   const [primaryModal, setPrimaryModal] = useState<boolean>(false);
 
   const [customerModal, setCustomerModal] = useState<boolean>(false);
@@ -31,26 +27,16 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
   const closeCustomerModal = () => setCustomerModal(false);
 
   const onOkHandler = (values: CustomerModel | {}) => {
-    if ("id" in values && selectedParticipantId) {
-      dispatch({
-        type: UPDATE,
-        payload: {
-          identifier: {
-            value: values["id"],
-          },
-          key: stateKey,
-          item: values,
+    dispatch({
+      type: CREATE,
+      payload: {
+        item: {
+          ...values,
+          ...(stateKey === 'policyHolders' ? {isLeader: false} : {})
         },
-      });
-    } else {
-      dispatch({
-        type: CREATE,
-        payload: {
-          item: values,
-          key: stateKey,
-        },
-      });
-    }
+        key: stateKey,
+      },
+    });
 
     onCancelHandler();
   };
@@ -60,27 +46,10 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
     setPrimaryModal(true);
   };
 
-  const defaultValuesPromise = async () => {
-    if (!selectedParticipantId) return {};
-
-    const response = await _request(
-      `/customer/${selectedParticipantId}`,
-      token,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return response.data;
-  };
-
   const formSchema = getFormSchemaCustomer({
-    [percentageKey]: z.string(),
+    [percentageKey]: z
+      .string()
+      .min(1, "Perqindja e pronesise eshte e detyrueshme!"),
   });
 
   if (customerModal) {
@@ -95,11 +64,9 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
         onOk={onOkHandler}
         onCancel={onCancelHandler}
         formSchema={formSchema}
-        defaultValues={defaultValuesPromise}
+        footer={<PercentageFooter percentageKey={percentageKey} />}
       >
-        <CustomerModal id={selectedParticipantId}>
-          <PercentageFooter percentageKey={percentageKey} />
-        </CustomerModal>
+        <CustomerModal />
       </Modal>
     );
   }
@@ -115,32 +82,31 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         width={"min-w-[25%]"}
       >
-          <div className="flex flex-col gap-4">
-            <SortableTable stateKey={stateKey} percentageKey={percentageKey} />
-
-            <Button
-              variant="edit"
-              onClick={() => {
-                openCustomerModal();
-                setPrimaryModal(false);
-              }}
-              className="mx-auto w-full"
-              icon={
-                <svg
-                  className="stroke-esig"
-                  width="14"
-                  height="14"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                >
-                  <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
-                </svg>
-              }
-            >
-              <span>Shto pjesemarres tjeter</span>
-            </Button>
-          </div>
+        <div className="flex flex-col gap-4 mb-4">
+          <SortableTable stateKey={stateKey} percentageKey={percentageKey} />
+          <Button
+            variant="edit"
+            onClick={() => {
+              openCustomerModal();
+              setPrimaryModal(false);
+            }}
+            className="mx-auto w-full"
+            icon={
+              <svg
+                className="stroke-esig"
+                width="14"
+                height="14"
+                xmlns="http://www.w3.org/2000/svg"
+                fillRule="evenodd"
+                clipRule="evenodd"
+              >
+                <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+              </svg>
+            }
+          >
+            <span>Shto pjesemarres tjeter</span>
+          </Button>
+        </div>
       </Modal>
 
       <Button

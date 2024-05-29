@@ -93,8 +93,6 @@ function Modal<T>({
   const onSubmit = async () => {
     const values: FieldValues = form.getValues();
 
-    console.log(values)
-
     for (const key in values) {
       const value = values[key];
 

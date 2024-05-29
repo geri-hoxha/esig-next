@@ -60,7 +60,7 @@ const columnDefs: ColDef<CustomerModel>[] = [
 ];
 
 const Table: React.FC = () => {
-  const { reset } = useFormContext<CustomerModel>();
+  const { reset, getValues } = useFormContext<CustomerModel>();
 
   const [rowData, setRowData] = useState<CustomerModel[]>([]);
 
@@ -85,7 +85,8 @@ const Table: React.FC = () => {
   };
 
   const radioGroupChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSeachedValue("");
+    reset({ searchedValue: undefined } as {});
+
     setRadioGroup(event.target.value as "searchWithName" | "searchWithNipt");
   };
 
@@ -176,7 +177,7 @@ const Table: React.FC = () => {
         <Input
           value={searchedValue}
           name="searchedValue"
-          label="Emri / Nipt i klientit"
+          label={`${radioGroup === searchWithNipt ? "Nipt i klientit" : "Emri i klientit"}`}
           onChange={onSearchChange}
           className={`${radioGroup === searchWithNipt ? "uppercase" : ""}`}
         />

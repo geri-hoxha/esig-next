@@ -17,8 +17,7 @@ import { token } from "@/components/esig/Navbar/Currencies";
 import useOrganizationEnums from "./useOrganizationEnums";
 
 interface IProps {
-  id: string;
-  children?: ReactNode;
+  id?: string;
 }
 
 export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {

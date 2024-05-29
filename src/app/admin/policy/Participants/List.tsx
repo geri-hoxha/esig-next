@@ -74,7 +74,7 @@ const List: React.FC<IParticipantsList & { title: string }> = ({
     const item = data.map((user) => {
       return {
         ...user,
-        [percentageKey]: splitPercentage,
+        [percentageKey]: splitPercentage * 100,
       };
     });
 
@@ -92,7 +92,7 @@ const List: React.FC<IParticipantsList & { title: string }> = ({
       if (index === 0) {
         return {
           ...user,
-          [percentageKey]: 1,
+          [percentageKey]: 100,
         };
       }
 
@@ -115,7 +115,6 @@ const List: React.FC<IParticipantsList & { title: string }> = ({
     <div className="flex flex-col min-w-60 ">
       <div className="flex items-center  font-semibold text-gray-700">
         {title}
-
         <ParticipantModal percentageKey={percentageKey} stateKey={stateKey} />
       </div>
       {data.length > 1 && (
@@ -156,9 +155,9 @@ const List: React.FC<IParticipantsList & { title: string }> = ({
                     `0${
                       (user as ParticipantWithPercentage)[percentageKey] === 0
                         ? ""
-                        : ".0"
-                    }%`
-                  )}
+                        : ".00"
+                    }`
+                  )}%
                 </span>
               )}
             </li>

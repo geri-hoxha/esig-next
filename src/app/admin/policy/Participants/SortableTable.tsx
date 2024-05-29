@@ -54,7 +54,6 @@ const SortableTable: React.FC<IParticipantsList> = ({
   );
 
   const onRowDragEnd = (event: RowDragEvent<SortableParticipant>) => {
-    event.api.refreshCells({ force: true });
 
     let rowData: SortableParticipant[] = [];
 
@@ -68,11 +67,15 @@ const SortableTable: React.FC<IParticipantsList> = ({
     });
 
     setRowData(rowData);
+
+    event.api.refreshCells({ force: true });
+
   };
 
   return (
     <div className={"ag-grid-drag"}>
       <AgGrid<SortableParticipant>
+        className=''
         domLayout="autoHeight"
         rowData={rowData}
         columnDefs={[
@@ -97,6 +100,7 @@ const SortableTable: React.FC<IParticipantsList> = ({
         getRowHeight={getRowHeight}
         onRowDragEnd={onRowDragEnd}
         getRowStyle={(params) => {
+          
           if (params.node.rowIndex === 0 && isPolicyHolder(params.data)) {
             return { background: "#D0E9FC" };
           }

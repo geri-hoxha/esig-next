@@ -49,14 +49,25 @@ const ExtraChargeFooter = ({}) => {
 const PercentageFooter: React.FC<{
   percentageKey: "ownershipPercentage" | "invoiceSplitPercentage";
 }> = ({ percentageKey }) => {
-  const { register } = useFormContext<
-    CustomerModel & ParticipantWithPercentage
-  >();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<CustomerModel & ParticipantWithPercentage>();
 
   return (
-    <div className="flex items-center gap-4 w-full">
-      <div className="flex items-center grow shrink-0">
-        <Input label="Perqindja" {...register(percentageKey)} suffix={"%"} />
+    <div className="flex items-center  h-full pl-4 gap-4">
+      <div className="flex items-center grow shrink-0 gap-4">
+        <Input
+          noErrorMessage
+          label="Perqindja"
+          {...register(percentageKey)}
+          suffix={"%"}
+        />
+        {errors[percentageKey] && (
+          <span className="text-esig-error text-sm font-semibold animate-bounce  grow shrink-0">
+            {errors[percentageKey]?.message}
+          </span>
+        )}
       </div>
     </div>
   );

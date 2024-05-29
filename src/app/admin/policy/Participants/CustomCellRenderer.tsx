@@ -128,9 +128,14 @@ const CustomCellRenderer: React.FC<IProps> = ({
   };
 
   const onPercentageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value ?? 0) / 100;
+    const value = Number(event.target.value ?? 0);
+
+
+    console.log(value)
 
     const leaderParticipant = rowData.at(0);
+
+    console.log(leaderParticipant)
 
     if (value > (leaderParticipant as ParticipantWithPercentage)[percentageKey]) {
       return toast({
@@ -203,7 +208,7 @@ const CustomCellRenderer: React.FC<IProps> = ({
           </div>
         )}
         <div className="flex items-center justify-between gap-4  mt-2 mb-4 ">
-          <span className="font-bold text-lg text-gray-600 truncate">
+          <span className="font-bold text-lg text-gray-600 truncate w-4/5">
             {data.displayName}
           </span>
 
@@ -229,7 +234,7 @@ const CustomCellRenderer: React.FC<IProps> = ({
         <Input
           label="Perqindja"
           placeholder="Perqindja"
-          value={numeral(Number((percentage ?? 0) * 100)).format("0.00")}
+          value={percentage}
           suffix={"%"}
           readOnly={node.rowIndex === 0}
           onChange={onPercentageChange}

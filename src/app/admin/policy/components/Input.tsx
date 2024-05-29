@@ -8,6 +8,7 @@ export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
   icon: ReactNode;
   suffix: ReactNode;
   label: string;
+  noErrorMessage: boolean;
 }
 
 const Input = React.forwardRef(
@@ -24,6 +25,7 @@ const Input = React.forwardRef(
       suffix,
       type = "text",
       onClick,
+      noErrorMessage = false,
       ...register
     }: Partial<IInput> = props;
 
@@ -85,7 +87,7 @@ const Input = React.forwardRef(
           )}
         </div>
 
-        {formContext?.formState && (
+        {formContext?.formState && !noErrorMessage && (
           <ErrorMessage error={formContext.formState.errors[name ?? ""]} />
         )}
       </div>
