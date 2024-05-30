@@ -18,11 +18,8 @@ import {
 } from "@/components/ui/drawer";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  EventHandler,
-  KeyboardEvent,
   KeyboardEventHandler,
   ReactNode,
-  SyntheticEvent,
   useEffect,
   useState,
 } from "react";
@@ -34,7 +31,6 @@ import {
 } from "react-hook-form";
 import { ZodRawShape, z } from "zod";
 import Button from "./Button";
-import { CustomerModel, PolicyParticipantPolicyUserRequest } from "../type";
 
 type AsyncDefaultValues<TFieldValues> = (
   payload?: unknown
@@ -48,7 +44,7 @@ interface IProps<T> {
   setOpen: (open: boolean) => void;
   width: string;
   footer?: ReactNode;
-  onOk: (values: T | {}) => void | Promise<void>;
+  onOk: (values: T extends FieldValues ? T : FieldValues ) => void | Promise<void>;
   onCancel: () => void;
   onReleaseClose: (open: boolean) => void;
   formSchema: z.ZodObject<ZodRawShape>;
@@ -91,15 +87,7 @@ function Modal<T>({
   };
 
   const onSubmit = async () => {
-    const values: FieldValues = form.getValues();
-
-    for (const key in values) {
-      const value = values[key];
-
-      if (key === ("extraCharge" as keyof PolicyParticipantPolicyUserRequest)) {
-        values[key] = value === "true";
-      }
-    }
+    const values = form.getValues();
 
     closeModalAndResetForm();
 

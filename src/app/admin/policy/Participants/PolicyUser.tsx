@@ -16,7 +16,6 @@ import { z } from "zod";
 import Input from "../components/Input";
 import { ExtraChargeFooter } from "./ModalFooter";
 import Button from "../components/Button";
-import { json } from "stream/consumers";
 
 type MapperParticipants = {
   [K in keyof IParticipants]: (
@@ -183,18 +182,24 @@ const PolicyUsers: React.FC = () => {
     };
   };
 
-  const onOkHandler = async (values: CustomerModel | {}) => {
-    if (selectedParticipantId) {
-      updatePolicyUserHandler(values as CustomerModel);
-    } else {
-      // isLeader true only for the first one
-      addPolicyUserHandler({
-        ...values,
-        isLeader: policyUsers.length === 0,
-      } as CustomerModel);
-    }
+  const onOkHandler = async (values: CustomerModel | any) => {
+    try {
+      values["extraCharge"] = values["extraCharge"] === "true";
 
-    onCancelHandler();
+      if (selectedParticipantId) {
+        updatePolicyUserHandler(values as CustomerModel);
+      } else {
+        // isLeader true only for the first one
+        addPolicyUserHandler({
+          ...values,
+          isLeader: policyUsers.length === 0,
+        } as CustomerModel);
+      }
+
+      onCancelHandler();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onCancelHandler = () => {

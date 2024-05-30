@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { CustomerModel } from "../type";
+import { CustomerModel, PolicyParticipantPolicyUserRequest } from "../type";
 import Modal from "../components/Modal";
 import CustomerModal, { getFormSchemaCustomer } from "../CustomerModal";
 import { useCoreContext } from "../context";
@@ -8,15 +8,15 @@ import { IParticipantsList } from "./List";
 import { PercentageFooter } from "./ModalFooter";
 import { z } from "zod";
 import _request from "@/request";
-import { token } from "@/components/esig/Navbar/Currencies";
-import SortableTable from "./SortableTable";
+import SortableTable, { SortableParticipant } from "./SortableTable";
 import Button from "../components/Button";
+import { useToast } from "@/components/ui/use-toast";
 
 const ParticipantModal: React.FC<IParticipantsList> = ({
   stateKey,
   percentageKey,
 }) => {
-  const { dispatch } = useCoreContext();
+  const { data, dispatch } = useCoreContext();
 
   const [primaryModal, setPrimaryModal] = useState<boolean>(false);
 
@@ -26,13 +26,43 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
 
   const closeCustomerModal = () => setCustomerModal(false);
 
-  const onOkHandler = (values: CustomerModel | {}) => {
+  const { toast } = useToast();
+
+  const onOkHandler = (values: SortableParticipant) => {
+    const leader = data[stateKey].at(0);
+
+    const leaderPercentage: number =
+      // @ts-ignore
+      (leader?.[percentageKey] || 0) - (values[percentageKey] || 0);
+
+    if (leaderPercentage < 0) {
+      toast({
+        variant: "destructive",
+        title: `Perqindja e liderit nuk mund te jete me e vogel se 0: Kontrollo perqindjet!`,
+      });
+      return;
+    }
+
+    // update first participant (leader) on context
+    dispatch({
+      type: UPDATE,
+      payload: {
+        key: stateKey,
+        item: {
+          ...leader,
+          [percentageKey]: leaderPercentage,
+        },
+        identifier: { value: leader?.id ?? "" },
+      },
+    });
+
+    // insert the new participant
     dispatch({
       type: CREATE,
       payload: {
         item: {
           ...values,
-          ...(stateKey === 'policyHolders' ? {isLeader: false} : {})
+          ...(stateKey === "policyHolders" ? { isLeader: false } : {}),
         },
         key: stateKey,
       },
@@ -54,7 +84,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
 
   if (customerModal) {
     return (
-      <Modal
+      <Modal<CustomerModel>
         title="Modali i pjesemarresve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         open

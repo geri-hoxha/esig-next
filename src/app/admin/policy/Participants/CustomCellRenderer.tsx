@@ -1,9 +1,8 @@
 import Image from "next/image";
-import { ChangeEvent, ChangeEventHandler, ReactNode, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { CustomerModel } from "../type";
 import { IRowNode } from "ag-grid-enterprise";
 import Input from "../components/Input";
-import numeral from "numeral";
 import { isPolicyHolder } from ".";
 import { IParticipantsList, ParticipantWithPercentage } from "./List";
 import { useCoreContext } from "../context";
@@ -30,22 +29,30 @@ interface IProps extends IParticipantsList {
   };
   rowData: SortableParticipant[];
   setRowData: React.Dispatch<React.SetStateAction<SortableParticipant[]>>;
+  rowIndex: number;
 }
 
+const roundTwoDigits = (number: number = 0) => {
+  return Math.round((Number(number) + Number.EPSILON) * 100) / 100;
+};
+
+// components remounts each time we change input percentage because of Ag-grid. Save the index being updated outside react tree, so we can compare later which input to autofocus
+let autoFocus = -1;
+
 const CustomCellRenderer: React.FC<IProps> = ({
-  node,
   data,
   percentageKey,
   stateKey,
   toast,
   rowData,
   setRowData,
-  ...others
+  rowIndex,
+  ...props
 }) => {
   const { data: coreData, dispatch } = useCoreContext();
 
   const [percentage, setPercentage] = useState<number>(
-    (data as ParticipantWithPercentage)[percentageKey]
+    roundTwoDigits((data as ParticipantWithPercentage)[percentageKey])
   );
 
   const deleteParticipant = (data: CustomerModel) => {
@@ -81,33 +88,29 @@ const CustomCellRenderer: React.FC<IProps> = ({
 
     const leaderParticipant = rowData.at(0);
 
-    // remove the deleted one
-    const cleanedUpParticipants = [...rowData].filter(
-      (item) => item.id !== data.id
-    );
-
     // find the new sum
-    const sum = cleanedUpParticipants.reduce(
-      (accumulator, currentValue, index) => {
-        if (index === 0) return 0;
-        return (
-          accumulator +
-          (currentValue as ParticipantWithPercentage)[percentageKey]
-        );
-      },
-      0
-    );
+    const sum = rowData.reduce((accumulator, currentValue, index) => {
+      if (index === 0) return 0;
+
+      if (currentValue.id === data.id) return accumulator;
+
+      return accumulator + (currentValue[percentageKey] || 0);
+    }, 0);
 
     // calculate percentage for leader
-    const updatedParticipants = cleanedUpParticipants.map((item: any) => {
+    const updatedParticipants: SortableParticipant[] = [];
+
+    rowData.forEach((item: SortableParticipant) => {
+      if (item.id === data.id) return;
+
       if (item.id === leaderParticipant?.id) {
-        return {
+        return updatedParticipants.push({
           ...leaderParticipant,
-          [percentageKey]: 1 - sum,
-        };
+          [percentageKey]: 100 - sum,
+        });
       }
 
-      return item;
+      updatedParticipants.push(item);
     });
 
     // update first participant (leader) on context
@@ -117,7 +120,7 @@ const CustomCellRenderer: React.FC<IProps> = ({
         key: stateKey,
         item: {
           ...leaderParticipant,
-          [percentageKey]: 1 - sum,
+          [percentageKey]: 100 - sum,
         },
         identifier: { value: leaderParticipant?.id ?? "" },
       },
@@ -130,22 +133,37 @@ const CustomCellRenderer: React.FC<IProps> = ({
   const onPercentageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value ?? 0);
 
-
-    console.log(value)
-
     const leaderParticipant = rowData.at(0);
 
-    console.log(leaderParticipant)
+    // calculate the sum of percentages of participants who are not leader
+    const sum = [...rowData].reduce(
+      (accumulator, currentValue: SortableParticipant, index) => {
+        // dont calculate the leader (the one who holds the remain percentage)
+        if (index === 0) return 0;
 
-    if (value > (leaderParticipant as ParticipantWithPercentage)[percentageKey]) {
+        // new value to calculate
+        if (currentValue["id"] === data.id) {
+          return accumulator + value;
+        }
+
+        // old values
+        return accumulator + (currentValue?.[percentageKey] || 0);
+      },
+      0
+    );
+
+    const leftOverLeaderPercentage = 100 - sum;
+
+    // validate
+    if (leftOverLeaderPercentage < 0) {
       return toast({
         variant: "destructive",
-        title: `Perqindja nuk mund te jete me e madhe se perqindja e liderit!`,
+        title: `Perqindja e liderit nuk mund te jete me e vogel se 0: Kontrollo perqindjet!`,
       });
     }
 
-    // update the one participant that changed
-    const updatedGrid = rowData.map((item: any) => {
+    const updatedParticipant = rowData.map((item: any) => {
+      // the one who was edited
       if (item.id === data.id) {
         return {
           ...item,
@@ -153,48 +171,36 @@ const CustomCellRenderer: React.FC<IProps> = ({
         };
       }
 
-      return item;
-    });
-
-    const sum = updatedGrid.reduce((accumulator, currentValue, index) => {
-      if (index === 0) return 0;
-      return accumulator + currentValue[percentageKey];
-    }, 0);
-
-    const updatedLeaderParticipant = updatedGrid.map((item: any) => {
+      // update leader percentge
       if (item.id === leaderParticipant?.id) {
         return {
           ...leaderParticipant,
-          [percentageKey]: 1 - sum,
+          [percentageKey]: leftOverLeaderPercentage,
         };
       }
 
       return item;
     });
 
-    setRowData(updatedLeaderParticipant);
+    setRowData(updatedParticipant);
 
     dispatch({
       type: SET,
       payload: {
         key: stateKey,
-        item: updatedLeaderParticipant,
+        item: updatedParticipant,
       },
     });
 
-    // Remove all non-digit characters from the input for robustness
-    const rawNumbers = event.target.value.replace(/\D/g, "");
-    // Format the number with commas
-    const formattedNumber = rawNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setPercentage(roundTwoDigits(value));
 
-    console.log(formattedNumber);
-    setPercentage(Number(formattedNumber));
+    autoFocus = rowIndex;
   };
 
   return (
     <>
       <div className={`flex flex-col  border-l  pb-5 pl-5 `}>
-        {node.rowIndex === 0 && isPolicyHolder(data) && (
+        {rowIndex === 0 && isPolicyHolder(data) && (
           <div className="mt-2 flex items-center" style={{ lineHeight: 0 }}>
             <Image
               src="/svg/info.svg"
@@ -212,7 +218,7 @@ const CustomCellRenderer: React.FC<IProps> = ({
             {data.displayName}
           </span>
 
-          {node.rowIndex !== 0 && (
+          {rowIndex !== 0 && (
             <button
               onClick={() => deleteParticipant(data)}
               className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig-error hover:bg-red-50 transition-all duration-100"
@@ -232,11 +238,14 @@ const CustomCellRenderer: React.FC<IProps> = ({
           )}
         </div>
         <Input
+          key={data.id}
           label="Perqindja"
           placeholder="Perqindja"
           value={percentage}
-          suffix={"%"}
-          readOnly={node.rowIndex === 0}
+          type="number"
+          autoFocus={rowIndex !== 0 && autoFocus === rowIndex}
+          suffix={<span className="font-bold">%</span>}
+          readOnly={rowIndex === 0}
           onChange={onPercentageChange}
         />
       </div>

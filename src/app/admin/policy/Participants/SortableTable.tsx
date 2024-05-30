@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { memo, useCallback, useMemo, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { IParticipantsList } from "./List";
 import AgGrid from "@/components/ag/Ag-grid";
@@ -15,6 +15,8 @@ import {
 
 export interface SortableParticipant extends CustomerModel {
   rowHeight?: number | null;
+  ownershipPercentage?: number;
+  invoiceSplitPercentage?: number;
 }
 
 const SortableTable: React.FC<IParticipantsList> = ({
@@ -102,7 +104,7 @@ const SortableTable: React.FC<IParticipantsList> = ({
         getRowStyle={(params) => {
           
           if (params.node.rowIndex === 0 && isPolicyHolder(params.data)) {
-            return { background: "#D0E9FC" };
+            return { background: "#E4F2FD" };
           }
           return { background: "#fff" };
         }}

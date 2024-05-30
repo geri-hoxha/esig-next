@@ -66,6 +66,7 @@ const Input = React.forwardRef(
             onClick={onClick}
             type={type}
             id={name}
+            onKeyDown={(evt) => evt.key === "e" && type === 'number' && evt.preventDefault()}
             {...getInputAttr()}
             onChange={onChange}
             className={`block w-full rounded-md border-0 py-1.5 ${pl10} text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-esig sm:text-sm sm:leading-6 ${className} ${
