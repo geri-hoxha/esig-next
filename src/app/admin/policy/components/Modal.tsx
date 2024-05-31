@@ -104,7 +104,7 @@ function Modal<T>({
   };
 
   const handleEnterPress: KeyboardEventHandler = (event) => {
-    if (event.key === "Enter" || event.key == "Space") {
+    if (event.key === "Enter") {
       onSubmit();
     }
   };

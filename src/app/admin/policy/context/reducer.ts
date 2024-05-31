@@ -30,12 +30,6 @@ const MASS_UPDATE = ActionTypes.MASS_UPDATE;
 
 const SET = ActionTypes.SET;
 
-function validateDuplication(selectedArray: any[], item: any) {
-
-    if (selectedArray instanceof Array && selectedArray.map((item) => item.id).includes(item.id)) {
-        throw new Error('Error: Entiteti qe po kerkoni te shtoni eshte ekzistent dhe nuk mund ta duplikoni!')
-    }
-}
 
 function reducer<T>(state: T, action: IAction<T>): T {
 
@@ -48,11 +42,9 @@ function reducer<T>(state: T, action: IAction<T>): T {
     switch (type) {
 
         case CREATE:
-            validateDuplication(selectedArray, item);
             return { ...state, [key]: [...selectedArray, item] };
 
         case UPDATE:
-            validateDuplication(selectedArray, item);
             return {
                 ...state, [key]: [...selectedArray.map((_item) => {
                     if (_item[identifier.key ?? 'id'] === identifier.value) {
@@ -85,9 +77,9 @@ export {
     DELETE,
     MASS_UPDATE,
     SET,
+    ActionTypes
 }
 
 export type {
     IAction,
-    ActionTypes
 }
