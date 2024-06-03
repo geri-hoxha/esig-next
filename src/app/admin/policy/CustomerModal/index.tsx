@@ -15,251 +15,268 @@ import { DrawerClose } from "@/components/ui/drawer";
 import Select, { IOptions } from "../components/Select";
 import { token } from "@/components/esig/Navbar/Currencies";
 import useOrganizationEnums from "./useOrganizationEnums";
-import Map from "./Map";
+import dynamic from "next/dynamic";
 
+const MapWithNoSSR = dynamic(() => import("./Map"), {
+  ssr: false,
+});
 export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
-    return z.object({
-        taxNumber: z.string().min(1, "NUID eshte i detyrueshem!"),
-        displayName: z.string().min(1, "Emri eshte i detyrueshem!"),
-        contactType: z.string().min(1, "Lloji i kontaktit eshte i detyrueshem!"),
-        ...argSchema,
-    });
+  return z.object({
+    taxNumber: z.string().min(1, "NUID eshte i detyrueshem!"),
+    displayName: z.string().min(1, "Emri eshte i detyrueshem!"),
+    contactType: z.string().min(1, "Lloji i kontaktit eshte i detyrueshem!"),
+    ...argSchema,
+  });
 };
+
+export interface ICoords {
+    latitude: number;
+    longitude: number;
+}
+
 const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
-    const { watch, register, reset, setValue } = useFormContext<CustomerModel>();
+  const { watch, register, reset, setValue } = useFormContext<CustomerModel>();
 
-    const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
+  const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
 
-    const { optionsList, loading } = useOrganizationEnums();
+  const { optionsList, loading } = useOrganizationEnums();
 
-    const [showMap, setShowMap] = useState<boolean>(false);
+  const [showMap, setShowMap] = useState<boolean>(false);
 
-    const [address, setAddress] = useState<{
-        value: string;
-        coords: Partial<[number, number]>
-    }>({
-        value: '',
-        coords: []
+  const [address, setAddress] = useState<{
+    value: string;
+    coords: ICoords;
+  }>({
+    value: "",
+    coords: {
+        latitude: 0,
+        longitude: 0
+    },
+  });
+
+  useEffect(() => {
+    getOptions();
+    setCustomerData();
+  }, []);
+
+  const setCustomerData = async () => {
+    if (!entityId) return;
+
+    const response = await _request(`/customer/${entityId}`, token, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    useEffect(() => {
-        getOptions();
-        setCustomerData()
-    }, []);
+    const { address } = response.data as CustomerModel;
 
-    const setCustomerData = async () => {
-        if (!entityId) return;
+    const { city, country, postalCode, streetAddress } = address;
 
-        const response = await _request(
-            `/customer/${entityId}`,
-            token,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+    let addressString = "";
 
-        const { address } = response.data as CustomerModel;
+    !!city ? (addressString += `${city} `) : "";
+    !!country ? (addressString += `${country} `) : "";
+    !!postalCode ? (addressString += `${postalCode} `) : "";
+    !!streetAddress ? (addressString += `${streetAddress} `) : "";
 
-        const { city, country, postalCode, streetAddress } = address;
+    setAddress({
+      value: addressString,
+      coords: {
+        latitude: address.latitude || 0,
+        longitude: address.longitude || 0
+      },
+    });
 
-        let addressString = '';
+    reset(response.data);
+  };
 
-        !!city ? addressString += `${city} ` : '';
-        !!country ? addressString += `${country} ` : '';
-        !!postalCode ? addressString += `${postalCode} ` : '';
-        !!streetAddress ? addressString += `${streetAddress} ` : '';
+  const getOptions = async () => {
+    const data: IOptions[] = await _request("/enum/ContactType", token, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-        setAddress({
-            value: addressString,
-            coords: [
-                address.latitude ?? 0,
-                address.longitude ?? 0
-            ]
-        })
+    setContactTypeOptions(data);
 
-        reset(response.data)
-    }
+    setValue("contactType", data.at(0)?.value ?? "");
+  };
 
+  const customerId = watch("id");
 
-    const getOptions = async () => {
-        const data: IOptions[] = await _request("/enum/ContactType", token, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
+  const contactType = watch("contactType");
 
-        setContactTypeOptions(data);
-
-        setValue('contactType', data.at(0)?.value ?? '')
-    };
-
-    const customerId = watch("id");
-
-    const contactType = watch("contactType");
-
-    if (showMap) {
-        return (
-            <div className="relative">
-
- 
-<div className="flex items-center ml-auto gap-x-2 absolute bg-white -bottom-12 py-1 w-full right-0 z-20 ">
-                     <Button
-                      variant="danger"
-                      
-                      className="border border-dashed border-esig-error py-1 ml-auto"
-                      onClick={() => {
-                        setShowMap(false)
-                    }}
-                    >
-                      Anullo veprimin
-                    </Button>
-                   <Button
-                    type="submit"
-                    iconSrc="/svg/check_no_border.svg"
-                    className="border border-dashed border-esig"
-                    variant="edit"
-                  >
-                    Ruaj dhe apliko
-                  </Button>
-                </div>
-
-                <div className="z-50 bg-white relative">
-                    <Map coords={address.coords}>
-          
-                    </Map>
-                </div>
-            </div>
-        )
-    }
-
+  if (showMap) {
     return (
-        <div className="grid grid-cols-12 gap-4">
-            {
-                !!entityId ? null :
-                    <div className="col-span-12 md:col-span-4">
-                        <Table />
-                    </div>
-            }
-            <div className={`col-span-12  md:border-l-2 border-dashed pl-4 ${!!entityId ? 'col-span-12' : 'md:col-span-8'}`}>
-                {!!customerId ? (
-                    <div className="flex items-center mb-4 h-8">
-                        <span className="text-lg flex items-center truncate">
-                            {" "}
-
-                            <div className="italic pl-2 truncate ">
-                                {watch("displayName")}
-                            </div>
-                        </span>
-
-                        <div className="flex grow shrink-0">
-                            <Button variant="edit">Shiko te gjitha</Button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="mb-4 h-8 text-sm text-gray-600 flex items-center gap-2">
-                        <Image
-                            src="/svg/info.svg"
-                            alt="edit"
-                            width={"0"}
-                            height={"0"}
-                            style={{ width: 17, height: 17 }}
-                            priority
-                        />
-                        <span>(Zgjidh klientin ne tabelen ne te majte)</span>
-                    </div>
-                )}
-
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                    <Input {...register("taxNumber")} label="Nipt i klientit" />
-                    <Input {...register("phoneNumber")} label="Numri i telefonit" />
-                    <Input {...register("displayName")} label="Emri i plote" />
-                    <Input {...register("email")} label="Email" />
-                    <Select
-                        {...register("contactType")}
-                        label="Lloji i kontaktit"
-                        options={contactTypeOptions}
-                    />
-                    <Checkbox {...register("isLocal")}>
-                        <>{watch("isLocal") ? "Shqiptar" : "I huaj"}</>
-                    </Checkbox>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="grid col-span-2 md:col-span-1 grid-cols-2 md:grid-cols-1 gap-4 h-max">
-                        {contactType === "Person" ? (
-                            <>
-                                <Input {...register("genderType")} label="Gjinia" />
-                                <Input {...register("fathersName")} label="Atesia" />
-                                <Input
-                                    {...register("birthday")}
-                                    label="Ditelindja"
-                                    type="date"
-                                />
-                            </>
-                        ) : contactType === "Organization" ? (
-                            <>
-                                <Input
-                                    {...register("businessDescription")}
-                                    label="Përshkrimi i biznesit"
-                                />
-                                <Input {...register("administrator")} label="Administratori" />
-                                <div className="grid grid-cols-2 gap-4 ">
-                                    <Select
-                                        {...register("organizationLegalFormType")}
-                                        options={optionsList.LegalFormType}
-                                        label="Lloji i formës ligjore"
-                                    />
-                                    <Select
-                                        {...register("organizationBusinessSizeType")}
-                                        options={optionsList.BusinessSizeType}
-                                        label="Lloji i madhësisë së biznesit"
-                                    />
-
-                                    <Select
-                                        {...register("organizationOwnershipType")}
-                                        options={optionsList.OwnershipType}
-                                        label="Lloji i pronarit"
-                                    />
-                                    <Select
-                                        {...register("organizationSectorType")}
-                                        options={optionsList.SectorType}
-                                        label="Lloji i sektorit"
-                                    />
-                                </div>
-                                <Checkbox {...register("isActive")}>
-                                    <>{watch("isActive") ? "Aktiv" : "Jo-Aktiv"}</>
-                                </Checkbox>
-                            </>
-                        ) : null}
-
-                        <Input
-                            value={address.value}
-                            label="Adresa"
-                            suffix={
-                                <Button variant="edit" onClick={() => {
-                                    setShowMap(true);
-                                }}>
-                                    Ndrysho
-                                </Button>
-                            }
-                            onChange={() => { }}
-                        />
-                    </div>
-                    <div className="hidden md:block h-72">
-                        <CustomerDonut />
-                    </div>
-                </div>
-            </div>
+      <div className="relative" style={{ height: 508 }}>
+        <div
+          className="flex items-end ml-auto gap-x-2 absolute bg-white top-full w-full right-0 z-20 "
+          style={{ height: 48 }}
+        >
+          <Button
+            variant="danger"
+            className="border border-dashed border-esig-error py-1 ml-auto"
+            onClick={() => {
+              setShowMap(false);
+            }}
+          >
+            Anullo veprimin
+          </Button>
+          <Button
+            type="submit"
+            iconSrc="/svg/check_no_border.svg"
+            className="border border-dashed border-esig"
+            variant="edit"
+          >
+            Ruaj dhe apliko
+          </Button>
         </div>
+        <div className="z-50 bg-white relative flex flex-col h-full">
+          <MapWithNoSSR
+            position={address.coords}
+            setPosition={(coords) => {
+              setAddress({
+                value: address.value,
+                coords,
+              });
+            }}
+          />
+        </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="grid grid-cols-12 gap-4">
+      {!!entityId ? null : (
+        <div className="col-span-12 md:col-span-4">
+          <Table />
+        </div>
+      )}
+      <div
+        className={`col-span-12  md:border-l-2 border-dashed pl-4 ${
+          !!entityId ? "col-span-12" : "md:col-span-8"
+        }`}
+      >
+        {!!customerId ? (
+          <div className="flex items-center mb-4 h-8">
+            <span className="text-lg flex items-center truncate">
+              {" "}
+              <div className="italic pl-2 truncate ">
+                {watch("displayName")}
+              </div>
+            </span>
+
+            <div className="flex grow shrink-0">
+              <Button variant="edit">Shiko te gjitha</Button>
+            </div>
+          </div>
+        ) : (
+          <div className="mb-4 h-8 text-sm text-gray-600 flex items-center gap-2">
+            <Image
+              src="/svg/info.svg"
+              alt="edit"
+              width={"0"}
+              height={"0"}
+              style={{ width: 17, height: 17 }}
+              priority
+            />
+            <span>(Zgjidh klientin ne tabelen ne te majte)</span>
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <Input {...register("taxNumber")} label="Nipt i klientit" />
+          <Input {...register("phoneNumber")} label="Numri i telefonit" />
+          <Input {...register("displayName")} label="Emri i plote" />
+          <Input {...register("email")} label="Email" />
+          <Select
+            {...register("contactType")}
+            label="Lloji i kontaktit"
+            options={contactTypeOptions}
+          />
+          <Checkbox {...register("isLocal")}>
+            <>{watch("isLocal") ? "Shqiptar" : "I huaj"}</>
+          </Checkbox>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="grid col-span-2 md:col-span-1 grid-cols-2 md:grid-cols-1 gap-4 h-max">
+            {contactType === "Person" ? (
+              <>
+                <Input {...register("genderType")} label="Gjinia" />
+                <Input {...register("fathersName")} label="Atesia" />
+                <Input
+                  {...register("birthday")}
+                  label="Ditelindja"
+                  type="date"
+                />
+              </>
+            ) : contactType === "Organization" ? (
+              <>
+                <Input
+                  {...register("businessDescription")}
+                  label="Përshkrimi i biznesit"
+                />
+                <Input {...register("administrator")} label="Administratori" />
+                <div className="grid grid-cols-2 gap-4 ">
+                  <Select
+                    {...register("organizationLegalFormType")}
+                    options={optionsList.LegalFormType}
+                    label="Lloji i formës ligjore"
+                  />
+                  <Select
+                    {...register("organizationBusinessSizeType")}
+                    options={optionsList.BusinessSizeType}
+                    label="Lloji i madhësisë së biznesit"
+                  />
+
+                  <Select
+                    {...register("organizationOwnershipType")}
+                    options={optionsList.OwnershipType}
+                    label="Lloji i pronarit"
+                  />
+                  <Select
+                    {...register("organizationSectorType")}
+                    options={optionsList.SectorType}
+                    label="Lloji i sektorit"
+                  />
+                </div>
+                <Checkbox {...register("isActive")}>
+                  <>{watch("isActive") ? "Aktiv" : "Jo-Aktiv"}</>
+                </Checkbox>
+              </>
+            ) : null}
+
+            <Input
+              value={address.value}
+              label="Adresa"
+              suffix={
+                <Button
+                  variant="edit"
+                  onClick={() => {
+                    setShowMap(true);
+                  }}
+                >
+                  Ndrysho
+                </Button>
+              }
+              onChange={() => {}}
+            />
+          </div>
+          <div className="hidden md:block h-72">
+            <CustomerDonut />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default CustomerModal;

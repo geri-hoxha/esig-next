@@ -70,7 +70,6 @@ function Modal<T>({
   onCancel = () => { },
   onReleaseClose = () => { },
   formSchema = z.object({}),
-  destroyOnClose = false
 }: Partial<IProps<T>>) {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
@@ -116,11 +115,6 @@ function Modal<T>({
       onSubmit();
     }
   };
-
-  if (!open && destroyOnClose) {
-    console.log('we here amigo')
-    return null
-  }
 
   if (isDesktop) {
     return (

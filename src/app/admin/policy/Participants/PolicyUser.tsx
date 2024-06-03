@@ -104,9 +104,11 @@ const PolicyUsers: React.FC = () => {
           item: {
             ...values,
             // isLeader true only for the first one
-            ...(key === 'policyHolders' ? {
-              isLeader: policyUsers.length === 0
-            } : {})
+            ...(key === "policyHolders"
+              ? {
+                  isLeader: policyUsers.length === 0,
+                }
+              : {}),
           },
         },
       });
@@ -228,7 +230,8 @@ const PolicyUsers: React.FC = () => {
               <Button variant="edit" onClick={() => onEditClick(user)}>
                 Zgjidh
               </Button>
-              <Button
+              {user.id && (
+                <Button
                   variant={"danger"}
                   onClick={() => {
                     deletePolicyUserHandler(user);
@@ -236,6 +239,7 @@ const PolicyUsers: React.FC = () => {
                 >
                   Fshij
                 </Button>
+              )}
             </div>
           );
         }

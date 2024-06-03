@@ -13,7 +13,7 @@ const ExtraChargeFooter = ({}) => {
   } = useFormContext<CustomerModel & PolicyParticipantPolicyUserRequest>();
 
   return (
-    <div className="flex items-center  h-full pl-4 gap-4">
+    <div className="flex items-center  h-full pl-5 gap-4">
       <div className="list-item  text-esig font-semibold text-base  ">
         Tarife shtese{" "}
       </div>
@@ -55,7 +55,7 @@ const PercentageFooter: React.FC<{
   } = useFormContext<CustomerModel & ParticipantWithPercentage>();
 
   return (
-    <div className="flex items-center  h-full pl-4 gap-4">
+    <div className="flex items-center  h-full pl-5 gap-4">
       <div className="flex items-center grow shrink-0 gap-4">
         <Input
           noErrorMessage
