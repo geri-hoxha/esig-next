@@ -175,6 +175,7 @@ const Table: React.FC = () => {
       </div>
       <div className="flex items-center gap-2 mt-2">
         <Input
+        autoFocus
           value={searchedValue}
           name="searchedValue"
           label={`${radioGroup === searchWithNipt ? "Nipt i klientit" : "Emri i klientit"}`}

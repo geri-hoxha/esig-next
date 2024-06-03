@@ -11,6 +11,7 @@ import _request from "@/request";
 import SortableTable, { SortableParticipant } from "./SortableTable";
 import Button from "../components/Button";
 import { useToast } from "@/components/ui/use-toast";
+import { withErrorHandling } from "../helpers";
 
 const ParticipantModal: React.FC<IParticipantsList> = ({
   stateKey,
@@ -28,7 +29,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
 
   const { toast } = useToast();
 
-  const onOkHandler = (values: SortableParticipant) => {
+  const onOkHandler = withErrorHandling((values: SortableParticipant) => {
     const leader = data[stateKey].at(0);
 
     const leaderPercentage: number =
@@ -43,6 +44,18 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
       return;
     }
 
+    // insert the new participant
+    dispatch({
+      type: CREATE,
+      payload: {
+        item: {
+          ...values,
+          ...(stateKey === "policyHolders" ? { isLeader: false } : {}),
+        },
+        key: stateKey,
+      },
+    });
+
     // update first participant (leader) on context
     dispatch({
       type: UPDATE,
@@ -56,20 +69,8 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
       },
     });
 
-    // insert the new participant
-    dispatch({
-      type: CREATE,
-      payload: {
-        item: {
-          ...values,
-          ...(stateKey === "policyHolders" ? { isLeader: false } : {}),
-        },
-        key: stateKey,
-      },
-    });
-
     onCancelHandler();
-  };
+  });
 
   const onCancelHandler = () => {
     closeCustomerModal();

@@ -48,3 +48,19 @@ export function removeQueryParam(paramKey: string) {
     // Replace the current URL with the new URL
     window.history.replaceState({ path: newUrl }, "", newUrl);
 }
+
+// Define the decorator
+export const withErrorHandling = (fn:(...args:any) =>  void | Promise<void>, throwError:boolean = true) => {
+    return async function(...args:any) {
+      try {
+        return await fn(...args);
+      } catch (error) {
+        console.error(error);
+        // Throw this error if the parent function needs to know, for ex: stop execution
+        if(throwError) {
+          throw error;
+        }
+        return; // or some default value
+      }
+    };
+  };

@@ -14,6 +14,7 @@ import {
   PolicyParticipantPolicyUserRequest,
 } from "../type";
 import dayjs from "dayjs";
+import { useToast } from "@/components/ui/use-toast";
 
 export interface OverwrittenIssueRequest extends IssueRequest {
   beneficiaries: (PolicyParticipantBeneficiaryRequest & CustomerModel)[];
@@ -32,7 +33,7 @@ export interface IParticipants
     | "policyHolders"
     | "invoiceRecipients"
     | "policyUsers"
-  > {}
+  > { }
 
 const defaultRequest = {
   serial: "",
@@ -68,7 +69,7 @@ const defaultUi = {
   premium: 0,
   loading: false,
   disabled: false,
-  premiumMethod: async () => {},
+  premiumMethod: async () => { },
 };
 
 interface ICoreContext {
@@ -80,9 +81,9 @@ interface ICoreContext {
 
 const CoreContext = createContext<ICoreContext>({
   data: defaultRequest,
-  dispatch: () => {},
+  dispatch: () => { },
   ui: defaultUi,
-  dispatchUi: () => {},
+  dispatchUi: () => { },
 });
 
 export const useCoreContext = () => useContext(CoreContext);
@@ -113,9 +114,11 @@ export default function CoreContextProvider({
 
   const [ui, dispatchUi] = useReducer(reducer<IUi>, defaultUi);
 
-  useEffect(() => {
-    console.log(data);
-  }, [JSON.stringify(data)]);
+  const { toast } = useToast();
+
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [JSON.stringify(data)]);
 
   function validateDuplication(action: IAction<OverwrittenIssueRequest>) {
     const actionType = action.type;
@@ -133,7 +136,7 @@ export default function CoreContextProvider({
 
     if (ids.includes(action.payload.item?.id)) {
       throw new Error(
-        "Error: Entiteti qe po kerkoni te shtoni eshte ekzistent dhe nuk mund ta duplikoni!"
+        `Error: ${action.payload.item.displayName} eshte ekzistent dhe nuk mund te duplikohet. Veprimi u anullua!`
       );
     }
   }
@@ -147,7 +150,13 @@ export default function CoreContextProvider({
             validateDuplication(action);
 
             return dispatch(action);
-          } catch (error) {
+          } catch (error: any) {
+
+            toast({
+              variant: "destructive",
+              title: error.message,
+            });
+
             throw error;
           }
         },

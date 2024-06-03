@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/drawer";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  JSXElementConstructor,
   KeyboardEventHandler,
   ReactNode,
   useEffect,
@@ -31,6 +32,8 @@ import {
 } from "react-hook-form";
 import { ZodRawShape, z } from "zod";
 import Button from "./Button";
+import { withErrorHandling } from "../helpers";
+import _request from "@/request";
 
 type AsyncDefaultValues<TFieldValues> = (
   payload?: unknown
@@ -44,13 +47,14 @@ interface IProps<T> {
   setOpen: (open: boolean) => void;
   width: string;
   footer?: ReactNode;
-  onOk: (values: T extends FieldValues ? T : FieldValues ) => void | Promise<void>;
+  onOk: (values: T extends FieldValues ? T : FieldValues) => void | Promise<void>;
   onCancel: () => void;
   onReleaseClose: (open: boolean) => void;
   formSchema: z.ZodObject<ZodRawShape>;
-  defaultValues:
-  | DefaultValues<T extends FieldValues ? T : FieldValues>
-  | AsyncDefaultValues<T extends FieldValues ? T : FieldValues>;
+  destroyOnClose: boolean;
+  // defaultValues:
+  // | DefaultValues<T extends FieldValues ? T : FieldValues>
+  // | AsyncDefaultValues<T extends FieldValues ? T : FieldValues>;
 }
 
 // generic for the form fields
@@ -66,14 +70,16 @@ function Modal<T>({
   onCancel = () => { },
   onReleaseClose = () => { },
   formSchema = z.object({}),
-  defaultValues,
+  destroyOnClose = false
 }: Partial<IProps<T>>) {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
   const form = useForm<T extends FieldValues ? T : FieldValues>({
-    defaultValues,
+    // defaultValues: {},
     resolver: zodResolver(formSchema),
   });
+
+  const { getValues } = form;
 
   useEffect(() => {
     const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
@@ -86,18 +92,20 @@ function Modal<T>({
     onCancel();
   };
 
-  const onSubmit = async () => {
-    const values = form.getValues();
+  const onSubmit = withErrorHandling(
+    async () => {
+      const values = getValues();
 
-    closeModalAndResetForm();
+      await onOk(values);
 
-    await onOk(values);
-  };
+      closeModalAndResetForm();
+
+    }
+    , false);
 
   const closeModalAndResetForm = () => {
-    setOpen(false);
 
-    form.reset({} as any);
+    setOpen(false);
 
     // in any case
     removeQueryParam("id");
@@ -108,6 +116,11 @@ function Modal<T>({
       onSubmit();
     }
   };
+
+  if (!open && destroyOnClose) {
+    console.log('we here amigo')
+    return null
+  }
 
   if (isDesktop) {
     return (
@@ -222,4 +235,15 @@ function Modal<T>({
   );
 }
 
-export default Modal;
+function withComponentDestroyer<T>(WrappedComponent: JSXElementConstructor<Partial<IProps<T>>>) {
+  return (props: Partial<IProps<T>>) => {
+
+    if (!props.open && props.destroyOnClose) {
+      return null;
+    }
+
+    return <WrappedComponent {...props} />
+  };
+};
+
+export default withComponentDestroyer(Modal);

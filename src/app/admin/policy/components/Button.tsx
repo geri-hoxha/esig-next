@@ -39,7 +39,7 @@ const Button: React.FC<IProps> = ({
                 ? iconSrc
                 : variant === "edit"
                 ? "/svg/edit.svg"
-                : "/svg/close.svg"
+                : variant === "danger" ? "/svg/close.svg" : ''
             }`}
             alt=":("
             width={"0"}

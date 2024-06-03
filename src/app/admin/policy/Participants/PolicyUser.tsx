@@ -101,7 +101,13 @@ const PolicyUsers: React.FC = () => {
         type: CREATE,
         payload: {
           key,
-          item: values,
+          item: {
+            ...values,
+            // isLeader true only for the first one
+            ...(key === 'policyHolders' ? {
+              isLeader: policyUsers.length === 0
+            } : {})
+          },
         },
       });
     });
@@ -160,51 +166,19 @@ const PolicyUsers: React.FC = () => {
     });
   };
 
-  const defaultValuesPromise = async () => {
-    if (!selectedParticipantId) return {};
-
-    const response = await _request(
-      `/customer/${selectedParticipantId}`,
-      token,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return {
-      ...response.data,
-      contactType: "",
-    };
-  };
-
   const onOkHandler = async (values: CustomerModel | any) => {
-    try {
-      values["extraCharge"] = values["extraCharge"] === "true";
+    values["extraCharge"] = values["extraCharge"] === "true";
 
-      if (selectedParticipantId) {
-        updatePolicyUserHandler(values as CustomerModel);
-      } else {
-        // isLeader true only for the first one
-        addPolicyUserHandler({
-          ...values,
-          isLeader: policyUsers.length === 0,
-        } as CustomerModel);
-      }
-
-      onCancelHandler();
-    } catch (error) {
-      console.log(error);
+    if (selectedParticipantId) {
+      updatePolicyUserHandler(values as CustomerModel);
+    } else {
+      addPolicyUserHandler(values);
     }
+
+    onCancelHandler();
   };
 
   const onCancelHandler = () => {
-    setOpen(false);
-
     setSelectedParticipantId("");
   };
 
@@ -254,8 +228,7 @@ const PolicyUsers: React.FC = () => {
               <Button variant="edit" onClick={() => onEditClick(user)}>
                 Zgjidh
               </Button>
-              {index !== 0 && (
-                <Button
+              <Button
                   variant={"danger"}
                   onClick={() => {
                     deletePolicyUserHandler(user);
@@ -263,7 +236,6 @@ const PolicyUsers: React.FC = () => {
                 >
                   Fshij
                 </Button>
-              )}
             </div>
           );
         }
@@ -306,8 +278,7 @@ const PolicyUsers: React.FC = () => {
           <span>Polica arriti maksimumin e perdorueve</span>
         </div>
       )}
-
-      <Modal<CustomerModel>
+      <Modal
         title="Modali i perdoruesve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         open={open}
@@ -317,10 +288,10 @@ const PolicyUsers: React.FC = () => {
         onOk={onOkHandler}
         onCancel={onCancelHandler}
         formSchema={formSchema}
-        defaultValues={defaultValuesPromise}
         footer={<ExtraChargeFooter />}
+        destroyOnClose
       >
-        <CustomerModal id={selectedParticipantId} />
+        <CustomerModal entityId={selectedParticipantId} />
       </Modal>
     </>
   );
