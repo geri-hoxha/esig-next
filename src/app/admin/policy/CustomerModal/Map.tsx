@@ -13,9 +13,9 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useToast } from "@/components/ui/use-toast";
 import Input from "../components/Input";
-import Button from "../components/Button";
 import Image from "next/image";
-import { ICoords } from ".";
+import Loader from "../components/Loader";
+import { Address } from "../type";
 
 // marker
 const customIcon = new L.Icon({
@@ -41,6 +41,11 @@ const isInsideAlbaniaBoundsValidation = (position: ICoords): boolean => {
   return withinBounds;
 };
 
+export interface ICoords {
+  latitude: number;
+  longitude: number;
+}
+
 interface ILeafletAddress {
   address: {
     county: string;
@@ -53,20 +58,39 @@ interface ILeafletAddress {
   lon: string;
 }
 
+const prepareAddressModel = (leafletModel: ILeafletAddress): Address => {
+  return {
+    country: leafletModel.address.county,
+    city: leafletModel.address.city,
+    postalCode: leafletModel.address.postcode,
+    streetAddress: leafletModel.address.road,
+    streetAddress2: null,
+    latitude: parseFloat(leafletModel.lat),
+    longitude: parseFloat(leafletModel.lon),
+  };
+};
+
 interface IProps {
   position: ICoords;
-  setPosition: (arg: ICoords) => void;
+  setPosition: (value: string, model: Address | null) => void;
 }
 
 // Custom component that adds a marker at a clicked location
-const LocationMarker: React.FC<
-  IProps & { getAddress: ({ latitude, longitude }: ICoords) => Promise<void> }
-> = ({ position, setPosition, getAddress }) => {
+const LocationMarker: React.FC<{
+  position: ICoords;
+  getAddress: ({ latitude, longitude }: ICoords) => Promise<void>;
+}> = ({ position, getAddress }) => {
   const map = useMap();
 
   useEffect(() => {
-    map.setView([position.latitude, position.longitude], map.getZoom());
-  }, []);
+    map.setView(
+      {
+        lat: position?.latitude,
+        lng: position?.longitude,
+      },
+      map.getZoom()
+    );
+  }, [position]);
 
   useMapEvents({
     async click(e: any) {
@@ -75,11 +99,7 @@ const LocationMarker: React.FC<
         longitude: e.latlng.lng,
       };
 
-      setPosition(newPosition);
-
       await getAddress(newPosition);
-
-      map.setView(e.latlng, map.getZoom());
     },
   });
 
@@ -93,65 +113,104 @@ const LocationMarker: React.FC<
 };
 
 const Map: React.FC<IProps> = ({ position, setPosition }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [value, setValue] = useState(" ");
 
   const { toast } = useToast();
 
   const getAddress = async ({ latitude, longitude }: ICoords) => {
     try {
+      setLoading(true);
+
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
       );
 
       const data: ILeafletAddress = await response.json();
 
-      console.log(data);
+      // @ts-ignore
+      if (!!data?.["error"]) return;
 
-      setValue(data.display_name); // Update the address state with the fetched address
+      const newPosition: ICoords = {
+        latitude: parseFloat(data.lat),
+        longitude: parseFloat(data.lon),
+      };
+
+      const withinBounds = isInsideAlbaniaBoundsValidation(newPosition);
+
+      if (!withinBounds) {
+        toast({
+          variant: "destructive",
+          title: `Lokacioni qe kerkuat nuk eshte brenda territorit te Shqiperise!`,
+        });
+      }
+
+      setPosition(data.display_name, prepareAddressModel(data));
+
+      setValue(data.display_name);
     } catch (error) {
-      console.error("Error fetching address:", error);
+      setValue("");
+
+      setPosition("", null);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSearch = async () => {
-    const query = value;
+    try {
+      setLoading(true);
 
-    if(!query) return;
+      const query = value;
 
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${query}`
-    );
-    const data: ILeafletAddress[] = await response.json();
-    console.log(data);
+      if (!query) return;
 
-    if (data?.length <= 0) {
-      toast({
-        variant: "destructive",
-        title: `Lokacioni qe kerkuat nuk ekzsiston!`,
-      });
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${query}`
+      );
+      const data: ILeafletAddress[] = await response.json();
+
+      if (data?.length <= 0) {
+        toast({
+          variant: "destructive",
+          title: `Lokacioni qe kerkuat nuk ekzsiston!`,
+        });
+      }
+
+      // the one with the most probability to be the user desired to search
+      const firstAddress: ILeafletAddress = data[0];
+
+      const { lat, lon } = firstAddress;
+
+      const newPosition: ICoords = {
+        latitude: parseFloat(lat),
+        longitude: parseFloat(lon),
+      };
+
+      const withinBounds = isInsideAlbaniaBoundsValidation(newPosition);
+
+      if (!withinBounds) {
+        toast({
+          variant: "destructive",
+          title: `Lokacioni qe kerkuat nuk eshte brenda territorit te Shqiperise!`,
+        });
+      }
+
+      setPosition(firstAddress.display_name, prepareAddressModel(firstAddress));
+
+      setValue(firstAddress.display_name);
+    } catch (error) {
+      setValue("");
+
+      setPosition("", null);
+    } finally {
+      setLoading(false);
     }
-
-    const { lat, lon } = data[0];
-
-    const newPosition: ICoords = {
-      latitude: parseFloat(lat),
-      longitude: parseFloat(lon),
-    };
-
-    const withinBounds = isInsideAlbaniaBoundsValidation(newPosition);
-
-    if (!withinBounds) {
-      toast({
-        variant: "destructive",
-        title: `Lokacioni qe kerkuat nuk eshte brenda territorit te Shqiperise!`,
-      });
-    }
-
-    setPosition(newPosition);
   };
 
   return (
-    <>
+    <Loader loading={loading}>
       <div className="flex items-center max-w-sm pb-4">
         <Input
           value={value}
@@ -159,8 +218,10 @@ const Map: React.FC<IProps> = ({ position, setPosition }) => {
           onChange={(e) => setValue(e.target.value)}
         />
         <div
-          className={`bg-esig p-2 rounded-md ${
-            !!value.trim() ? "bg-esig cursor-pointer" : "bg-gray-400 cursor-not-allowed z-20"
+          className={`bg-esig p-2 rounded-r-md ${
+            !!value?.trim()
+              ? "bg-esig cursor-pointer"
+              : "bg-gray-400 cursor-not-allowed"
           }`}
           onClick={handleSearch}
         >
@@ -185,13 +246,9 @@ const Map: React.FC<IProps> = ({ position, setPosition }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <LocationMarker
-          position={position}
-          setPosition={setPosition}
-          getAddress={getAddress}
-        />
+        <LocationMarker position={position} getAddress={getAddress} />
       </MapContainer>
-    </>
+    </Loader>
   );
 };
 

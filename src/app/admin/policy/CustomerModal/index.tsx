@@ -9,9 +9,8 @@ import Table from "./Table";
 import Input from "../components/Input";
 import Checkbox from "../components/Checkbox";
 import CustomerDonut from "../../sale/v3/CustomerDonut";
-import { CustomerModel } from "../type";
+import { Address, CustomerModel } from "../type";
 import Button from "../components/Button";
-import { DrawerClose } from "@/components/ui/drawer";
 import Select, { IOptions } from "../components/Select";
 import { token } from "@/components/esig/Navbar/Currencies";
 import useOrganizationEnums from "./useOrganizationEnums";
@@ -29,13 +28,8 @@ export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
   });
 };
 
-export interface ICoords {
-    latitude: number;
-    longitude: number;
-}
-
 const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
-  const { watch, register, reset, setValue } = useFormContext<CustomerModel>();
+  const { watch, register, reset, setValue, getValues } = useFormContext<CustomerModel>();
 
   const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
 
@@ -45,13 +39,10 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
 
   const [address, setAddress] = useState<{
     value: string;
-    coords: ICoords;
+    model: Address | null;
   }>({
     value: "",
-    coords: {
-        latitude: 0,
-        longitude: 0
-    },
+    model: null,
   });
 
   useEffect(() => {
@@ -84,10 +75,7 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
 
     setAddress({
       value: addressString,
-      coords: {
-        latitude: address.latitude || 0,
-        longitude: address.longitude || 0
-      },
+      model: address,
     });
 
     reset(response.data);
@@ -112,6 +100,8 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
 
   const contactType = watch("contactType");
 
+  console.log(address)
+  
   if (showMap) {
     return (
       <div className="relative" style={{ height: 508 }}>
@@ -124,26 +114,40 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
             className="border border-dashed border-esig-error py-1 ml-auto"
             onClick={() => {
               setShowMap(false);
+              setAddress({
+                value: "",
+                model: null,
+              });
             }}
           >
-            Anullo veprimin
+            Fshije adresen
           </Button>
           <Button
-            type="submit"
             iconSrc="/svg/check_no_border.svg"
             className="border border-dashed border-esig"
             variant="edit"
+            onClick={() => {
+              console.log(address);
+              console.log(getValues())
+            }}
           >
-            Ruaj dhe apliko
+            Ruaj adresen
           </Button>
         </div>
-        <div className="z-50 bg-white relative flex flex-col h-full">
+        <div className="z-10  bg-white relative flex flex-col h-full">
           <MapWithNoSSR
-            position={address.coords}
-            setPosition={(coords) => {
+            position={{
+              latitude: address.model?.latitude || 0,
+              longitude: address.model?.longitude || 0,
+            }}
+            setPosition={(value, model) => {
               setAddress({
-                value: address.value,
-                coords,
+                value,
+                model: {
+                  ...address.model,
+                  country: model?.country || 'AL',
+                  ...model,
+                },
               });
             }}
           />
