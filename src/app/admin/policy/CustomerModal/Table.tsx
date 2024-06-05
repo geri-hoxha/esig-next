@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Input from "../components/Input";
 import Checkbox from "../components/Checkbox";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEventHandler, useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import AgGrid, { FilterModel, getAgPayload } from "@/components/ag/Ag-grid";
 import { CustomerModel } from "../type";
@@ -151,6 +151,12 @@ const Table: React.FC = () => {
     }
   };
 
+  const handleOnKeyDown: KeyboardEventHandler = (event) => {
+    if (event.key === "Enter") {
+      onSearchClick();
+    }
+  };
+
   return (
     <div className="flex flex-col  gap-4">
       <div className="flex items-center gap-4">
@@ -175,10 +181,15 @@ const Table: React.FC = () => {
       </div>
       <div className="flex items-center gap-2 mt-2">
         <Input
-        autoFocus
+          onKeyDown={handleOnKeyDown}
+          autoFocus
           value={searchedValue}
           name="searchedValue"
-          label={`${radioGroup === searchWithNipt ? "Nipt i klientit" : "Emri i klientit"}`}
+          label={`${
+            radioGroup === searchWithNipt
+              ? "Nipt i klientit"
+              : "Emri i klientit"
+          }`}
           onChange={onSearchChange}
           className={`${radioGroup === searchWithNipt ? "uppercase" : ""}`}
         />

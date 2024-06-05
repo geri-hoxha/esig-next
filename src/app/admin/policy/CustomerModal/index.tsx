@@ -29,7 +29,15 @@ export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
 };
 
 const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
-  const { watch, register, reset, setValue, getValues } = useFormContext<CustomerModel>();
+  const {
+    watch,
+    register,
+    reset,
+    setValue,
+    getValues,
+    trigger,
+    formState: { isSubmitted, errors },
+  } = useFormContext<CustomerModel>();
 
   const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
 
@@ -44,6 +52,19 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
     value: "",
     model: null,
   });
+
+  useEffect(() => {
+    return   () => {
+     init()
+    };
+  }, []);
+
+  const init = async () => {
+    console.log(getValues())
+    const result = await trigger(); // triggers validation for all fields
+
+    console.log(result);
+  }
 
   useEffect(() => {
     getOptions();
@@ -100,8 +121,8 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
 
   const contactType = watch("contactType");
 
-  console.log(address)
-  
+  console.log(getValues());
+
   if (showMap) {
     return (
       <div className="relative" style={{ height: 508 }}>
@@ -127,8 +148,10 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
             className="border border-dashed border-esig"
             variant="edit"
             onClick={() => {
-              console.log(address);
-              console.log(getValues())
+              if (address.model !== null) {
+                setValue("address", address.model);
+              }
+              setShowMap(false);
             }}
           >
             Ruaj adresen
@@ -145,7 +168,7 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
                 value,
                 model: {
                   ...address.model,
-                  country: model?.country || 'AL',
+                  country: model?.country || "AL",
                   ...model,
                 },
               });

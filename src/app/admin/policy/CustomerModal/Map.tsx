@@ -50,6 +50,7 @@ interface ILeafletAddress {
   address: {
     county: string;
     city?: string;
+    village?: string;
     postcode: string;
     road?: string;
   };
@@ -61,7 +62,7 @@ interface ILeafletAddress {
 const prepareAddressModel = (leafletModel: ILeafletAddress): Address => {
   return {
     country: leafletModel.address.county,
-    city: leafletModel.address.city,
+    city: leafletModel.address.city || leafletModel.address.village,
     postalCode: leafletModel.address.postcode,
     streetAddress: leafletModel.address.road,
     streetAddress2: null,
@@ -144,6 +145,8 @@ const Map: React.FC<IProps> = ({ position, setPosition }) => {
           variant: "destructive",
           title: `Lokacioni qe kerkuat nuk eshte brenda territorit te Shqiperise!`,
         });
+
+        return;
       }
 
       setPosition(data.display_name, prepareAddressModel(data));
@@ -176,6 +179,8 @@ const Map: React.FC<IProps> = ({ position, setPosition }) => {
           variant: "destructive",
           title: `Lokacioni qe kerkuat nuk ekzsiston!`,
         });
+
+        return;
       }
 
       // the one with the most probability to be the user desired to search
@@ -191,10 +196,13 @@ const Map: React.FC<IProps> = ({ position, setPosition }) => {
       const withinBounds = isInsideAlbaniaBoundsValidation(newPosition);
 
       if (!withinBounds) {
+
         toast({
           variant: "destructive",
           title: `Lokacioni qe kerkuat nuk eshte brenda territorit te Shqiperise!`,
         });
+
+        return
       }
 
       setPosition(firstAddress.display_name, prepareAddressModel(firstAddress));

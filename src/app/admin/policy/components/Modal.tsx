@@ -47,7 +47,9 @@ interface IProps<T> {
   setOpen: (open: boolean) => void;
   width: string;
   footer?: ReactNode;
-  onOk: (values: T extends FieldValues ? T : FieldValues) => void | Promise<void>;
+  onOk: (
+    values: T extends FieldValues ? T : FieldValues
+  ) => void | Promise<void>;
   onCancel: () => void;
   onReleaseClose: (open: boolean) => void;
   formSchema: z.ZodObject<ZodRawShape>;
@@ -63,12 +65,12 @@ function Modal<T>({
   description = "",
   children = null,
   open = true,
-  setOpen = () => { },
+  setOpen = () => {},
   width = "min-w-[70%]",
   footer = null,
-  onOk = () => { },
-  onCancel = () => { },
-  onReleaseClose = () => { },
+  onOk = () => {},
+  onCancel = () => {},
+  onReleaseClose = () => {},
   formSchema = z.object({}),
 }: Partial<IProps<T>>) {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
@@ -91,28 +93,28 @@ function Modal<T>({
     onCancel();
   };
 
-  const onSubmit = withErrorHandling(
-    async () => {
-      const values = getValues();
+  const onSubmit = withErrorHandling(async () => {
+    const values = getValues();
 
-      await onOk(values);
+    await onOk(values);
 
-      closeModalAndResetForm();
-
-    }
-    , false);
+    closeModalAndResetForm();
+  }, false);
 
   const closeModalAndResetForm = () => {
-
     setOpen(false);
 
     // in any case
     removeQueryParam("id");
   };
 
-  const handleEnterPress: KeyboardEventHandler = (event) => {
-    if (event.key === "Enter") {
-      onSubmit();
+  const handleEnterPress: KeyboardEventHandler = async (event) => {
+    // check <Table /> component for input with id: 'searchedValue'. Explanation: The enter on this case must be used to submit customer table search
+    if (
+      event.key === "Enter" &&
+      (event.target as HTMLInputElement).id !== "searchedValue"
+    ) {
+      form.handleSubmit(onSubmit)();
     }
   };
 
@@ -176,7 +178,7 @@ function Modal<T>({
     <Drawer
       open={open}
       onOpenChange={(open) => {
-        setOpen(open)
+        setOpen(open);
         if (!open) {
           onCancelClick();
         }
@@ -229,15 +231,16 @@ function Modal<T>({
   );
 }
 
-function withComponentDestroyer<T>(WrappedComponent: JSXElementConstructor<Partial<IProps<T>>>) {
+function withComponentDestroyer<T>(
+  WrappedComponent: JSXElementConstructor<Partial<IProps<T>>>
+) {
   return (props: Partial<IProps<T>>) => {
-
     if (!props.open && props.destroyOnClose) {
       return null;
     }
 
-    return <WrappedComponent {...props} />
+    return <WrappedComponent {...props} />;
   };
-};
+}
 
 export default withComponentDestroyer(Modal);
