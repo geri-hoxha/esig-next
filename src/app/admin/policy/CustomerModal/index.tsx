@@ -54,22 +54,40 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
   });
 
   useEffect(() => {
-    return   () => {
-     init()
+    getOptions();
+
+    setCustomerData();
+
+    return () => {
+      updateCustomer();
     };
   }, []);
 
-  const init = async () => {
-    console.log(getValues())
-    const result = await trigger(); // triggers validation for all fields
+  const updateCustomer = async () => {
+    const valid = await trigger(); // triggers validation for all fields
 
-    console.log(result);
-  }
+    if (!valid) return;
 
-  useEffect(() => {
-    getOptions();
-    setCustomerData();
-  }, []);
+    const values = watch();
+
+    console.log(values);
+
+    const response = await _request(`/customer/${values.id}`, token, {
+      method: "POST",
+      body: JSON.stringify({
+        ...values,
+        displayName: values.displayName || `${values.firstName} ${values.lastName}`,
+        ...(values.contactType === 'Organization' ? { firstName: values.displayName } : {}),
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log(response);
+  };
 
   const setCustomerData = async () => {
     if (!entityId) return;
@@ -121,7 +139,7 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
 
   const contactType = watch("contactType");
 
-  console.log(getValues());
+  console.log(watch())
 
   if (showMap) {
     return (

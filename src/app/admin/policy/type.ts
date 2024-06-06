@@ -22,6 +22,34 @@ export interface CustomerModel extends BaseEntityModel {
     organizationSectorType: string | null;
 }
 
+export interface PersonRequest {
+    fathersName: string | null;
+    birthday: Dayjs;
+    genderType: string;
+}
+
+export interface OrganizationRequest {
+    isActive: boolean;
+    businessDescription: string | null;
+    administrator: string | null;
+    organizationLegalFormType: string | null;
+    organizationBusinessSizeType: string | null;
+    organizationOwnershipType: string | null;
+    organizationSectorType: string | null;
+}
+export interface ComputeCustomerCommand_Request {
+    taxNumber: string;
+    isLocal: boolean;
+    firstName: string;
+    lastName: string | null;
+    phoneNumber: string | null;
+    email: string | null;
+    address: Address;
+    contactType: string;
+    personData: PersonRequest | null;
+    organizationData: OrganizationRequest | null;
+}
+
 export interface BaseEntityModel {
     id: string;
     isSystemEntity: boolean;
