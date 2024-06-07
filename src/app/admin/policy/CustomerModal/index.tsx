@@ -15,6 +15,8 @@ import Select, { IOptions } from "../components/Select";
 import { token } from "@/components/esig/Navbar/Currencies";
 import useOrganizationEnums from "./useOrganizationEnums";
 import dynamic from "next/dynamic";
+import { plainToClass } from "class-transformer";
+import ComputeCustomerCommand_Request_Model from "./dto";
 
 const MapWithNoSSR = dynamic(() => import("./Map"), {
   ssr: false,
@@ -68,17 +70,13 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
 
     if (!valid) return;
 
-    const values = watch();
-
-    console.log(values);
+    const values: CustomerModel = watch();
 
     const response = await _request(`/customer/${values.id}`, token, {
       method: "POST",
-      body: JSON.stringify({
-        ...values,
-        displayName: values.displayName || `${values.firstName} ${values.lastName}`,
-        ...(values.contactType === 'Organization' ? { firstName: values.displayName } : {}),
-      }),
+      body: JSON.stringify(
+        plainToClass(ComputeCustomerCommand_Request_Model, values)
+      ),
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -139,7 +137,7 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
 
   const contactType = watch("contactType");
 
-  console.log(watch())
+  console.log(watch());
 
   if (showMap) {
     return (

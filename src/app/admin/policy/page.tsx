@@ -3,6 +3,7 @@ import Tutorial from "./components/Tutorial";
 import Form from "./Form";
 import Participants from "./Participants";
 import CoreContextProvider from "./context";
+import 'reflect-metadata';
 
 export default function Policy() {
   return (

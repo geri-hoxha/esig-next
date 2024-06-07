@@ -10,17 +10,17 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     // Check if user is authenticated
     const isAuthenticated = localStorage.getItem("token"); // Implement this function
 
-    // if (isAuthenticated) {
-    //   if (pathname === "/login") {
-    //     redirect("/admin/sale/v3");
-    //   }
-    // } else {
-    //   // Redirect to login page if not authenticated
+    if (isAuthenticated) {
+      if (pathname === "/login") {
+        redirect("/admin/sale/v3");
+      }
+    } else {
+      // Redirect to login page if not authenticated
 
-    //   if (pathname !== "/login") {
-    //     redirect("/login");
-    //   }
-    // }
+      if (pathname !== "/login") {
+        redirect("/login");
+      }
+    }
   }, []);
 
   return <>{children}</>;

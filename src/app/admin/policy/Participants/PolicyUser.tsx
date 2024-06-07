@@ -16,6 +16,8 @@ import { z } from "zod";
 import Input from "../components/Input";
 import { ExtraChargeFooter } from "./ModalFooter";
 import Button from "../components/Button";
+import { plainToClass } from "class-transformer";
+import PolicyUserModel from "./dto";
 
 type MapperParticipants = {
   [K in keyof IParticipants]: (
@@ -169,7 +171,11 @@ const PolicyUsers: React.FC = () => {
   };
 
   const onOkHandler = async (values: CustomerModel | any) => {
-    values["extraCharge"] = values["extraCharge"] === "true";
+    const transformedCustomer = plainToClass(PolicyUserModel, values, {
+      groups: ["policyUsers"],
+    });
+
+    console.log(transformedCustomer)
 
     if (selectedParticipantId) {
       updatePolicyUserHandler(values as CustomerModel);

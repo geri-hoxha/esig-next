@@ -11,7 +11,7 @@ export interface CustomerModel extends BaseEntityModel {
     email: string | null;
     address: Address;
     fathersName: string | null;
-    birthday: Dayjs | null;
+    birthday: Dayjs;
     genderType: string | null;
     isActive: boolean | null;
     businessDescription: string | null;
