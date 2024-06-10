@@ -17,6 +17,7 @@ import useOrganizationEnums from "./useOrganizationEnums";
 import dynamic from "next/dynamic";
 import { plainToClass } from "class-transformer";
 import ComputeCustomerCommand_Request_Model from "./dto";
+import { useToast } from "@/components/ui/use-toast";
 
 const MapWithNoSSR = dynamic(() => import("./Map"), {
   ssr: false,
@@ -31,7 +32,7 @@ export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
   });
 };
 
-const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = '' }) => {
+const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
   const {
     watch,
     register,
@@ -39,20 +40,16 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = '' }) => {
     setValue,
     getValues,
     trigger,
-    formState: { isSubmitted, errors, isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitted, isSubmitting, isSubmitSuccessful },
   } = useFormContext<CustomerModel>();
 
   const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
 
+  const { toast } = useToast();
+
   const { optionsList, loading } = useOrganizationEnums();
 
   const [showMap, setShowMap] = useState<boolean>(false);
-
-  console.log(isSubmitted)
-
-  console.log(isSubmitting)
-
-  console.log(isSubmitSuccessful)
 
   const [address, setAddress] = useState<{
     value: string;
@@ -68,18 +65,19 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = '' }) => {
     setCustomerData();
 
     return () => {
-      updateCustomer();
+      updateCustomer(isSubmitting);
     };
-  }, []);
+  }, [isSubmitting]);
 
-  const updateCustomer = async () => {
-    const valid = await trigger(); // triggers validation for all fields
+  const updateCustomer = async (isSubmitting: boolean) => {
+    // Continue only if use clicked 'submit'
+    if (!isSubmitting) return;
 
-    if (!valid) return;
+    if (!(await trigger())) return;
 
     const values: CustomerModel = watch();
 
-    console.log(values)
+    console.log(values);
 
     const response = await _request(`/customer/${values.id}`, token, {
       method: "POST",
@@ -92,10 +90,17 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = '' }) => {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    const customer: CustomerModel = response.data;
+
+    toast({
+      variant: "success",
+      title: "Klienti u perditesua me sukses ne sistem!",
+    });
   };
 
   const setCustomerData = async () => {
-    if (!entityId) return;
+    if (!entityId || !!getValues().id) return;
 
     const response = await _request(`/customer/${entityId}`, token, {
       method: "GET",
@@ -126,6 +131,8 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = '' }) => {
   };
 
   const getOptions = async () => {
+    if (contactTypeOptions.length !== 0) return;
+
     const data: IOptions[] = await _request("/enum/ContactType", token, {
       method: "GET",
       headers: {
