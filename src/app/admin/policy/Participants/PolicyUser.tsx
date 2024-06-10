@@ -17,7 +17,7 @@ import Input from "../components/Input";
 import { ExtraChargeFooter } from "./ModalFooter";
 import Button from "../components/Button";
 import { plainToClass } from "class-transformer";
-import PolicyUserModel from "./dto";
+import ParticipantModel from "./dto";
 
 type MapperParticipants = {
   [K in keyof IParticipants]: (
@@ -25,6 +25,12 @@ type MapperParticipants = {
     | { insurerId: string }
   )[];
 };
+
+const transformCustomerToParticipant = (values: CustomerModel, key: keyof IParticipants) => {
+  return plainToClass(ParticipantModel, values, {
+    groups: [key],
+  });
+}
 
 const formSchema = getFormSchemaCustomer({
   extraCharge: z.enum(["true", "false"]).optional(),
@@ -103,15 +109,7 @@ const PolicyUsers: React.FC = () => {
         type: CREATE,
         payload: {
           key,
-          item: {
-            ...values,
-            // isLeader true only for the first one
-            ...(key === "policyHolders"
-              ? {
-                  isLeader: policyUsers.length === 0,
-                }
-              : {}),
-          },
+          item: transformCustomerToParticipant(values, key)
         },
       });
     });
@@ -126,7 +124,7 @@ const PolicyUsers: React.FC = () => {
             value: values.id,
           },
           key,
-          item: values,
+          item: transformCustomerToParticipant(values, key)
         },
       });
     });
@@ -135,6 +133,11 @@ const PolicyUsers: React.FC = () => {
   const deletePolicyUserHandler = (
     values: PolicyParticipantPolicyUserRequest & CustomerModel
   ) => {
+    // never leave it empty
+    if(policyUsers.length === 1) {
+      createEmptyPolicyUser();
+    }
+
     participantsIteration((key) => {
       dispatch({
         type: DELETE,
@@ -171,11 +174,6 @@ const PolicyUsers: React.FC = () => {
   };
 
   const onOkHandler = async (values: CustomerModel | any) => {
-    const transformedCustomer = plainToClass(PolicyUserModel, values, {
-      groups: ["policyUsers"],
-    });
-
-    console.log(transformedCustomer)
 
     if (selectedParticipantId) {
       updatePolicyUserHandler(values as CustomerModel);

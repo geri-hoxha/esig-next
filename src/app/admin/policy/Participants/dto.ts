@@ -1,13 +1,26 @@
 import { Exclude, Expose, Transform, Type, plainToClass } from 'class-transformer';
 import PolicyUsers from './PolicyUser';
+import { IParticipants } from '../context';
 
 
-class PolicyUserModel {
+class ParticipantModel {
+    private static isFirstTransformation: boolean = true;
+
+    @Expose({ groups: ['policyUsers'] as (keyof IParticipants)[] })
     @Type(() => Boolean)
     extraCharge?: boolean;
 
-    @Expose({ groups: ['policyUsers'] }) 
-    isLeader?: boolean; 
+    @Expose({ groups: ['policyHolders'] as (keyof IParticipants)[] })
+    @Transform(({value}: {value: boolean}) => {
+        if(typeof value === 'boolean') return value;
+
+        if (ParticipantModel.isFirstTransformation) {
+            ParticipantModel.isFirstTransformation = false;
+            return true;
+        }
+        return false;
+    })
+    isLeader?: boolean;
 }
 
-export default PolicyUserModel;
+export default ParticipantModel;

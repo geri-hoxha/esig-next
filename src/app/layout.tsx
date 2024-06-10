@@ -1,4 +1,4 @@
-// import 'reflect-metadata';
+import './reflect-metadata-client-side';
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import "ag-grid-enterprise";

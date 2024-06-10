@@ -21,6 +21,7 @@ import ComputeCustomerCommand_Request_Model from "./dto";
 const MapWithNoSSR = dynamic(() => import("./Map"), {
   ssr: false,
 });
+
 export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
   return z.object({
     taxNumber: z.string().min(1, "NUID eshte i detyrueshem!"),
@@ -30,7 +31,7 @@ export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
   });
 };
 
-const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
+const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = '' }) => {
   const {
     watch,
     register,
@@ -38,7 +39,7 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
     setValue,
     getValues,
     trigger,
-    formState: { isSubmitted, errors },
+    formState: { isSubmitted, errors, isSubmitting, isSubmitSuccessful },
   } = useFormContext<CustomerModel>();
 
   const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
@@ -46,6 +47,12 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
   const { optionsList, loading } = useOrganizationEnums();
 
   const [showMap, setShowMap] = useState<boolean>(false);
+
+  console.log(isSubmitted)
+
+  console.log(isSubmitting)
+
+  console.log(isSubmitSuccessful)
 
   const [address, setAddress] = useState<{
     value: string;
@@ -72,6 +79,8 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
 
     const values: CustomerModel = watch();
 
+    console.log(values)
+
     const response = await _request(`/customer/${values.id}`, token, {
       method: "POST",
       body: JSON.stringify(
@@ -83,8 +92,6 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log(response);
   };
 
   const setCustomerData = async () => {
@@ -136,8 +143,6 @@ const CustomerModal: React.FC<{ entityId: string }> = ({ entityId }) => {
   const customerId = watch("id");
 
   const contactType = watch("contactType");
-
-  console.log(watch());
 
   if (showMap) {
     return (

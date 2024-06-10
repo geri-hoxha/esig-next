@@ -98,7 +98,7 @@ function Modal<T>({
 
     await onOk(values);
 
-    closeModalAndResetForm();
+    onCancelClick();
   }, false);
 
   const closeModalAndResetForm = () => {

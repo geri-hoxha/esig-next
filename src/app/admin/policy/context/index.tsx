@@ -88,7 +88,7 @@ const CoreContext = createContext<ICoreContext>({
 
 export const useCoreContext = () => useContext(CoreContext);
 
-export function isParticipantCVArray(
+export function isParticipantsArray(
   participants: any
 ): participants is Array<{ id: string }> {
   // Check if it's an array and all elements in the array have an 'id' property
@@ -116,9 +116,9 @@ export default function CoreContextProvider({
 
   const { toast } = useToast();
 
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [JSON.stringify(data)]);
+  useEffect(() => {
+    console.log(data);
+  }, [JSON.stringify(data)]);
 
   function validateDuplication(action: IAction<OverwrittenIssueRequest>) {
     const actionType = action.type;
@@ -127,7 +127,7 @@ export default function CoreContextProvider({
 
     const selectedArray = data[action.payload.key];
 
-    if (!isParticipantCVArray(selectedArray)) return;
+    if (!isParticipantsArray(selectedArray)) return;
 
     const ids = selectedArray.map((item) => {
       if (item.id) return item.id;

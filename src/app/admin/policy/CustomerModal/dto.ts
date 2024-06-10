@@ -1,6 +1,7 @@
 import { Exclude, Expose, Transform, plainToClass } from 'class-transformer';
-import { Address, ComputeCustomerCommand_Request, CustomerModel, OrganizationRequest, PersonRequest } from '../type';
+import { ComputeCustomerCommand_Request, CustomerModel, OrganizationRequest, PersonRequest } from '../type';
 import { Dayjs } from 'dayjs';
+import type { Address } from '../type';
 
 @Exclude()
 class ComputeCustomerCommand_Request_Model implements Partial<ComputeCustomerCommand_Request> {

@@ -12,6 +12,8 @@ import SortableTable, { SortableParticipant } from "./SortableTable";
 import Button from "../components/Button";
 import { useToast } from "@/components/ui/use-toast";
 import { withErrorHandling } from "../helpers";
+import { plainToClass } from "class-transformer";
+import ParticipantModel from "./dto";
 
 const ParticipantModal: React.FC<IParticipantsList> = ({
   stateKey,
@@ -48,10 +50,9 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
     dispatch({
       type: CREATE,
       payload: {
-        item: {
-          ...values,
-          ...(stateKey === "policyHolders" ? { isLeader: false } : {}),
-        },
+        item: plainToClass(ParticipantModel, values, {
+          groups: ['policyHolders'],
+        }),
         key: stateKey,
       },
     });
@@ -85,7 +86,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
 
   if (customerModal) {
     return (
-      <Modal<CustomerModel>
+      <Modal
         title="Modali i pjesemarresve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         open
@@ -95,6 +96,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
         onOk={onOkHandler}
         onCancel={onCancelHandler}
         formSchema={formSchema}
+        destroyOnClose
         footer={<PercentageFooter percentageKey={percentageKey} />}
       >
         <CustomerModal />
