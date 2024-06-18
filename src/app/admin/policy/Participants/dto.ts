@@ -7,7 +7,7 @@ class ParticipantModel {
     private static isFirstTransformation: boolean = true;
 
     @Expose({ groups: ['policyUsers'] as (keyof IParticipants)[] })
-    @Type(() => Boolean)
+    @Transform(({ value }) => value === 'true' ? true : false)
     extraCharge?: boolean;
 
     @Expose({ groups: ['policyHolders'] as (keyof IParticipants)[] })

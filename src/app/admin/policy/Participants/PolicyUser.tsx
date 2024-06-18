@@ -44,7 +44,6 @@ const PolicyUsers: React.FC = () => {
     policyHolders,
     beneficiaries,
     invoiceRecipients,
-    insurers,
   } = data;
 
   const [selectedParticipantId, setSelectedParticipantId] =
@@ -84,7 +83,6 @@ const PolicyUsers: React.FC = () => {
     policyHolders,
     beneficiaries,
     invoiceRecipients,
-    insurers,
   };
 
   const participantsIteration = (
@@ -134,7 +132,7 @@ const PolicyUsers: React.FC = () => {
     values: PolicyParticipantPolicyUserRequest & CustomerModel
   ) => {
     // never leave it empty
-    if(policyUsers.length === 1) {
+    if (policyUsers.length === 1) {
       createEmptyPolicyUser();
     }
 
@@ -296,7 +294,7 @@ const PolicyUsers: React.FC = () => {
         onOk={onOkHandler}
         onCancel={onCancelHandler}
         formSchema={formSchema}
-        footer={<ExtraChargeFooter />}
+        footer={<ExtraChargeFooter extraCharge={policyUsers.find((user) => user.id === selectedParticipantId)?.extraCharge} />}
         destroyOnClose
       >
         <CustomerModal entityId={selectedParticipantId} />

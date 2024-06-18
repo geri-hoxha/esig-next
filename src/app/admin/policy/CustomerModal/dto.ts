@@ -1,10 +1,28 @@
 import { Exclude, Expose, Transform, plainToClass } from 'class-transformer';
-import { ComputeCustomerCommand_Request, CustomerModel, OrganizationRequest, PersonRequest } from '../type';
+import type { ComputeCustomerCommand_Request, CustomerModel, OrganizationRequest, PersonRequest } from '../type';
 import { Dayjs } from 'dayjs';
 import type { Address } from '../type';
 
 @Exclude()
 class ComputeCustomerCommand_Request_Model implements Partial<ComputeCustomerCommand_Request> {
+    @Exclude()
+    private static splitReportName(obj: CustomerModel, fieldName: 'firstName' | 'lastName') {
+
+        const haveReportName = !!obj.reportName?.trim();
+
+        if (!haveReportName) return ''
+
+        const splittedArray = obj.reportName.split('|');
+
+        const result: { [key: string]: string } = {};
+
+        splittedArray.forEach(item => {
+            result[item] = item;
+        });
+
+        return result[fieldName]
+    }
+
     @Expose()
     taxNumber?: string;
 
@@ -12,15 +30,19 @@ class ComputeCustomerCommand_Request_Model implements Partial<ComputeCustomerCom
     isLocal?: boolean;
 
     @Expose()
-    @Transform(({ obj, value }: { obj: CustomerModel, value: string }) => {
+    @Transform(({ obj }: { obj: CustomerModel, value: string }) => {
         if (obj.contactType === 'Organization') {
             return obj.displayName
         }
-        return value
+
+        return ComputeCustomerCommand_Request_Model.splitReportName(obj, 'firstName')
     })
     firstName?: string;
 
-    @Expose()
+    @Expose({ groups: ['Person'] })
+    @Transform(({ obj }: { obj: CustomerModel, value: string }) => {
+        return ComputeCustomerCommand_Request_Model.splitReportName(obj, 'lastName')
+    })
     lastName?: string | null;
 
     @Expose()
@@ -35,23 +57,20 @@ class ComputeCustomerCommand_Request_Model implements Partial<ComputeCustomerCom
     @Expose({})
     contactType?: string;
 
-    @Expose()
+    @Expose({ groups: ['Person'] })
     @Transform(({ obj }: { obj: CustomerModel }): PersonRequestModel | null => {
-        if (obj.contactType !== 'Person') return null;
 
         return plainToClass(PersonRequestModel, obj);
 
     })
     personData?: PersonRequest | null;
 
-    @Expose()
+    @Expose({ groups: ['Organization'] })
     @Transform(({ obj }: { obj: CustomerModel }): OrganizationRequestModel | null => {
-        if (obj.contactType !== 'Organization') return null;
 
         return plainToClass(OrganizationRequestModel, obj);
     })
     organizationData?: OrganizationRequest | null;
-
 }
 
 export default ComputeCustomerCommand_Request_Model;

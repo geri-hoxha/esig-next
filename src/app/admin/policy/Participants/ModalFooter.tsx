@@ -5,12 +5,24 @@ import { CustomerModel, PolicyParticipantPolicyUserRequest } from "../type";
 import Checkbox from "../components/Checkbox";
 import Input from "../components/Input";
 import { ParticipantWithPercentage } from "./List";
+import { useEffect } from "react";
 
-const ExtraChargeFooter = ({}) => {
+interface IProps {
+  extraCharge?: boolean;
+}
+
+const ExtraChargeFooter: React.FC<IProps> = ({ extraCharge }) => {
   const {
     register,
     formState: { errors },
+    setValue,
   } = useFormContext<CustomerModel & PolicyParticipantPolicyUserRequest>();
+
+
+  useEffect(() => {
+    if(typeof extraCharge  === 'undefined') return;
+    setValue('extraCharge', String(extraCharge) as any)
+  }, []);
 
   return (
     <div className="flex items-center  h-full pl-5 gap-4">

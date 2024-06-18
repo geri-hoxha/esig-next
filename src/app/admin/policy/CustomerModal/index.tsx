@@ -18,6 +18,8 @@ import dynamic from "next/dynamic";
 import { plainToClass } from "class-transformer";
 import ComputeCustomerCommand_Request_Model from "./dto";
 import { useToast } from "@/components/ui/use-toast";
+import { withErrorHandling } from "../helpers";
+import DatePicker_ from "../components/Datepicker";
 
 const MapWithNoSSR = dynamic(() => import("./Map"), {
   ssr: false,
@@ -40,6 +42,7 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
     setValue,
     getValues,
     trigger,
+    control,
     formState: { isSubmitted, isSubmitting, isSubmitSuccessful },
   } = useFormContext<CustomerModel>();
 
@@ -69,7 +72,7 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
     };
   }, [isSubmitting]);
 
-  const updateCustomer = async (isSubmitting: boolean) => {
+  const updateCustomer = withErrorHandling(async (isSubmitting: boolean) => {
     // Continue only if use clicked 'submit'
     if (!isSubmitting) return;
 
@@ -77,12 +80,12 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
 
     const values: CustomerModel = watch();
 
-    console.log(values);
-
     const response = await _request(`/customer/${values.id}`, token, {
       method: "POST",
       body: JSON.stringify(
-        plainToClass(ComputeCustomerCommand_Request_Model, values)
+        plainToClass(ComputeCustomerCommand_Request_Model, values, {
+          groups: [values.contactType],
+        })
       ),
       headers: {
         "Content-Type": "application/json",
@@ -95,9 +98,9 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
 
     toast({
       variant: "success",
-      title: "Klienti u perditesua me sukses ne sistem!",
+      title: `Klienti ${customer.displayName} u perditesua me sukses ne sistem!`,
     });
-  };
+  });
 
   const setCustomerData = async () => {
     if (!entityId || !!getValues().id) return;
@@ -267,11 +270,12 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
               <>
                 <Input {...register("genderType")} label="Gjinia" />
                 <Input {...register("fathersName")} label="Atesia" />
-                <Input
-                  {...register("birthday")}
-                  label="Ditelindja"
-                  type="date"
-                />
+                <DatePicker_ ormatDatePicker
+        control={control}
+        name="birthday"
+        dateFormat="dd/MM/yyyy"
+      />
+               
               </>
             ) : contactType === "Organization" ? (
               <>

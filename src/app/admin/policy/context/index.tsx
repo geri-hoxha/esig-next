@@ -29,7 +29,6 @@ export interface IParticipants
   extends Pick<
     OverwrittenIssueRequest,
     | "beneficiaries"
-    | "insurers"
     | "policyHolders"
     | "invoiceRecipients"
     | "policyUsers"

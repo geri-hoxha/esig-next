@@ -92,15 +92,8 @@ const Table: React.FC = () => {
 
   const onRowClicked = (params: RowClickedEvent<CustomerModel>) => {
     if (!params.data) return;
-
-    const formattedData = {
-      ...params.data,
-      birthday: !!params.data.birthday
-        ? dayjs(params.data.birthday)?.format("YYYY-MM-DD")
-        : null,
-    };
-
-    reset(formattedData); // update your defaultValues && form values
+    
+    reset(params.data); // update your defaultValues && form values
   };
 
   const getFilterModel = () => {
