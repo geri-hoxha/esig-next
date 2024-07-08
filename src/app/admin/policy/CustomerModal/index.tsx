@@ -19,7 +19,7 @@ import { plainToClass } from "class-transformer";
 import ComputeCustomerCommand_Request_Model from "./dto";
 import { useToast } from "@/components/ui/use-toast";
 import { withErrorHandling } from "../helpers";
-import DatePicker_ from "../components/Datepicker";
+import DatePicker from "../components/Datepicker";
 
 const MapWithNoSSR = dynamic(() => import("./Map"), {
   ssr: false,
@@ -42,8 +42,7 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
     setValue,
     getValues,
     trigger,
-    control,
-    formState: { isSubmitted, isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting },
   } = useFormContext<CustomerModel>();
 
   const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
@@ -218,9 +217,8 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
         </div>
       )}
       <div
-        className={`col-span-12  md:border-l-2 border-dashed pl-4 ${
-          !!entityId ? "col-span-12" : "md:col-span-8"
-        }`}
+        className={`col-span-12  md:border-l-2 border-dashed pl-4 ${!!entityId ? "col-span-12" : "md:col-span-8"
+          }`}
       >
         {!!customerId ? (
           <div className="flex items-center mb-4 h-8">
@@ -270,12 +268,10 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
               <>
                 <Input {...register("genderType")} label="Gjinia" />
                 <Input {...register("fathersName")} label="Atesia" />
-                <DatePicker_ ormatDatePicker
-        control={control}
-        name="birthday"
-        dateFormat="dd/MM/yyyy"
-      />
-               
+                <DatePicker
+                  name="birthday"
+                  label="Birthday"
+                />
               </>
             ) : contactType === "Organization" ? (
               <>
@@ -326,7 +322,6 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
                   Ndrysho
                 </Button>
               }
-              onChange={() => {}}
             />
           </div>
           <div className="hidden md:block h-72">

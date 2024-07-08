@@ -5,6 +5,7 @@ import Input from "./components/Input";
 import { IFormContext } from "./context/FormProvider";
 import Section from "./Section";
 import Select from "./components/Select";
+import DatePicker from "./components/Datepicker";
 
 const Form = () => {
   const { register } = useFormContext<IFormContext>();
@@ -75,25 +76,22 @@ const Form = () => {
             title: "Data",
             children: (
               <>
-                <Input
-                  {...register("startDateUtc")}
+
+                <DatePicker
+                  name="startDateUtc"
                   label="Data e fillimit"
-                  type="date"
                 />
-                <Input
-                  {...register("endDateUtc")}
+                <DatePicker
+                  name="endDateUtc"
                   label="Data e perfundimit"
-                  type="date"
                 />
-                <Input
-                  {...register("issueDateUtc")}
+                <DatePicker
+                  name="issueDateUtc"
                   label="Data e leshimit"
-                  type="date"
                 />
-                <Input
-                  {...register("retroactiveDateUtc")}
+                <DatePicker
+                  name="retroactiveDateUtc"
                   label="Data e retroaktive"
-                  type="date"
                 />
               </>
             ),

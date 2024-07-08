@@ -162,3 +162,11 @@
     opacity: 1;
   }
 }
+
+
+.react-datepicker__header  {
+  @apply !bg-gray-100; 
+}
+.react-datepicker__day--selected {
+  @apply !bg-esig;
+}
