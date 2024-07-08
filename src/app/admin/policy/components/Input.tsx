@@ -46,8 +46,7 @@ const Input = React.forwardRef(
 
     const getInputAttr = () => {
       if (!!name) return { name };
-      if (!!value) return { value };
-      return {};
+      return {value};
     };
 
     return (

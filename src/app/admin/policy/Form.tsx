@@ -76,19 +76,9 @@ const Form = () => {
             title: "Data",
             children: (
               <>
-
-                <DatePicker
-                  name="startDateUtc"
-                  label="Data e fillimit"
-                />
-                <DatePicker
-                  name="endDateUtc"
-                  label="Data e perfundimit"
-                />
-                <DatePicker
-                  name="issueDateUtc"
-                  label="Data e leshimit"
-                />
+                <DatePicker name="startDateUtc" label="Data e fillimit" />
+                <DatePicker name="endDateUtc" label="Data e perfundimit" />
+                <DatePicker name="issueDateUtc" label="Data e leshimit" />
                 <DatePicker
                   name="retroactiveDateUtc"
                   label="Data e retroaktive"

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import ReactDatePicker from 'react-datepicker';
-import { useFormContext } from 'react-hook-form';
-import dayjs from 'dayjs';
-import 'react-datepicker/dist/react-datepicker.css';
-import Input from './Input';
-import { useOutsideClick } from '../hooks/useOutsideClick';
+import React, { useEffect, useState } from "react";
+import ReactDatePicker from "react-datepicker";
+import { useFormContext } from "react-hook-form";
+import dayjs from "dayjs";
+import "react-datepicker/dist/react-datepicker.css";
+import Input from "./Input";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 // Do not extend 'DatePickerProps' since that type from the library 'react-datepicker' was more of a workaround
 interface IProps {
@@ -13,62 +13,83 @@ interface IProps {
 }
 
 const DatePicker: React.FC<IProps> = ({ name, label }) => {
-
   const [date, setDate] = useState<Date | null>();
-
-  const [inputValue, setInputValue] = useState<string>(' ');
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const {
-    watch,
-    setValue,
-    register
-  } = useFormContext();
+  const { watch, setValue, register } = useFormContext();
 
   const ref = useOutsideClick(() => {
-    if (isOpen) setIsOpen(false);
+    if (isOpen) {
+      setIsOpen(false);
+    }
   });
 
   const value = watch?.(name);
 
   useEffect(() => {
-    setDate(value || undefined)
-    setInputValue(!!date ? dayjs(date).clone().format('DD/MM/YYYY') : ' ')
-  }, [value])
+    setDate(value || undefined);
+  }, [value]);
 
   const handleChange = (e: Date | null) => {
-
     setIsOpen(!isOpen);
 
     setDate(e);
-
-    setInputValue(e);
 
     setValue?.(name, e);
   };
 
   const handleClick = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(true);
   };
 
-  const onInputChange = (e:any) => {
-     
-   console.log(e.target.value)
-  }
+  const onInputChange = (e: any) => {
+    if(!e.target.value) return;
+
+    const newYear = parseInt(e.target.value, 10);
+
+    const updatedDate = new Date(e.target.value);
+
+    // bug fix: year of date starts with '1900'
+    updatedDate.setFullYear(newYear);
+
+    setDate(updatedDate);
+  };
+
+  const onKeyDown = (event: any) => {
+    if (event.code === "Enter") {
+      setIsOpen(false);
+    }
+  };
 
   return (
-    <>
-      <div className='relative' ref={ref}>
-        <Input type="hidden" {...register?.(name)} />
-        <Input label={label} onChange={onInputChange} value={inputValue} onClick={handleClick} pattern="[\d/]" />
-        <div className='absolute top-full left-0 z-50'>
-          {isOpen && (
-            <ReactDatePicker selected={date} onChange={handleChange} inline />
-          )}
-        </div>
+    <div className="relative" ref={ref}>
+      <Input type="hidden" {...register?.(name)} />
+      <Input
+        type={isOpen ? "date" : "text"}
+        label={label}
+        onChange={onInputChange}
+        value={
+          !!date
+            ? dayjs(date)
+                .clone()
+                .format(isOpen ? "YYYY-MM-DD" : "DD/MM/YYYY")
+            : undefined
+        }
+        onClick={handleClick}
+        onKeyDown={onKeyDown}
+      />
+      <div className="absolute top-full left-0 z-50">
+        {isOpen && (
+          <ReactDatePicker
+            dateFormat={"DD/MM/YYYY"}
+            selected={date}
+            onChange={handleChange}
+            inline
+          />
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
