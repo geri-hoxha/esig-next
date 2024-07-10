@@ -8,7 +8,6 @@ import { ZodRawShape, z } from "zod";
 import Table from "./Table";
 import Input from "../components/Input";
 import Checkbox from "../components/Checkbox";
-import CustomerDonut from "../../sale/v3/CustomerDonut";
 import { Address, CustomerModel } from "../type";
 import Button from "../components/Button";
 import Select, { IOptions } from "../components/Select";
@@ -20,6 +19,7 @@ import ComputeCustomerCommand_Request_Model from "./dto";
 import { useToast } from "@/components/ui/use-toast";
 import { withErrorHandling } from "../helpers";
 import DatePicker from "../components/Datepicker";
+import CustomerChart from "./Chart";
 
 const MapWithNoSSR = dynamic(() => import("./Map"), {
   ssr: false,
@@ -325,7 +325,7 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
             />
           </div>
           <div className="hidden md:block h-72">
-            <CustomerDonut />
+            <CustomerChart />
           </div>
         </div>
       </div>

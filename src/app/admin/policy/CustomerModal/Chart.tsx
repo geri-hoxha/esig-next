@@ -14,7 +14,7 @@ const CustomerChart = () => {
       options={{
         data: getData(),
         title: {
-          text: "Periudha: 01/01/2024 - 16/03/2024 ",
+          text: "01/01/2024 - 16/03/2024 ",
           fontSize: 12,
           fontWeight: "bold",
         },

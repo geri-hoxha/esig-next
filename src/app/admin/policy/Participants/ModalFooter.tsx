@@ -67,7 +67,7 @@ const PercentageFooter: React.FC<{
   } = useFormContext<CustomerModel & ParticipantWithPercentage>();
 
   return (
-    <div className="flex items-center  h-full pl-5 gap-4">
+    <div className="flex items-center  h-full gap-4">
       <div className="flex items-center grow shrink-0 gap-4">
         <Input
           noErrorMessage

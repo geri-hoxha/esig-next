@@ -1,16 +1,29 @@
-'use client';
+"use client";
 
+import { CustomerModel } from "@/types";
 import Section from "../Section";
 import { IParticipants, useCoreContext } from "../context";
 import List from "./List";
 import PolicyUsers from "./PolicyUser";
 
-export function isPolicyHolder(user: any): user is IParticipants["policyUsers"] {
+export function isPolicyHolder(
+  user: any
+): user is IParticipants["policyUsers"] {
   return "isLeader" in user;
 }
 
 const Participants = () => {
   const { data } = useCoreContext();
+
+  const { policyHolders, beneficiaries, invoiceRecipients } = data;
+
+  const checkIfPariticipantsArrayEmpty = (
+    participantsData: CustomerModel[]
+  ) => {
+    return (
+      participantsData.filter((participant) => participant.id).length === 0
+    );
+  };
 
   return (
     <Section
@@ -20,7 +33,11 @@ const Participants = () => {
           title: "Perdoruesit e polices",
           children: <PolicyUsers />,
         },
-        ...(data.policyUsers.filter((user) => user.id).length === 0
+        ...(checkIfPariticipantsArrayEmpty([
+          ...policyHolders,
+          ...beneficiaries,
+          ...invoiceRecipients,
+        ])
           ? []
           : [
               {

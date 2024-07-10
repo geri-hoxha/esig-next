@@ -6,7 +6,7 @@ import type { Address } from '../type';
 @Exclude()
 class ComputeCustomerCommand_Request_Model implements Partial<ComputeCustomerCommand_Request> {
     @Exclude()
-    private static splitReportName(obj: CustomerModel, fieldName: 'firstName' | 'lastName') {
+    private static splitReportName(obj: CustomerModel, wordIndex: number) {
 
         const haveReportName = !!obj.reportName?.trim();
 
@@ -14,13 +14,7 @@ class ComputeCustomerCommand_Request_Model implements Partial<ComputeCustomerCom
 
         const splittedArray = obj.reportName.split('|');
 
-        const result: { [key: string]: string } = {};
-
-        splittedArray.forEach(item => {
-            result[item] = item;
-        });
-
-        return result[fieldName]
+        return splittedArray[wordIndex]
     }
 
     @Expose()
@@ -35,13 +29,13 @@ class ComputeCustomerCommand_Request_Model implements Partial<ComputeCustomerCom
             return obj.displayName
         }
 
-        return ComputeCustomerCommand_Request_Model.splitReportName(obj, 'firstName')
+        return ComputeCustomerCommand_Request_Model.splitReportName(obj, 0)
     })
     firstName?: string;
 
     @Expose({ groups: ['Person'] })
     @Transform(({ obj }: { obj: CustomerModel, value: string }) => {
-        return ComputeCustomerCommand_Request_Model.splitReportName(obj, 'lastName')
+        return ComputeCustomerCommand_Request_Model.splitReportName(obj, 1)
     })
     lastName?: string | null;
 
