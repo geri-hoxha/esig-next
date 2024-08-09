@@ -18,9 +18,9 @@ const Button: React.FC<IProps> = ({
 }) => {
   return (
     <button
-      className={`mx-1.5 px-1.5 py-1 text-sm rounded-md   transition-all duration-100 ${
+      className={`mx-1.5 px-4 py-1 text-sm rounded-md  transition-all duration-100 ${
         variant === "danger"
-          ? "text-esig-error hover:bg-red-50"
+          ? "text-esig-error hover:bg-red-50 "
           : variant === "edit"
           ? "text-esig hover:bg-sky-50"
           : ""
@@ -44,7 +44,7 @@ const Button: React.FC<IProps> = ({
             alt=":("
             width={"0"}
             height={"0"}
-            style={{ width: 20, height: 20 }}
+            style={{ width: 17, height: 17 }}
             priority
           />
         )}

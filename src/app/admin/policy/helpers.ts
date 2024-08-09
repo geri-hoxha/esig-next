@@ -55,7 +55,9 @@ export const withErrorHandling = (fn:(...args:any) =>  void | Promise<void>, thr
       try {
         return await fn(...args);
       } catch (error) {
-        console.error(error);
+        
+        console.log(error);
+        
         // Throw this error if the parent function needs to know, for ex: stop execution
         if(throwError) {
           throw error;

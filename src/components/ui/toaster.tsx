@@ -24,7 +24,7 @@ export function Toaster() {
               )}
             </div>
             {action}
-            <ToastClose />
+            <ToastClose className={props?.variant === 'success' ? 'text-white' : ''} />
           </Toast>
         )
       })}

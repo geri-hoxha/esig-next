@@ -21,6 +21,9 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
 }) => {
   const { data, dispatch } = useCoreContext();
 
+  const [selectedParticipantId, setSelectedParticipantId] =
+  useState<string>("");
+
   const [primaryModal, setPrimaryModal] = useState<boolean>(false);
 
   const [customerModal, setCustomerModal] = useState<boolean>(false);
@@ -99,7 +102,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
         destroyOnClose
         footer={<PercentageFooter percentageKey={percentageKey} />}
       >
-        <CustomerModal />
+        <CustomerModal stateKey={stateKey} entityId={selectedParticipantId} />
       </Modal>
     );
   }
@@ -114,6 +117,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
         title="Modali i pjesemarresve te polices"
         description="Krijoni ose perditesoni listen e klienteve ne Esig"
         width={"min-w-[25%]"}
+        noActions
       >
         <div className="flex flex-col gap-4 mb-4">
           <SortableTable stateKey={stateKey} percentageKey={percentageKey} />
@@ -147,7 +151,6 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
         onClick={() => {
           setPrimaryModal(true);
         }}
-        className="text-esig hover:bg-sky-50"
       >
         <span>Ndrysho</span>
       </Button>

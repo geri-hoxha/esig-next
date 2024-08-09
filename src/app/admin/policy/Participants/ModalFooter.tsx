@@ -74,7 +74,7 @@ const PercentageFooter: React.FC<{
           label="Perqindja"
           type="number"
           {...register(percentageKey)}
-          suffix={<span className="font-bold">%</span>}
+          suffix={<span className="font-bold px-2">%</span>}
         />
         {errors[percentageKey] && (
           <span className="text-esig-error text-sm font-semibold animate-bounce  grow shrink-0">

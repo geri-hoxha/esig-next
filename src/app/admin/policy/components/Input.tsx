@@ -80,7 +80,7 @@ const Input = React.forwardRef(
             <div
               className={`absolute z-10  ${
                 readOnly ? "bg-gray-100/60" : "bg-white"
-              }  text-gray-500 h-[calc(100%-4px)] mr-0.5 flex items-center justify-center px-2 border-l-2 rounded-r-md  top-0.5 right-0 font-medium text-sm`}
+              }  text-gray-500 h-[calc(100%-4px)] mr-0.5 flex items-center justify-center border-l-2 rounded-r-md  top-0.5 right-0 font-medium text-sm`}
             >
               {suffix}
             </div>

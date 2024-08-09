@@ -10,7 +10,6 @@ import { CREATE, DELETE, SET, UPDATE } from "../context/reducer";
 import Modal from "../components/Modal";
 import CustomerModal, { getFormSchemaCustomer } from "../CustomerModal";
 import _request from "@/request";
-import { token } from "@/components/esig/Navbar/Currencies";
 import { PolicyParticipantPolicyUserRequest } from "@/types";
 import { z } from "zod";
 import Input from "../components/Input";
@@ -18,6 +17,8 @@ import { ExtraChargeFooter } from "./ModalFooter";
 import Button from "../components/Button";
 import { plainToClass } from "class-transformer";
 import ParticipantModel from "./dto";
+import { useFormContext } from "react-hook-form";
+import { withErrorHandling } from "../helpers";
 
 type MapperParticipants = {
   [K in keyof IParticipants]: (
@@ -26,11 +27,14 @@ type MapperParticipants = {
   )[];
 };
 
-const transformCustomerToParticipant = (values: CustomerModel, key: keyof IParticipants) => {
+const transformCustomerToParticipant = (
+  values: CustomerModel,
+  key: keyof IParticipants
+) => {
   return plainToClass(ParticipantModel, values, {
     groups: [key],
   });
-}
+};
 
 const formSchema = getFormSchemaCustomer({
   extraCharge: z.enum(["true", "false"]).optional(),
@@ -39,12 +43,7 @@ const formSchema = getFormSchemaCustomer({
 const PolicyUsers: React.FC = () => {
   const { data, dispatch } = useCoreContext();
 
-  const {
-    policyUsers,
-    policyHolders,
-    beneficiaries,
-    invoiceRecipients,
-  } = data;
+  const { policyUsers, policyHolders, beneficiaries, invoiceRecipients } = data;
 
   const [selectedParticipantId, setSelectedParticipantId] =
     useState<string>("");
@@ -107,7 +106,7 @@ const PolicyUsers: React.FC = () => {
         type: CREATE,
         payload: {
           key,
-          item: transformCustomerToParticipant(values, key)
+          item: transformCustomerToParticipant(values, key),
         },
       });
     });
@@ -122,7 +121,7 @@ const PolicyUsers: React.FC = () => {
             value: values.id,
           },
           key,
-          item: transformCustomerToParticipant(values, key)
+          item: transformCustomerToParticipant(values, key),
         },
       });
     });
@@ -171,16 +170,13 @@ const PolicyUsers: React.FC = () => {
     });
   };
 
-  const onOkHandler = async (values: CustomerModel | any) => {
-
+  const onOkHandler = withErrorHandling(async (values: CustomerModel | any) => {
     if (selectedParticipantId) {
       updatePolicyUserHandler(values as CustomerModel);
     } else {
       addPolicyUserHandler(values);
     }
-
-    onCancelHandler();
-  };
+  }, false);
 
   const onCancelHandler = () => {
     setSelectedParticipantId("");
@@ -211,7 +207,7 @@ const PolicyUsers: React.FC = () => {
                 className={`${!!user.extraCharge ? "pr-32" : ""}`}
                 suffix={
                   !!user.extraCharge && (
-                    <div className=" flex items-center justify-center gap-2">
+                    <div className="px-2 flex items-center justify-center gap-2">
                       <Image
                         className="cursor-pointer"
                         src="/svg/chart_up.svg"
@@ -251,6 +247,7 @@ const PolicyUsers: React.FC = () => {
       {lengthOfValidPolicyUsers >= 1 && lengthOfValidPolicyUsers <= 3 && (
         <Button
           variant="edit"
+          className="w-max mx-auto"
           onClick={() => {
             setOpen(true);
           }}
@@ -294,10 +291,20 @@ const PolicyUsers: React.FC = () => {
         onOk={onOkHandler}
         onCancel={onCancelHandler}
         formSchema={formSchema}
-        footer={<ExtraChargeFooter extraCharge={policyUsers.find((user) => user.id === selectedParticipantId)?.extraCharge} />}
+        footer={
+          <ExtraChargeFooter
+            extraCharge={
+              policyUsers.find((user) => user.id === selectedParticipantId)
+                ?.extraCharge
+            }
+          />
+        }
         destroyOnClose
       >
-        <CustomerModal entityId={selectedParticipantId} />
+        <CustomerModal
+          stateKey="policyUsers"
+          entityId={selectedParticipantId}
+        />
       </Modal>
     </>
   );

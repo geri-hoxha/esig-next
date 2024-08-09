@@ -29,11 +29,13 @@ import {
   FieldValues,
   useForm,
   FormProvider,
+  UseFormReset,
 } from "react-hook-form";
 import { ZodRawShape, z } from "zod";
 import Button from "./Button";
 import { withErrorHandling } from "../helpers";
 import _request from "@/request";
+import { useCoreContext } from "../context";
 
 type AsyncDefaultValues<TFieldValues> = (
   payload?: unknown
@@ -54,6 +56,7 @@ interface IProps<T> {
   onReleaseClose: (open: boolean) => void;
   formSchema: z.ZodObject<ZodRawShape>;
   destroyOnClose: boolean;
+  noActions: boolean;
   // defaultValues:
   // | DefaultValues<T extends FieldValues ? T : FieldValues>
   // | AsyncDefaultValues<T extends FieldValues ? T : FieldValues>;
@@ -72,6 +75,7 @@ function Modal<T>({
   onCancel = () => {},
   onReleaseClose = () => {},
   formSchema = z.object({}),
+  noActions = false,
 }: Partial<IProps<T>>) {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
@@ -80,7 +84,8 @@ function Modal<T>({
     resolver: zodResolver(formSchema),
   });
 
-  const { getValues } = form;
+
+  const { getValues, reset } = form;
 
   useEffect(() => {
     const width = window.innerWidth > 0 ? window.innerWidth : screen.width;
@@ -143,30 +148,30 @@ function Modal<T>({
           <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               {children}
-              <div className="w-full border-t-2 border-dashed ">
-                <div className="flex items-center justify-between  mt-4">
-                  {footer}
-                  <div className="flex items-center w-max ml-auto gap-x-2  ">
-                    <DrawerClose asChild>
+              {noActions ? null : (
+                <div className="w-full border-t-2 border-dashed ">
+                  <div className="flex items-center justify-between  mt-4">
+                    {footer}
+                    <div className="flex items-center w-max ml-auto gap-x-2  ">
+                      <DrawerClose asChild>
+                        <Button
+                          variant="danger"
+                          onClick={onCancelClick}
+                        >
+                          Anullo veprimin
+                        </Button>
+                      </DrawerClose>
                       <Button
-                        variant="danger"
-                        onClick={onCancelClick}
-                        className="border border-dashed border-esig-error py-1"
+                        type="submit"
+                        iconSrc="/svg/check_no_border.svg"
+                        variant="edit"
                       >
-                        Anullo veprimin
+                        Ruaj dhe apliko
                       </Button>
-                    </DrawerClose>
-                    <Button
-                      type="submit"
-                      iconSrc="/svg/check_no_border.svg"
-                      className="border border-dashed border-esig"
-                      variant="edit"
-                    >
-                      Ruaj dhe apliko
-                    </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </form>
           </FormProvider>
         </DialogContent>
@@ -208,7 +213,6 @@ function Modal<T>({
                     <Button
                       variant="danger"
                       onClick={onCancelClick}
-                      className="border border-dashed border-esig-error py-1"
                     >
                       Anullo veprimin
                     </Button>

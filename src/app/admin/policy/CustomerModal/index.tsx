@@ -20,6 +20,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { withErrorHandling } from "../helpers";
 import DatePicker from "../components/Datepicker";
 import CustomerChart from "./Chart";
+import { IParticipants, useCoreContext } from "../context";
 
 const MapWithNoSSR = dynamic(() => import("./Map"), {
   ssr: false,
@@ -34,7 +35,12 @@ export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
   });
 };
 
-const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
+interface IProps {
+  entityId: string;
+  stateKey: keyof IParticipants;
+}
+
+const CustomerModal: React.FC<IProps> = ({ entityId, stateKey }) => {
   const {
     watch,
     register,
@@ -46,6 +52,8 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
   } = useFormContext<CustomerModel>();
 
   const [contactTypeOptions, setContactTypeOptions] = useState<IOptions[]>([]);
+
+  const { data } = useCoreContext();
 
   const { toast } = useToast();
 
@@ -73,11 +81,12 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
 
   const updateCustomer = withErrorHandling(async (isSubmitting: boolean) => {
     // Continue only if use clicked 'submit'
-    if (!isSubmitting) return;
-
-    if (!(await trigger())) return;
+    if (!isSubmitting || !(await trigger())) return;
 
     const values: CustomerModel = watch();
+
+    // validate duplication again
+    if (data[stateKey].map((user) => user.id).includes(values?.id)) return;
 
     const response = await _request(`/customer/${values.id}`, token, {
       method: "POST",
@@ -162,7 +171,7 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
         >
           <Button
             variant="danger"
-            className="border border-dashed border-esig-error py-1 ml-auto"
+            className="border-dashed ml-auto"
             onClick={() => {
               setShowMap(false);
               setAddress({
@@ -175,7 +184,7 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
           </Button>
           <Button
             iconSrc="/svg/check_no_border.svg"
-            className="border border-dashed border-esig"
+            className="border-dashed"
             variant="edit"
             onClick={() => {
               if (address.model !== null) {
@@ -217,8 +226,9 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
         </div>
       )}
       <div
-        className={`col-span-12  md:border-l-2 border-dashed pl-4 ${!!entityId ? "col-span-12" : "md:col-span-8"
-          }`}
+        className={`col-span-12  md:border-l-2 border-dashed pl-4 ${
+          !!entityId ? "col-span-12" : "md:col-span-8"
+        }`}
       >
         {!!customerId ? (
           <div className="flex items-center mb-4 h-8">
@@ -268,10 +278,7 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
               <>
                 <Input {...register("genderType")} label="Gjinia" />
                 <Input {...register("fathersName")} label="Atesia" />
-                <DatePicker
-                  name="birthday"
-                  label="Birthday"
-                />
+                <DatePicker name="birthday" label="Birthday" />
               </>
             ) : contactType === "Organization" ? (
               <>
@@ -314,6 +321,7 @@ const CustomerModal: React.FC<{ entityId?: string }> = ({ entityId = "" }) => {
               label="Adresa"
               suffix={
                 <Button
+                  className="!mx-0 !h-full rounded-none"
                   variant="edit"
                   onClick={() => {
                     setShowMap(true);

@@ -11,6 +11,7 @@ import { Toast } from "@/components/ui/use-toast";
 import { ToastActionElement, ToastProps } from "@/components/ui/toast";
 import { ToastAction } from "@/components/ui/toast";
 import { SortableParticipant } from "./SortableTable";
+import Button from "../components/Button";
 
 type ToasterToast = ToastProps & {
   id: string;
@@ -219,22 +220,12 @@ const CustomCellRenderer: React.FC<IProps> = ({
           </span>
 
           {rowIndex !== 0 && (
-            <button
+            <Button
+              variant="danger"
               onClick={() => deleteParticipant(data)}
-              className="w-max px-1.5 py-1 text-sm rounded-md  bg-transparent border-none text-esig-error hover:bg-red-50 transition-all duration-100"
             >
-              <div className="flex items-center gap-x-1">
-                <Image
-                  src="/svg/close.svg"
-                  alt="edit"
-                  width={"0"}
-                  height={"0"}
-                  style={{ width: 20, height: 20 }}
-                  priority
-                />
-                <span>Fshij</span>
-              </div>
-            </button>
+            Fshij
+            </Button>
           )}
         </div>
         <Input
@@ -244,7 +235,7 @@ const CustomCellRenderer: React.FC<IProps> = ({
           value={percentage}
           type="number"
           autoFocus={rowIndex !== 0 && autoFocus === rowIndex}
-          suffix={<span className="font-bold">%</span>}
+          suffix={<span className="font-bold px-2">%</span>}
           readOnly={rowIndex === 0}
           onChange={onPercentageChange}
         />
