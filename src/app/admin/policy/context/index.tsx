@@ -76,6 +76,7 @@ interface ICoreContext {
   dispatch: Dispatch<IAction<OverwrittenIssueRequest>>;
   ui: IUi;
   dispatchUi: Dispatch<IAction<IUi>>;
+  rules: any
 }
 
 const CoreContext = createContext<ICoreContext>({
@@ -83,6 +84,7 @@ const CoreContext = createContext<ICoreContext>({
   dispatch: () => { },
   ui: defaultUi,
   dispatchUi: () => { },
+  rules: null
 });
 
 export const useCoreContext = () => useContext(CoreContext);
@@ -161,6 +163,7 @@ export default function CoreContextProvider({
         },
         ui,
         dispatchUi,
+        rules
       }}
     >
       {children}

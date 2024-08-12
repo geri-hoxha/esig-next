@@ -268,7 +268,7 @@ const PolicyUsers: React.FC = () => {
         </Button>
       )}
       {/* the maxDefault from rule (context) */}
-      {lengthOfValidPolicyUsers >= 3 && (
+      {lengthOfValidPolicyUsers >= rul && (
         <div className="flex items-center justify-center text-gray-600 gap-2 text-sm">
           <Image
             src="/svg/info.svg"

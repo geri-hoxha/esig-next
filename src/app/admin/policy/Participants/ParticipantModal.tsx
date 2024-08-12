@@ -127,7 +127,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
               openCustomerModal();
               setPrimaryModal(false);
             }}
-            className="mx-auto w-full"
+            className="mx-auto w-max"
             icon={
               <svg
                 className="stroke-esig"

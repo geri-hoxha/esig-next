@@ -16,15 +16,27 @@ const Button: React.FC<IProps> = ({
   type = "button",
   ...props
 }) => {
+  const getClassName = () => {
+    if (variant === "danger") return "text-esig-error hover:bg-red-50";
+
+    if (variant === "edit") return "text-esig hover:bg-sky-50";
+
+    return "";
+  };
+
+  const getIcon = () => {
+    if (!!iconSrc) return iconSrc;
+
+    if (variant === "edit") return "/svg/edit.svg";
+
+    if (variant === "danger") return "/svg/close.svg";
+
+    return "";
+  };
+
   return (
     <button
-      className={`mx-1.5 px-4 py-1 text-sm rounded-md  transition-all duration-100 ${
-        variant === "danger"
-          ? "text-esig-error hover:bg-red-50 "
-          : variant === "edit"
-          ? "text-esig hover:bg-sky-50"
-          : ""
-      } ${className}`}
+      className={`mx-1.5 px-4 py-1 text-sm rounded-md  transition-all duration-100 ${getClassName()} ${className}`}
       {...props}
       type={type}
     >
@@ -34,13 +46,7 @@ const Button: React.FC<IProps> = ({
         ) : (
           <Image
             className="cursor-pointer"
-            src={`${
-              !!iconSrc
-                ? iconSrc
-                : variant === "edit"
-                ? "/svg/edit.svg"
-                : variant === "danger" ? "/svg/close.svg" : ''
-            }`}
+            src={`${getIcon()}`}
             alt=":("
             width={"0"}
             height={"0"}
