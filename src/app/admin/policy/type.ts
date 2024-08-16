@@ -189,3 +189,51 @@ export interface IUi {
     disabled: boolean;
     premiumMethod: () => Promise<void>
 }
+
+export interface SmartEnumOfCurrencyTypeAndString {
+    name: string | null;
+    value: string | null;
+}
+export interface BaseEnumOfCurrencyType extends SmartEnumOfCurrencyTypeAndString {
+    text: string;
+}
+
+export interface ProductConfiguration extends BaseEntityModel {
+    canSell: boolean;
+    canCancel: boolean;
+    canReturn: boolean;
+    canDuplicate: boolean;
+    canAdjustPremium: boolean;
+    hasInstallments: boolean;
+    hasRenewals: boolean;
+    bonusCommissionRate: number;
+    agencyCommissionRate: number;
+    intermediaryCommissionRate: number;
+    defaultStartDateUtcDiff: number;
+    minStartDateUtcDiff: number;
+    maxStartDateUtcDiff: number;
+    defaultIssueDateUtcDiff: number;
+    minIssueDateUtcDiff: number;
+    maxIssueDateUtcDiff: number;
+    minBeneficiaryCount: number;
+    maxBeneficiaryCount: number;
+    minPolicyHolderCount: number;
+    maxPolicyHolderCount: number;
+    minPolicyUserCount: number;
+    maxPolicyUserCount: number;
+    minInsurerCount: number;
+    maxInsurerCount: number;
+    minInvoiceRecipientCount: number;
+    maxInvoiceRecipientCount: number;
+    currencyTypesAllowed: BaseEnumOfCurrencyType[];
+    paymentTypesAllowed: BaseEnumOfCurrencyType[];
+    distributionChannelTypesAllowed: BaseEnumOfCurrencyType[];
+    waitingPeriodTypeAllowed: BaseEnumOfCurrencyType[];
+    riskAddressTypesAllowed: BaseEnumOfCurrencyType[];
+    //
+    productId: string;
+    productTemplateId: string | null;
+    agencyId: string | null;
+    // for front-end
+    isSelling: boolean;
+  }

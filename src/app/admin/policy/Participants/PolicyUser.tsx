@@ -41,7 +41,7 @@ const formSchema = getFormSchemaCustomer({
 });
 
 const PolicyUsers: React.FC = () => {
-  const { data, dispatch } = useCoreContext();
+  const { data, dispatch, rules } = useCoreContext();
 
   const { policyUsers, policyHolders, beneficiaries, invoiceRecipients } = data;
 
@@ -268,7 +268,7 @@ const PolicyUsers: React.FC = () => {
         </Button>
       )}
       {/* the maxDefault from rule (context) */}
-      {lengthOfValidPolicyUsers >= rul && (
+      {lengthOfValidPolicyUsers >= rules.maxPolicyUserCount && (
         <div className="flex items-center justify-center text-gray-600 gap-2 text-sm">
           <Image
             src="/svg/info.svg"

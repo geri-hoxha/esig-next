@@ -9,7 +9,7 @@ var currentYear = currentDate.getFullYear();
 const Footer: React.FC = () => {
   return (
     <footer className="border-t">
-      <div className="text-center p-3 w-full font-medium text-xs md:text-sm text-slate-600">
+      <div className="text-center p-3 bg-gray-50 w-full font-medium text-xs md:text-sm text-slate-600">
         <div className="font-bold">ESIG</div>
         <div>{currentYear} &copy; SilverNET Systems</div>
       </div>

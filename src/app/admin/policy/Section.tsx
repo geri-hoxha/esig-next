@@ -30,7 +30,7 @@ const Section: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
               <div
                 className={`grid grid-cols-1  md:grid-cols-${
                   item?.cols ?? "2"
-                } gap-4 ${item.className ?? ""}`}
+                } gap-6 ${item.className ?? ""}`}
               >
                 {item.children}
               </div>

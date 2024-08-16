@@ -187,7 +187,7 @@ const ZeratWrapper = () => {
         );
       })}
 
-      {/* <div className="flex items-center ">
+      <div className="flex items-center ">
         <div className="border-b w-full h-px border-dashed  border-esig"></div>
         <div
           onClick={addNewItem}
@@ -221,7 +221,7 @@ const ZeratWrapper = () => {
           </div>
         </div>
         <div className="border-b w-full h-px border-dashed  border-esig"></div>
-      </div> */}
+      </div>
     </>
   );
 };

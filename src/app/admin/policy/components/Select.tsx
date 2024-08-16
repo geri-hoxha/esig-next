@@ -53,8 +53,8 @@ const Select = React.forwardRef(
         <div className=" rounded-md shadow-sm">
           <label
             htmlFor={name}
-            className={`absolute truncate w-auto -top-3 left-2 inline-block rounded-md  px-1 text-xs font-medium text-gray-900 ${
-              readOnly ? "bg-gray-100" : "bg-white"
+            className={`absolute truncate w-auto -top-4 left-2 inline-block rounded-md  px-1 text-xs font-medium text-gray-900 ${
+              readOnly ? "bg-gray-100" : "bg-transparent"
             }`}
           >
             {label}

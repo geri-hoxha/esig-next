@@ -13,7 +13,7 @@ const Sidemenu: React.FC<IProps> = ({
 }) => {
   return (
     <aside
-      className={`w-64 fixed left-0  justify-between flex-col h-full border-gray-200 border-r bg-white ${className}`}
+      className={`w-64 fixed left-0  justify-between flex-col h-full border-gray-200 border-r bg-gray-50 ${className}`}
     >
       <div className="flex flex-col space-y-2 p-4">
         <Routes routes={routes} />

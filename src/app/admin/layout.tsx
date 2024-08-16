@@ -25,7 +25,7 @@ export default function RootLayout({
       <div className="flex w-full h-full grow mt-[93px]">
         <Sidemenu className="hidden md:flex" />
         <div className="flex flex-col h-auto w-full ml-0 md:ml-[255px]">
-          <main className="w-full h-full p-4 md:p-6 bg-white flex flex-col gap-4 md:gap-6">
+          <main className="w-full h-full p-4 md:p-6 bg-gray-50 flex flex-col gap-4 md:gap-6">
             <Breadcrumb />
             {/* <PageTitle /> */}
             {children}

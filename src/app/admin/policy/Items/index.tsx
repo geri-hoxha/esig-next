@@ -1,0 +1,213 @@
+'use client';
+import { useToast } from "@/components/ui/use-toast";
+import Section from "../Section";
+import { LegacyRef, createRef, useState } from "react";
+import { ToastAction } from "@/components/ui/toast";
+import Image from "next/image";
+import Popconfirm from "../components/PopConfirm";
+
+interface IItem {
+  id: number;
+  ref: LegacyRef<HTMLDivElement> | undefined;
+}
+
+const Items = () => {
+  const { toast } = useToast();
+
+  const [items, setItems] = useState<IItem[]>([
+    {
+      id: 1,
+      ref: createRef(),
+    },
+  ]);
+
+  const addNewItem = () => {
+    const ref: LegacyRef<HTMLDivElement> | undefined = createRef();
+
+    setItems([
+      ...items,
+      {
+        id: items.length + 1,
+        ref,
+      },
+    ]);
+
+    setTimeout(() => {
+      const boundingRect = ref.current?.getBoundingClientRect();
+
+      const yOffset = -100; // Adjust the offset as per your requirement
+
+      const y = (boundingRect?.top || 0) + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }, 100);
+  };
+
+  const deleteItem = (id: number) => {
+    setItems(items.filter((item) => item.id !== id));
+
+    toast({
+      title: `Zeri numer: ${id} u fshi nga lista!`,
+      description: "Klikoni 'Undo' nese ishte gabimisht.",
+      action: (
+        <ToastAction
+          className="bg-esig text-white hover:bg-esig-fluorite"
+          onClick={() => {
+            // using the power of closures
+            setItems(items);
+          }}
+          altText="Goto schedule to undo"
+        >
+          Undo
+        </ToastAction>
+      ),
+    });
+  };
+
+  return (
+    <>
+      {items.map((item) => {
+        return (
+          <div ref={item.ref} key={item.id}>
+            <Section
+              title={
+                <div className="flex items-center gap-4">
+                  <h2 className="text-xl md:text-2xl flex items-center gap-2">
+                    <span className="text-white bg-esig rounded-full flex items-center justify-center text-base px-2.5">
+                      {item.id}
+                    </span>
+                    <span> Zerat e polices</span>
+                  </h2>
+
+                  {item.id !== 1 && (
+                    <Popconfirm
+                      title="Fshi zerin?"
+                      description="A jeni i sigurte qe doni te fshini zerin?"
+                      onConfirm={() => deleteItem(item.id)}
+                    >
+                      <Image
+                        className="cursor-pointer"
+                        src="/svg/close.svg"
+                        alt="edit"
+                        width={"0"}
+                        height={"0"}
+                        style={{ width: 25, height: 25 }}
+                        priority
+                      />
+                    </Popconfirm>
+                  )}
+                </div>
+              }
+              items={[
+                {
+                  title: "Objektet e siguruara",
+                  cols: "1",
+                  className:
+                    "scrollArea max-h-[500px] overflow-y-auto pr-2 pb-2",
+                  children: <InsuredObjects />,
+                },
+                {
+                  title: (
+                    <div className="flex items-center justify-between border-gray-400 border-dashed pt-4 sm:pt-0 border-t sm:border-none">
+                      <h3 className="hidden sm:block text-lg md:text-xl bg-red-0">
+                        Mbulimet e objektit / eve
+                      </h3>
+                      {selected && <ZeratModal increment={increment} />}
+                    </div>
+                  ),
+                  cols: "1",
+                  className: "scrollArea max-h-[500px] overflow-y-auto pr-2",
+                  children: (
+                    <>
+                      {selected ? (
+                        <>
+                          <Zerat />
+                          <Zerat />
+                          <Zerat />
+                        </>
+                      ) : (
+                        <ZeratModal increment={increment}>
+                          <div className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-36 border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+                            <div className="flex md:hidden items-center gap-x-1 mx-auto py-2">
+                              <svg
+                                className="stroke-esig"
+                                width="14"
+                                height="14"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                              >
+                                <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+                              </svg>
+                              <span className="text-esig">
+                                Shto pjesemarres tjeter
+                              </span>
+                            </div>
+
+                            <svg
+                              className="stroke-esig hidden md:block"
+                              width="30"
+                              height="30"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                            >
+                              <path d="M14 14v-14h1v14h14v1h-14v14h-1v-14h-14v-1h14z" />
+                            </svg>
+                          </div>
+                        </ZeratModal>
+
+                        // <div className="flex items-end justify-center h-20">
+                        //   <div className="hidden md:block border-2 border-gray-400 border-dotted text-gray-600 text-sm px-3 py-1 rounded-md">
+                        //     Asnje pakete / mbulim i perzgjedhur ...
+                        //   </div>
+                        // </div>
+                      )}
+                    </>
+                  ),
+                },
+              ]}
+            />
+          </div>
+        );
+      })}
+
+      <div className="flex items-center">
+        <div className="border-b w-full h-px border-dashed  border-esig"></div>
+        <div
+          onClick={addNewItem}
+          className="cursor-pointer text-sm md:text-lg group border w-full md:w-1/2 px-5 mx-auto py-1.5 md:py-3 text-esig   h-max border-dashed  border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-sm   transition-all duration-200 relative"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <svg
+              className="stroke-esig hidden md:block"
+              width="15"
+              height="15"
+              xmlns="http://www.w3.org/2000/svg"
+              fillRule="evenodd"
+              clipRule="evenodd"
+            >
+              <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+            </svg>
+            <svg
+              className="stroke-esig block md:hidden"
+              width="10"
+              height="10"
+              xmlns="http://www.w3.org/2000/svg"
+              fillRule="evenodd"
+              clipRule="evenodd"
+            >
+              <path d="M4 4v-4h1v4h4v1h-4v4h-1v-4h-4v-1h4z" />
+            </svg>
+            <span className="font-semibold w-max leading-none">
+              Shto ze police
+            </span>
+          </div>
+        </div>
+        <div className="border-b w-full h-px border-dashed  border-esig"></div>
+      </div>
+    </>
+  );
+};
+
+export default Items;
