@@ -60,6 +60,7 @@ interface ILeafletAddress {
 }
 
 const prepareAddressModel = (leafletModel: ILeafletAddress): Address => {
+  // use dto model
   return {
     country: leafletModel.address.county,
     city: leafletModel.address.city || leafletModel.address.village,

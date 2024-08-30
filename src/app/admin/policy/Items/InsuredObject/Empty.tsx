@@ -1,18 +1,34 @@
 import { useCallback, useState } from "react";
 import Modal from "../../components/Modal";
 import CustomerModal from "../../CustomerModal";
-import { CustomerModel } from "../../type";
+import { CustomerModel, PolicyItemRequest } from "../../type";
+import { FieldValues } from "react-hook-form";
+import { useCoreContext } from "../../context";
+import { CREATE, UPDATE } from "../../context/reducer";
+import PolicyItemController from "../../context/PolicyItemController";
 
-const Empty = () => {
+const Empty = ({ itemIndex }: { itemIndex: number }) => {
   const [open, setOpen] = useState<boolean>(false);
 
-  const onOkHandler = (values:CustomerModel) => {
-    console.log(values);
-  }
+  const { data, dispatch } = useCoreContext();
+
+  const onOkHandler = (values: CustomerModel) => {
+
+    const controller = new PolicyItemController(data.items[itemIndex]);
+
+    dispatch(controller.createInsuredObject<CustomerModel>(values));
+  };
+
+  const openModal = () => {
+    setOpen(true);
+  };
 
   return (
     <>
-      <div className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-36 border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative">
+      <div
+        onClick={openModal}
+        className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-36 border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative"
+      >
         <div className="flex md:hidden items-center gap-x-1 mx-auto py-2">
           <svg
             className="stroke-esig"
@@ -39,7 +55,7 @@ const Empty = () => {
         </svg>
       </div>
 
-      <Modal
+      <Modal<CustomerModel>
         title="Modali i objekteve te siguruara"
         description="Ketu mund te zgjidhni/modikoni objektin e siguruar."
         open={open}
@@ -49,10 +65,7 @@ const Empty = () => {
         onOk={onOkHandler}
         destroyOnClose
       >
-        <CustomerModal
-          stateKey="policyUsers"
-          entityId={selectedParticipantId}
-        />
+        <CustomerModal stateKey="policyUsers" entityId={""} />
       </Modal>
     </>
   );

@@ -60,7 +60,7 @@ const columnDefs: ColDef<CustomerModel>[] = [
 ];
 
 const Table: React.FC = () => {
-  const { reset, getValues } = useFormContext<CustomerModel>();
+  const { reset, getValues, setValue } = useFormContext<CustomerModel>();
 
   const [rowData, setRowData] = useState<CustomerModel[]>([]);
 
@@ -85,8 +85,7 @@ const Table: React.FC = () => {
   };
 
   const radioGroupChange = (event: ChangeEvent<HTMLInputElement>) => {
-    reset({ searchedValue: undefined } as {});
-
+    setValue('searchedValue' as any, undefined)
     setRadioGroup(event.target.value as "searchWithName" | "searchWithNipt");
   };
 

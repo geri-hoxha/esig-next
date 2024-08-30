@@ -34,6 +34,7 @@ const Select = React.forwardRef(
 
     const {
       formState: { errors },
+      getValues,
     } = useFormContext<Record<string, any>>();
 
     let iconDiv;
@@ -69,7 +70,13 @@ const Select = React.forwardRef(
           ${readOnly ? "bg-gray-100" : ""}`}
             ref={ref}
           >
+            <option value="" disabled selected hidden>
+              Select option
+            </option>
             {options.map((option) => {
+              if (option.key === "-" && option.value === "-") {
+                return <option disabled>------------------------------</option>;
+              }
               return (
                 <option key={option.value} value={option.value}>
                   {option.key}

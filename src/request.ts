@@ -38,7 +38,9 @@ export async function request(url: string, options: _RequestInit) {
                 Accept: "application/json",
             },
             ...options,
-            body: JSON.stringify(options.body),
+            ...(!!options.body ? {
+                body: JSON.stringify(options.body)
+            } : {}),
         }
     );
 

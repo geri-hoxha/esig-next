@@ -104,12 +104,14 @@ export interface BeginRequest {
 }
 
 
-export interface PolicyItemInsuredObjectRequest {
+export interface PolicyItemInsuredObjectRequest<T = any> {
     id: string;
     objectType: string;
-    object: any;
+    object: T;
     objectValue: number;
 }
+
+export type ObjectType = 'Vehicle' | 'Property' | 'Person';
 
 export interface LimitRecord {
     enabled: boolean;

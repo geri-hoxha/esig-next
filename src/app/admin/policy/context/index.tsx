@@ -8,7 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { ActionTypes, IAction, reducer } from "./reducer";
+import { IAction, reducer } from "./reducer";
 import { ReactNode, useReducer } from "react";
 import {
   CustomerModel,
@@ -25,7 +25,10 @@ import dayjs from "dayjs";
 import { useToast } from "@/components/ui/use-toast";
 import _request from "@/request";
 import { token } from "@/components/esig/Navbar/Currencies";
-import Loader, { PageLoader } from "../components/Loader";
+import { PageLoader } from "../components/Loader";
+import { ClassConstructor } from "class-transformer";
+import PolicyItemRequestModel from "../models/PolicyItemRequestModel";
+import { ObjectModelDTO } from "../page";
 
 export interface OverwrittenIssueRequest extends IssueRequest {
   beneficiaries: (PolicyParticipantBeneficiaryRequest & CustomerModel)[];
@@ -99,27 +102,36 @@ const CoreContext = createContext<ICoreContext>({
 
 export const useCoreContext = () => useContext(CoreContext);
 
-export function isParticipantsArray(
-  participants: any
-): participants is Array<{ id: string }> {
-  // Check if it's an array and all elements in the array have an 'id' property
-  return (
-    Array.isArray(participants) &&
-    participants.every(
-      (participant) => typeof participant === "object" && "id" in participant
-    )
-  );
-}
-
-export default function CoreContextProvider({
+export default function CoreContextProvider<T>({
   children,
   id,
+  objectModelDTO,
 }: {
   children: ReactNode;
   id: string;
+  objectModelDTO: ObjectModelDTO;
 }) {
+  const { toast } = useToast();
+
   const [data, dispatch] = useReducer(
-    reducer<OverwrittenIssueRequest>,
+    (
+      data: OverwrittenIssueRequest,
+      props: IAction<OverwrittenIssueRequest>
+    ) => {
+      try {
+        
+        return reducer<OverwrittenIssueRequest>(data, props);
+
+      } catch (error: any) {
+
+        toast({
+          variant: "destructive",
+          title: error.message,
+        });
+
+        return data;
+      }
+    },
     defaultRequest
   );
 
@@ -127,13 +139,12 @@ export default function CoreContextProvider({
 
   const [ui, setUi] = useState<IUi>(defaultUi);
 
-  const { toast } = useToast();
-
   useEffect(() => {
     console.log(data);
   }, [JSON.stringify(data)]);
 
   useEffect(() => {
+    PolicyItemRequestModel.modelParameter = objectModelDTO;
     initBusinessRules();
   }, []);
 
@@ -154,41 +165,6 @@ export default function CoreContextProvider({
     setRules(response.data.defaultConfiguration);
   };
 
-  function middleware(action: IAction<OverwrittenIssueRequest>) {
-    const actionType = action.type;
-
-    // 1.0
-    if(action.payload.key === 'items') {
-      preparePolicyItemsPayload(action);
-    }
-
-    // 2.0
-    if (actionType !== ActionTypes.CREATE) return;
-   
-    validateDuplication(action);
-  }
-
-  const validateDuplication = (action: IAction<OverwrittenIssueRequest>) => {
-    const selectedArray = data[action.payload.key];
-
-    if (!isParticipantsArray(selectedArray)) return;
-
-    const ids = selectedArray.map((item) => {
-      if (item.id) return item.id;
-      return {};
-    });
-
-    if (ids.includes(action.payload.item?.id)) {
-      throw new Error(
-        `Error: ${action.payload.item.displayName} eshte ekzistent dhe nuk mund te duplikohet. Veprimi u anullua!`
-      );
-    }
-  };
-
-  const preparePolicyItemsPayload = (action: IAction<OverwrittenIssueRequest>) => {
-    // action.payload.item
-  }
-
   if (!rules) {
     return <PageLoader text="Polica po ngarkohet ..." />;
   }
@@ -197,21 +173,7 @@ export default function CoreContextProvider({
     <CoreContext.Provider
       value={{
         data,
-        dispatch: (action: IAction<OverwrittenIssueRequest>) => {
-          try {
-            console.log(action)
-            middleware(action);
-
-            return dispatch(action);
-          } catch (error: any) {
-            toast({
-              variant: "destructive",
-              title: error.message,
-            });
-
-            throw error;
-          }
-        },
+        dispatch,
         ui,
         setRules,
         rules,

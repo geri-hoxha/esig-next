@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
         <span>Development environment</span>
       </div>
 
-      <nav className=" w-full px-3 py-2 md:px-4 md:py-3 bg-gray-200 flex items-center border-gray-200 border-b z-50">
+      <nav className=" w-full px-3 py-2 md:px-4 md:py-3 bg-white flex items-center shadow-md border-gray-300 border-b z-50">
         <div className="lg:min-w-52  ">
           <div className="flex md:hidden">
             <Sheet>

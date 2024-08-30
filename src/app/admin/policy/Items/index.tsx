@@ -1,25 +1,39 @@
-'use client';
+"use client";
 import { useToast } from "@/components/ui/use-toast";
 import Section from "../Section";
-import { LegacyRef, createRef, useState } from "react";
+import { LegacyRef, ReactNode, createRef, useEffect, useState } from "react";
 import { ToastAction } from "@/components/ui/toast";
 import Image from "next/image";
 import Popconfirm from "../components/PopConfirm";
+import InsuredObjects from "./InsuredObject";
+import PolicyItemController from "../context/PolicyItemController";
+import { useCoreContext } from "../context";
 
 interface IItem {
   id: number;
   ref: LegacyRef<HTMLDivElement> | undefined;
 }
 
-const Items = () => {
+const Items = ({ children }: { children: ReactNode }) => {
+  const { data, dispatch } = useCoreContext();
+
   const { toast } = useToast();
 
-  const [items, setItems] = useState<IItem[]>([
-    {
-      id: 1,
-      ref: createRef(),
-    },
-  ]);
+  const [items, setItems] = useState<IItem[]>([]);
+
+  useEffect(() => {
+    const id = items.length + 1;
+
+    dispatch(PolicyItemController.createItem(id));
+
+    setItems([
+      ...items,
+      {
+        id,
+        ref: createRef(),
+      },
+    ]);
+  }, []);
 
   const addNewItem = () => {
     const ref: LegacyRef<HTMLDivElement> | undefined = createRef();
@@ -104,7 +118,7 @@ const Items = () => {
                   cols: "1",
                   className:
                     "scrollArea max-h-[500px] overflow-y-auto pr-2 pb-2",
-                  children: <InsuredObjects />,
+                  children:  children() <InsuredObjects itemIndex={item.id - 1} />,
                 },
                 {
                   title: (
@@ -112,14 +126,14 @@ const Items = () => {
                       <h3 className="hidden sm:block text-lg md:text-xl bg-red-0">
                         Mbulimet e objektit / eve
                       </h3>
-                      {selected && <ZeratModal increment={increment} />}
+                      {/* {selected && <ZeratModal increment={increment} />} */}
                     </div>
                   ),
                   cols: "1",
                   className: "scrollArea max-h-[500px] overflow-y-auto pr-2",
                   children: (
                     <>
-                      {selected ? (
+                      {/* {selected ? (
                         <>
                           <Zerat />
                           <Zerat />
@@ -162,7 +176,7 @@ const Items = () => {
                         //     Asnje pakete / mbulim i perzgjedhur ...
                         //   </div>
                         // </div>
-                      )}
+                      )} */}
                     </>
                   ),
                 },

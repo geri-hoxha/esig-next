@@ -24,22 +24,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  DefaultValues,
-  FieldValues,
-  useForm,
-  FormProvider,
-  UseFormReset,
-} from "react-hook-form";
+import { FieldValues, useForm, FormProvider } from "react-hook-form";
 import { ZodRawShape, z } from "zod";
 import Button from "./Button";
 import { withErrorHandling } from "../helpers";
 import _request from "@/request";
-import { useCoreContext } from "../context";
-
-type AsyncDefaultValues<TFieldValues> = (
-  payload?: unknown
-) => Promise<TFieldValues>;
+import { CustomerModel } from "../type";
 
 interface IProps<T> {
   title: string;
@@ -57,9 +47,6 @@ interface IProps<T> {
   formSchema: z.ZodObject<ZodRawShape>;
   destroyOnClose: boolean;
   noActions: boolean;
-  // defaultValues:
-  // | DefaultValues<T extends FieldValues ? T : FieldValues>
-  // | AsyncDefaultValues<T extends FieldValues ? T : FieldValues>;
 }
 
 // generic for the form fields
@@ -83,7 +70,6 @@ function Modal<T>({
     // defaultValues: {},
     resolver: zodResolver(formSchema),
   });
-
 
   const { getValues, reset } = form;
 
@@ -154,10 +140,7 @@ function Modal<T>({
                     {footer}
                     <div className="flex items-center w-max ml-auto gap-x-2  ">
                       <DrawerClose asChild>
-                        <Button
-                          variant="danger"
-                          onClick={onCancelClick}
-                        >
+                        <Button variant="danger" onClick={onCancelClick}>
                           Anullo veprimin
                         </Button>
                       </DrawerClose>
@@ -210,10 +193,7 @@ function Modal<T>({
                 {footer}
                 <div className="flex items-center w-max ml-auto gap-x-2  ">
                   <DrawerClose asChild>
-                    <Button
-                      variant="danger"
-                      onClick={onCancelClick}
-                    >
+                    <Button variant="danger" onClick={onCancelClick}>
                       Anullo veprimin
                     </Button>
                   </DrawerClose>
@@ -235,16 +215,10 @@ function Modal<T>({
   );
 }
 
-function withComponentDestroyer<T>(
-  WrappedComponent: JSXElementConstructor<Partial<IProps<T>>>
-) {
-  return (props: Partial<IProps<T>>) => {
-    if (!props.open && props.destroyOnClose) {
-      return null;
-    }
+export default function <T>(props: Partial<IProps<T>>) {
+  if (!props.open && props.destroyOnClose) {
+    return null;
+  }
 
-    return <WrappedComponent {...props} />;
-  };
+  return <Modal<T> {...props} />;
 }
-
-export default withComponentDestroyer(Modal);

@@ -31,22 +31,50 @@ const MASS_UPDATE = ActionTypes.MASS_UPDATE;
 const SET = ActionTypes.SET;
 
 
+export function isParticipantsArray(
+    participants: any
+): participants is Array<{ id: string }> {
+    // Check if it's an array and all elements in the array have an 'id' property
+    return (
+        Array.isArray(participants) &&
+        participants.every(
+            (participant) => typeof participant === "object" && "id" in participant
+        )
+    );
+}
+
 function reducer<T>(state: T, action: IAction<T>): T {
 
     const { type, payload } = action;
 
     const { key, item, identifier = { key: 'id', value: '' } } = payload;
 
-    const selectedArray = state[key] as Array<any>
+    const selectedArray: any = state[key] as Array<any>
 
     switch (type) {
 
         case CREATE:
+
+            if (isParticipantsArray(selectedArray)) {
+
+                const ids = selectedArray.map((item) => {
+                    if (item.id) return item.id;
+                    return {};
+                });
+
+                if (ids.includes(action.payload.item?.id)) {
+                    throw new Error(
+                        `${action.payload.item.displayName} eshte ekzistent dhe nuk mund te duplikohet. Veprimi u anullua!`
+                    );
+                }
+
+            }
+
             return { ...state, [key]: [...selectedArray, item] };
 
         case UPDATE:
             return {
-                ...state, [key]: [...selectedArray.map((_item) => {
+                ...state, [key]: [...selectedArray.map((_item: any) => {
                     if (_item[identifier.key ?? 'id'] === identifier.value) {
                         return item;
                     }
@@ -56,7 +84,7 @@ function reducer<T>(state: T, action: IAction<T>): T {
             };
 
         case DELETE:
-            return { ...state, [key]: [...selectedArray.filter((item) => item[identifier.key ?? 'id'] !== identifier.value)] };
+            return { ...state, [key]: [...selectedArray.filter((item: any) => item[identifier.key ?? 'id'] !== identifier.value)] };
 
         case MASS_UPDATE:
             return { ...state, ...item };
@@ -68,7 +96,6 @@ function reducer<T>(state: T, action: IAction<T>): T {
             throw new Error(`Action Type: ${type} not supported!`);
     }
 };
-
 
 export {
     reducer,
