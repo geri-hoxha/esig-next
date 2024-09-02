@@ -13,8 +13,6 @@ class PolicyItemController {
     private item: PolicyItemRequest;
 
     constructor(item: PolicyItemRequest) {
-        console.log(item)
-        console.log(item())
         this.item = item;
     }
 
@@ -66,7 +64,7 @@ class PolicyItemController {
         })
     }
 
-    public createInsuredObject<T>(object: PolicyItemInsuredObjectRequest<T>['object'], objectValue: number = 0, objectType: string = PolicyItemRequestModel.modelParameter.objectType): ReturnType {
+    public createInsuredObject<T>(object: PolicyItemInsuredObjectRequest<T>['object'], objectValue: number = 0, objectType: string = PolicyItemRequestModel.modelParameter?.objectType || ''): ReturnType {
         return this.updateItem({
             ...this.item,
             insuredObjects: [
@@ -81,7 +79,7 @@ class PolicyItemController {
         })
     }
 
-    public updateInsuredObject<T>(idToUpdate: string, updatedObject: PolicyItemInsuredObjectRequest<T>): ReturnType {
+    public updateInsuredObject<T>(idToUpdate: string, updatedObject: PolicyItemInsuredObjectRequest<T>['object']): ReturnType {
 
         const objectToUpdate = this.item.insuredObjects.find((insuredObject) => insuredObject.id === idToUpdate);
 
@@ -94,7 +92,10 @@ class PolicyItemController {
             insuredObjects: [
                 ...this.item.insuredObjects.map((insuredObject) => {
                     if (insuredObject.id === idToUpdate) {
-                        return updatedObject;
+                        return {
+                            ...insuredObject,
+                            object: updatedObject
+                        };
                     }
 
                     return insuredObject

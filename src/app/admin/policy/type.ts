@@ -111,7 +111,7 @@ export interface PolicyItemInsuredObjectRequest<T = any> {
     objectValue: number;
 }
 
-export type ObjectType = 'Vehicle' | 'Property' | 'Person';
+export type ObjectType = 'Vehicle' | 'Property' | 'Person' | undefined;
 
 export interface LimitRecord {
     enabled: boolean;

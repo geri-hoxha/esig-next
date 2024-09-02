@@ -44,13 +44,13 @@ const Cards = ({ object, objects, setObjects }) => {
           <span className=" ">{object?.taxNumber}</span>
         </div>
         <ul className="flex flex-col gap-y-2">
-          {/* <li>
+          <li>
               <div className="flex items-center gap-4 ">
                 <div>Datelindja</div>
                 <div className="border-b-2 border-dotted w-full"></div>
                 <div>{object?.birthday}</div>
               </div>
-            </li> */}
+            </li>
           <li>
             <div className="flex items-center gap-4">
               <div>Nr.Tel</div>
@@ -66,13 +66,7 @@ const Cards = ({ object, objects, setObjects }) => {
               <div>{object?.email || "geri.hoxha@gmail.com"}</div>
             </div>
           </li>
-          {/* <li>
-              <div className="flex items-center gap-4">
-                <div>Atesia</div>
-                <div className="border-b-2 border-dotted w-full"></div>
-                <div>{object?.fathersName}</div>
-              </div>
-            </li> */}
+ 
         </ul>
         <div className="mt-4">Adresa: Rr. Medar shtylla, Tirane, 1060</div>
       </div>

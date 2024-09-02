@@ -1,23 +1,19 @@
-import { ClassConstructor, Exclude, Expose, Transform, plainToClass } from "class-transformer";
-import { ObjectType, PolicyItemInsuredObjectRequest } from "../type";
+import { Exclude, Expose, Transform, plainToClass } from "class-transformer";
+import { PolicyItemInsuredObjectRequest } from "../type";
 import { ObjectModelDTO } from "../page";
 
 @Exclude()
 class PolicyItemInsuredObjectRequestModel
     implements PolicyItemInsuredObjectRequest {
 
-    static modelParameter: ObjectModelDTO = {
-            obj: class _ { },
-            // default
-            objectType: 'Vehicle'
-        };
+    static modelParameter: ObjectModelDTO;
 
     @Expose()
     id: string = "";
 
     @Expose()
     @Transform(() => {
-        return PolicyItemInsuredObjectRequestModel.modelParameter.objectType || '';
+        return PolicyItemInsuredObjectRequestModel.modelParameter.objectType;
     })
     objectType: string = "";
 

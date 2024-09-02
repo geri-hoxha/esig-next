@@ -22,7 +22,7 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
   const { data, dispatch } = useCoreContext();
 
   const [selectedParticipantId, setSelectedParticipantId] =
-  useState<string>("");
+    useState<string>("");
 
   const [primaryModal, setPrimaryModal] = useState<boolean>(false);
 
@@ -102,7 +102,12 @@ const ParticipantModal: React.FC<IParticipantsList> = ({
         destroyOnClose
         footer={<PercentageFooter percentageKey={percentageKey} />}
       >
-        <CustomerModal stateKey={stateKey} entityId={selectedParticipantId} />
+        <CustomerModal
+          entityId={selectedParticipantId}
+          duplicationValidationFailed={(values) => {
+            return data[stateKey].map((user) => user.id).includes(values?.id)
+          }}
+        />
       </Modal>
     );
   }

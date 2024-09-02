@@ -26,7 +26,6 @@ import { useToast } from "@/components/ui/use-toast";
 import _request from "@/request";
 import { token } from "@/components/esig/Navbar/Currencies";
 import { PageLoader } from "../components/Loader";
-import { ClassConstructor } from "class-transformer";
 import PolicyItemRequestModel from "../models/PolicyItemRequestModel";
 import { ObjectModelDTO } from "../page";
 
@@ -96,7 +95,7 @@ const CoreContext = createContext<ICoreContext>({
   dispatch: () => {},
   ui: defaultUi,
   setUi: () => {},
-  rules: {} as any,
+  rules: {} as ProductConfiguration,
   setRules: () => {},
 });
 

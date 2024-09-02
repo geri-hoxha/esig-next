@@ -11,9 +11,11 @@ import VehicleObjectModel from "./models/VehicleObject";
 import PersonObjectModel from "./models/PersonObject";
 import { ClassConstructor } from "class-transformer";
 import { ObjectType } from "./type";
+import { ReactNode } from "react";
+import InsuredObjects from "./InsuredObjects";
 
-export default function Casco() {
-  return <BasePolicy id="00000000-8af4-4ae2-8620-c20298432460" />;
+export default function PrivateHealth() {
+  return <BasePolicy id="00000000-8af4-4ae2-8620-c20298432460">{(itemIndex) => <InsuredObjects itemIndex={itemIndex} />}</BasePolicy>;
 }
 
 export type ObjectModelDTO = {
@@ -21,14 +23,7 @@ export type ObjectModelDTO = {
   objectType: ObjectType;
 };
 
-// Person
-const InsuredObject = () => {
-  return (
-
-  )
-}
-
-const BasePolicy: React.FC<{ id: string }> = ({ id }) => {
+const BasePolicy: React.FC<{ id: string; children: (itemIndex: number) => ReactNode }> = ({ id, children }) => {
   return (
     <CoreContextProvider<PersonObjectModel>
       id={id}
@@ -40,7 +35,7 @@ const BasePolicy: React.FC<{ id: string }> = ({ id }) => {
       <div className="flex items-start justify-between">
         <div className="flex flex-col justify-center">
           <h1 className="text-2xl md:text-3xl font-bold w-max">
-            Shitje produkti KASKO
+            Shitje produkti <span className="text-esig">SHENDETI PRIVAT</span>
           </h1>
           <span className="text-gray-600 text-lg md:text-xl">
             Sigurimi i detyrueshem qe mbulon palet e treta ne rast aksidenti
@@ -55,9 +50,9 @@ const BasePolicy: React.FC<{ id: string }> = ({ id }) => {
 
       <Participants />
 
-      <Items >
-      <InsuredObject />
-        </Items>
+      <Items>
+        {(itemIndex) => children(itemIndex)}
+      </Items>
     </CoreContextProvider>
   );
 };

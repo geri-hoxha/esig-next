@@ -37,10 +37,10 @@ export const getFormSchemaCustomer = (argSchema: ZodRawShape) => {
 
 interface IProps {
   entityId: string;
-  stateKey: keyof IParticipants;
+  duplicationValidationFailed: (values: CustomerModel) => boolean;
 }
 
-const CustomerModal: React.FC<IProps> = ({ entityId, stateKey }) => {
+const CustomerModal: React.FC<IProps> = ({ entityId, duplicationValidationFailed }) => {
   const {
     watch,
     register,
@@ -86,7 +86,7 @@ const CustomerModal: React.FC<IProps> = ({ entityId, stateKey }) => {
     const values: CustomerModel = watch();
 
     // validate duplication again
-    if (data[stateKey].map((user) => user.id).includes(values?.id)) return;
+    if (duplicationValidationFailed(values)) return;
 
     const response = await _request(`/customer/${values.id}`, token, {
       method: "POST",

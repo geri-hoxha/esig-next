@@ -1,13 +1,10 @@
-import { useCallback, useState } from "react";
-import Modal from "../../components/Modal";
-import CustomerModal from "../../CustomerModal";
-import { CustomerModel, PolicyItemRequest } from "../../type";
-import { FieldValues } from "react-hook-form";
-import { useCoreContext } from "../../context";
-import { CREATE, UPDATE } from "../../context/reducer";
-import PolicyItemController from "../../context/PolicyItemController";
+import { useState } from "react";
+import { useCoreContext } from "../context";
+import { CustomerModel } from "../type";
+import PolicyItemController from "../context/PolicyItemController";
+import ObjectModal from "./ObjectModal";
 
-const Empty = ({ itemIndex }: { itemIndex: number }) => {
+const AddObject = ({ itemIndex }: { itemIndex: number }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const { data, dispatch } = useCoreContext();
@@ -27,7 +24,7 @@ const Empty = ({ itemIndex }: { itemIndex: number }) => {
     <>
       <div
         onClick={openModal}
-        className="cursor-pointer group border   w-full h-full border-dashed sm:min-h-36 border-transparent  hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl   transition-all duration-200 relative"
+        className="cursor-pointer group border w-full h-full border-dashed sm:min-h-36 border-transparent hover:border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-xl transition-all duration-200 relative"
       >
         <div className="flex md:hidden items-center gap-x-1 mx-auto py-2">
           <svg
@@ -42,7 +39,6 @@ const Empty = ({ itemIndex }: { itemIndex: number }) => {
           </svg>
           <span className="text-esig">Shto pjesemarres tjeter</span>
         </div>
-
         <svg
           className="stroke-esig hidden md:block"
           width="30"
@@ -54,21 +50,9 @@ const Empty = ({ itemIndex }: { itemIndex: number }) => {
           <path d="M14 14v-14h1v14h14v1h-14v14h-1v-14h-14v-1h14z" />
         </svg>
       </div>
-
-      <Modal<CustomerModel>
-        title="Modali i objekteve te siguruara"
-        description="Ketu mund te zgjidhni/modikoni objektin e siguruar."
-        open={open}
-        setOpen={useCallback((arg: boolean) => {
-          setOpen(arg);
-        }, [])}
-        onOk={onOkHandler}
-        destroyOnClose
-      >
-        <CustomerModal stateKey="policyUsers" entityId={""} />
-      </Modal>
+      <ObjectModal open={open} setOpen={setOpen} onOkHandler={onOkHandler} itemIndex={itemIndex} />
     </>
   );
 };
 
-export default Empty;
+export default AddObject;

@@ -302,8 +302,10 @@ const PolicyUsers: React.FC = () => {
         destroyOnClose
       >
         <CustomerModal
-          stateKey="policyUsers"
           entityId={selectedParticipantId}
+          duplicationValidationFailed={(values) => {
+            return data['policyUsers'].map((user) => user.id).includes(values?.id)
+          }}
         />
       </Modal>
     </>

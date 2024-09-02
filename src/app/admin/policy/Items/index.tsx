@@ -5,7 +5,6 @@ import { LegacyRef, ReactNode, createRef, useEffect, useState } from "react";
 import { ToastAction } from "@/components/ui/toast";
 import Image from "next/image";
 import Popconfirm from "../components/PopConfirm";
-import InsuredObjects from "./InsuredObject";
 import PolicyItemController from "../context/PolicyItemController";
 import { useCoreContext } from "../context";
 
@@ -14,8 +13,8 @@ interface IItem {
   ref: LegacyRef<HTMLDivElement> | undefined;
 }
 
-const Items = ({ children }: { children: ReactNode }) => {
-  const { data, dispatch } = useCoreContext();
+const Items = ({ children }: { children: (itemIndex: number) => ReactNode }) => {
+  const { dispatch } = useCoreContext();
 
   const { toast } = useToast();
 
@@ -118,7 +117,7 @@ const Items = ({ children }: { children: ReactNode }) => {
                   cols: "1",
                   className:
                     "scrollArea max-h-[500px] overflow-y-auto pr-2 pb-2",
-                  children:  children() <InsuredObjects itemIndex={item.id - 1} />,
+                  children: children(item.id - 1),
                 },
                 {
                   title: (

@@ -7,7 +7,7 @@ enum ActionTypes {
     DELETE = 'DELETE',
     // set state from the argument but also keeping the old state
     MASS_UPDATE = 'MASS_UPDATE',
-    // used for primitive and reference types to set value on a specific propert
+    // used for primitive and reference types to set value on a specific property
     SET = 'SET'
 }
 
