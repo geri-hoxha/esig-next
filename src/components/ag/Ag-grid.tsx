@@ -31,7 +31,7 @@ export const getAgPayload = (
   });
 };
 
-function AgGrid<T>({ className = "h-[500px]", ...props }: IProps<T>) {
+function AgGrid<T>({ className = '', ...props }: IProps<T>) {
   return (
     // wrapping container with theme & size
     <div

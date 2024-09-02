@@ -85,13 +85,13 @@ const Table: React.FC = () => {
   };
 
   const radioGroupChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setValue('searchedValue' as any, undefined)
+    setValue("searchedValue" as any, undefined);
     setRadioGroup(event.target.value as "searchWithName" | "searchWithNipt");
   };
 
   const onRowClicked = (params: RowClickedEvent<CustomerModel>) => {
     if (!params.data) return;
-    
+
     reset(params.data); // update your defaultValues && form values
   };
 
@@ -199,7 +199,7 @@ const Table: React.FC = () => {
       </div>
       <Loader loading={loading}>
         <AgGrid<CustomerModel>
-          className="h-[150px] md:h-[370px]"
+          className="h-[150px] md:h-[450px]"
           rowSelection="single"
           domLayout="normal"
           onRowClicked={onRowClicked}

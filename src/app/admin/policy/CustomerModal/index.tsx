@@ -40,7 +40,10 @@ interface IProps {
   duplicationValidationFailed: (values: CustomerModel) => boolean;
 }
 
-const CustomerModal: React.FC<IProps> = ({ entityId, duplicationValidationFailed }) => {
+const CustomerModal: React.FC<IProps> = ({
+  entityId,
+  duplicationValidationFailed,
+}) => {
   const {
     watch,
     register,
@@ -219,14 +222,14 @@ const CustomerModal: React.FC<IProps> = ({ entityId, duplicationValidationFailed
   }
 
   return (
-    <div className="grid grid-cols-12 gap-4">
+    <div className="grid grid-cols-12 gap-6">
       {!!entityId ? null : (
         <div className="col-span-12 md:col-span-4">
           <Table />
         </div>
       )}
       <div
-        className={`col-span-12  md:border-l-2 border-dashed pl-4 ${
+        className={`col-span-12 ${
           !!entityId ? "col-span-12" : "md:col-span-8"
         }`}
       >
@@ -257,7 +260,7 @@ const CustomerModal: React.FC<IProps> = ({ entityId, duplicationValidationFailed
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-2 gap-6 mb-6">
           <Input {...register("taxNumber")} label="Nipt i klientit" />
           <Input {...register("phoneNumber")} label="Numri i telefonit" />
           <Input {...register("displayName")} label="Emri i plote" />
@@ -272,8 +275,8 @@ const CustomerModal: React.FC<IProps> = ({ entityId, duplicationValidationFailed
           </Checkbox>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="grid col-span-2 md:col-span-1 grid-cols-2 md:grid-cols-1 gap-4 h-max">
+        <div className="grid grid-cols-2 gap-6 mb-6">
+          <div className="grid col-span-2 md:col-span-1 grid-cols-2 md:grid-cols-1 gap-6 h-max">
             {contactType === "Person" ? (
               <>
                 <Input {...register("genderType")} label="Gjinia" />
@@ -287,7 +290,7 @@ const CustomerModal: React.FC<IProps> = ({ entityId, duplicationValidationFailed
                   label="Përshkrimi i biznesit"
                 />
                 <Input {...register("administrator")} label="Administratori" />
-                <div className="grid grid-cols-2 gap-4 ">
+                <div className="grid grid-cols-2 gap-6">
                   <Select
                     {...register("organizationLegalFormType")}
                     options={optionsList.LegalFormType}
@@ -309,10 +312,10 @@ const CustomerModal: React.FC<IProps> = ({ entityId, duplicationValidationFailed
                     options={optionsList.SectorType}
                     label="Lloji i sektorit"
                   />
+                  <Checkbox {...register("isActive")}>
+                    <>{watch("isActive") ? "Aktiv" : "Jo-Aktiv"}</>
+                  </Checkbox>
                 </div>
-                <Checkbox {...register("isActive")}>
-                  <>{watch("isActive") ? "Aktiv" : "Jo-Aktiv"}</>
-                </Checkbox>
               </>
             ) : null}
 

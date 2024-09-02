@@ -71,7 +71,7 @@ const Select = React.forwardRef(
             ref={ref}
           >
             <option value="" disabled selected hidden>
-              Select option
+              Zgjidh
             </option>
             {options.map((option) => {
               if (option.key === "-" && option.value === "-") {

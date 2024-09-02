@@ -1,20 +1,22 @@
 import { ReactNode } from "react";
 
-interface IProps {
+export type ISectionItemProps = {
   title: string | ReactNode;
-  items: {
-    title: string | ReactNode;
-    children: ReactNode;
-    cols?: string;
-    className?: string;
-  }[];
+  children: ReactNode;
+  cols?: string;
+  className?: string;
+};
+
+interface ISectionProps {
+  title: string | ReactNode;
+  items: ISectionItemProps[];
 }
 
-const Section: React.FC<Partial<IProps>> = ({ title, items = [] }) => {
+const Section: React.FC<Partial<ISectionProps>> = ({ title, items = [] }) => {
   return (
     <div className="flex flex-col gap-4">
       {typeof title === "string" ? (
-        <h2 className="text-xl md:text-2xl">{title}</h2>
+        <h2 className="text-xl">{title}</h2>
       ) : (
         title
       )}

@@ -1,20 +1,28 @@
 "use client";
 import { useToast } from "@/components/ui/use-toast";
-import Section from "../Section";
+import Section, { ISectionItemProps } from "../Section";
 import { LegacyRef, ReactNode, createRef, useEffect, useState } from "react";
 import { ToastAction } from "@/components/ui/toast";
 import Image from "next/image";
 import Popconfirm from "../components/PopConfirm";
 import PolicyItemController from "../context/PolicyItemController";
 import { useCoreContext } from "../context";
+import Button from "../components/Button";
 
 interface IItem {
   id: number;
   ref: LegacyRef<HTMLDivElement> | undefined;
 }
 
-const Items = ({ children }: { children: (itemIndex: number) => ReactNode }) => {
-  const { dispatch } = useCoreContext();
+const Items = ({
+  children = () => ({
+    title: "",
+    children: null,
+  }),
+}: {
+  children: (itemIndex: number) => ISectionItemProps;
+}) => {
+  const { data, dispatch } = useCoreContext();
 
   const { toast } = useToast();
 
@@ -77,6 +85,14 @@ const Items = ({ children }: { children: (itemIndex: number) => ReactNode }) => 
     });
   };
 
+  const allItemsCoverages = data.items
+    .map((item) => {
+      return item.coverages;
+    })
+    .filter((coverages) => coverages?.length > 0);
+
+  const canAddNewItem = allItemsCoverages.length === data.items.length;
+
   return (
     <>
       {items.map((item) => {
@@ -86,7 +102,7 @@ const Items = ({ children }: { children: (itemIndex: number) => ReactNode }) => 
               title={
                 <div className="flex items-center gap-4">
                   <h2 className="text-xl md:text-2xl flex items-center gap-2">
-                    <span className="text-white bg-esig rounded-full flex items-center justify-center text-base px-2.5">
+                    <span className="text-white bg-esig font-bold rounded-full flex items-center justify-center text-base px-2.5">
                       {item.id}
                     </span>
                     <span> Zerat e polices</span>
@@ -98,27 +114,23 @@ const Items = ({ children }: { children: (itemIndex: number) => ReactNode }) => 
                       description="A jeni i sigurte qe doni te fshini zerin?"
                       onConfirm={() => deleteItem(item.id)}
                     >
-                      <Image
-                        className="cursor-pointer"
-                        src="/svg/close.svg"
-                        alt="edit"
-                        width={"0"}
-                        height={"0"}
-                        style={{ width: 25, height: 25 }}
-                        priority
-                      />
+                      <div className="w-10 h-10 hover:bg-red-100 flex items-center rounded-full justify-center cursor-pointer">
+                        <Image
+                          className="cursor-pointer"
+                          src="/svg/close.svg"
+                          alt="edit"
+                          width={"0"}
+                          height={"0"}
+                          style={{ width: 25, height: 25 }}
+                          priority
+                        />
+                      </div>
                     </Popconfirm>
                   )}
                 </div>
               }
               items={[
-                {
-                  title: "Objektet e siguruara",
-                  cols: "1",
-                  className:
-                    "scrollArea max-h-[500px] overflow-y-auto pr-2 pb-2",
-                  children: children(item.id - 1),
-                },
+                children(item.id - 1) || {},
                 {
                   title: (
                     <div className="flex items-center justify-between border-gray-400 border-dashed pt-4 sm:pt-0 border-t sm:border-none">
@@ -185,40 +197,33 @@ const Items = ({ children }: { children: (itemIndex: number) => ReactNode }) => 
         );
       })}
 
-      <div className="flex items-center">
-        <div className="border-b w-full h-px border-dashed  border-esig"></div>
-        <div
-          onClick={addNewItem}
-          className="cursor-pointer text-sm md:text-lg group border w-full md:w-1/2 px-5 mx-auto py-1.5 md:py-3 text-esig   h-max border-dashed  border-esig flex items-center justify-center hover:bg-sky-50 hover:shadow-md rounded-sm   transition-all duration-200 relative"
-        >
-          <div className="flex items-center justify-center gap-2">
-            <svg
-              className="stroke-esig hidden md:block"
-              width="15"
-              height="15"
-              xmlns="http://www.w3.org/2000/svg"
-              fillRule="evenodd"
-              clipRule="evenodd"
-            >
-              <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
-            </svg>
-            <svg
-              className="stroke-esig block md:hidden"
-              width="10"
-              height="10"
-              xmlns="http://www.w3.org/2000/svg"
-              fillRule="evenodd"
-              clipRule="evenodd"
-            >
-              <path d="M4 4v-4h1v4h4v1h-4v4h-1v-4h-4v-1h4z" />
-            </svg>
-            <span className="font-semibold w-max leading-none">
-              Shto ze police
-            </span>
-          </div>
+      {canAddNewItem && (
+        <div className="flex items-center">
+          <div className="border-b-2 w-full  border-sky-100  border-esig"></div>
+
+          <Button
+            variant="edit"
+            className="w-full mx-auto bg-sky-100 hover:!bg-sky-100"
+            onClick={addNewItem}
+            icon={
+              <svg
+                className="stroke-esig"
+                width="14"
+                height="14"
+                xmlns="http://www.w3.org/2000/svg"
+                fillRule="evenodd"
+                clipRule="evenodd"
+              >
+                <path d="M6 6v-6h1v6h6v1h-6v6h-1v-6h-6v-1h6z" />
+              </svg>
+            }
+          >
+            <span className="text-xl">Shto ze police</span>
+          </Button>
+
+          <div className="border-b-2 w-full  border-sky-100  border-esig"></div>
         </div>
-        <div className="border-b w-full h-px border-dashed  border-esig"></div>
-      </div>
+      )}
     </>
   );
 };

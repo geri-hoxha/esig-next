@@ -64,7 +64,19 @@ class PolicyItemController {
         })
     }
 
-    public createInsuredObject<T>(object: PolicyItemInsuredObjectRequest<T>['object'], objectValue: number = 0, objectType: string = PolicyItemRequestModel.modelParameter?.objectType || ''): ReturnType {
+    public createInsuredObject(object: PolicyItemInsuredObjectRequest['object'], objectValue: number = 0, objectType: string = PolicyItemRequestModel.modelParameter?.objectType || ''): ReturnType {
+        const isDuplicated = this.item.insuredObjects
+        .map((item) => {
+            return item.object.id;
+        })
+        .includes(object?.id);
+       
+        if(isDuplicated) {
+            throw new Error(
+                `${object.displayName} eshte ekzistent dhe nuk mund te duplikohet. Veprimi u anullua!`
+            );
+        }
+
         return this.updateItem({
             ...this.item,
             insuredObjects: [
@@ -108,7 +120,7 @@ class PolicyItemController {
         return this.updateItem({
             ...this.item,
             insuredObjects: [
-                ...this.item.insuredObjects.filter((insuredObject) => insuredObject.id !== id)
+                ...this.item.insuredObjects.filter((insuredObject) => insuredObject.object.id !== id)
             ]
         })
     }

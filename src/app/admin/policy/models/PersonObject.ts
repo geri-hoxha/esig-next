@@ -5,8 +5,10 @@ import AddressModel from "./Address";
 @Exclude()
 class PersonObjectModel {
   @Expose()
+  id?: string
+
+  @Expose()
   @Transform(({obj}) => {
-    console.log(obj)
     return obj.id
   })
   customerId?: string;

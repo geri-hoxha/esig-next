@@ -57,12 +57,14 @@ function reducer<T>(state: T, action: IAction<T>): T {
 
             if (isParticipantsArray(selectedArray)) {
 
-                const ids = selectedArray.map((item) => {
-                    if (item.id) return item.id;
-                    return {};
-                });
+                const isDuplicated = selectedArray
+                    .map((item) => {
+                        if (item.id) return item.id;
+                        return {};
+                    })
+                    .includes(action.payload.item?.id);
 
-                if (ids.includes(action.payload.item?.id)) {
+                if (isDuplicated) {
                     throw new Error(
                         `${action.payload.item.displayName} eshte ekzistent dhe nuk mund te duplikohet. Veprimi u anullua!`
                     );

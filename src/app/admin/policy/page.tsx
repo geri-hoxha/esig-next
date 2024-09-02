@@ -7,23 +7,42 @@ import Participants from "./Participants";
 import CoreContextProvider from "./context";
 import "reflect-metadata";
 import Items from "./Items";
-import VehicleObjectModel from "./models/VehicleObject";
 import PersonObjectModel from "./models/PersonObject";
 import { ClassConstructor } from "class-transformer";
 import { ObjectType } from "./type";
-import { ReactNode } from "react";
 import InsuredObjects from "./InsuredObjects";
-
-export default function PrivateHealth() {
-  return <BasePolicy id="00000000-8af4-4ae2-8620-c20298432460">{(itemIndex) => <InsuredObjects itemIndex={itemIndex} />}</BasePolicy>;
-}
+import { ISectionItemProps } from "./Section";
+import AddObject from "./InsuredObjects/AddObject";
 
 export type ObjectModelDTO = {
   obj: ClassConstructor<any>;
   objectType: ObjectType;
 };
 
-const BasePolicy: React.FC<{ id: string; children: (itemIndex: number) => ReactNode }> = ({ id, children }) => {
+export default function PrivateHealth() {
+  return (
+    <BasePolicy id="00000000-8af4-4ae2-8620-c20298432460">
+      {(itemIndex) => {
+        return {
+          title: (
+            <div className="flex items-center">
+              <span className="text-xl">Objektet e siguruara</span>
+              <AddObject itemIndex={itemIndex} />
+            </div>
+          ),
+          cols: "1",
+          className: "scrollArea max-h-[500px] overflow-y-auto pr-2 pb-2",
+          children: <InsuredObjects itemIndex={itemIndex} />,
+        };
+      }}
+    </BasePolicy>
+  );
+}
+
+const BasePolicy: React.FC<{
+  id: string;
+  children: (itemIndex: number) => ISectionItemProps;
+}> = ({ id, children }) => {
   return (
     <CoreContextProvider<PersonObjectModel>
       id={id}
@@ -43,16 +62,11 @@ const BasePolicy: React.FC<{ id: string; children: (itemIndex: number) => ReactN
         </div>
         <Tutorial />
       </div>
-
       <FormProvider>
         <Form />
       </FormProvider>
-
       <Participants />
-
-      <Items>
-        {(itemIndex) => children(itemIndex)}
-      </Items>
+      <Items>{(itemIndex) => children(itemIndex)}</Items>
     </CoreContextProvider>
   );
 };

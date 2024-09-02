@@ -122,7 +122,7 @@ function Modal<T>({
         }}
       >
         {/* <DialogTrigger asChild></DialogTrigger> */}
-        <DialogContent onKeyDown={handleEnterPress} className={width}>
+        <DialogContent onKeyDown={handleEnterPress} className={`${width}`}>
           <div className="flex items-center pb-2 border-gray-300 border-b-2 border-dashed">
             <DialogHeader>
               <DialogTitle className="text-xl">{title}</DialogTitle>
@@ -147,7 +147,7 @@ function Modal<T>({
                       <Button
                         type="submit"
                         iconSrc="/svg/check_no_border.svg"
-                        variant="edit"
+                        className="bg-esig text-white"
                       >
                         Ruaj dhe apliko
                       </Button>
@@ -200,8 +200,7 @@ function Modal<T>({
                   <Button
                     type="submit"
                     iconSrc="/svg/check_no_border.svg"
-                    className="border border-dashed border-esig"
-                    variant="edit"
+                    className="bg-esig text-white"
                   >
                     Ruaj dhe apliko
                   </Button>
