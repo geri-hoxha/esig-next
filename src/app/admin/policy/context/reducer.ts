@@ -14,7 +14,7 @@ enum ActionTypes {
 interface IAction<T> {
     type: ActionTypes;
     payload: {
-        key: keyof T;
+        key: keyof T | '';
         identifier?: { key?: string, value: string };
         item?: any;
     };
@@ -49,7 +49,7 @@ function reducer<T>(state: T, action: IAction<T>): T {
 
     const { key, item, identifier = { key: 'id', value: '' } } = payload;
 
-    const selectedArray: any = state[key] as Array<any>
+    const selectedArray = key ? (state[key] as Array<any>) : [];
 
     switch (type) {
 

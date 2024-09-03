@@ -140,14 +140,15 @@ function Modal<T>({
                     {footer}
                     <div className="flex items-center w-max ml-auto gap-x-2  ">
                       <DrawerClose asChild>
-                        <Button variant="danger" onClick={onCancelClick}>
+                        <Button variant="danger" className="bg-red-50" onClick={onCancelClick}>
                           Anullo veprimin
                         </Button>
                       </DrawerClose>
                       <Button
                         type="submit"
                         iconSrc="/svg/check_no_border.svg"
-                        className="bg-esig text-white"
+                        variant='edit'
+                        className="bg-sky-50"
                       >
                         Ruaj dhe apliko
                       </Button>

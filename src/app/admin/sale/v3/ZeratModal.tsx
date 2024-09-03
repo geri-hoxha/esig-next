@@ -706,6 +706,8 @@ const ZeratModal = ({ increment, children = null }: any) => {
     setOpen(open);
   };
 
+  console.log(coverageOpen)
+
   if (coverageOpen) {
     return (
       <Modal

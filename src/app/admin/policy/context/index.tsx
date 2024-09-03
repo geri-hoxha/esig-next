@@ -8,7 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { IAction, reducer } from "./reducer";
+import { IAction, MASS_UPDATE, reducer } from "./reducer";
 import { ReactNode, useReducer } from "react";
 import {
   CustomerModel,
@@ -118,11 +118,8 @@ export default function CoreContextProvider<T>({
       props: IAction<OverwrittenIssueRequest>
     ) => {
       try {
-        
         return reducer<OverwrittenIssueRequest>(data, props);
-
       } catch (error: any) {
-
         toast({
           variant: "destructive",
           title: error.message,
@@ -144,8 +141,26 @@ export default function CoreContextProvider<T>({
 
   useEffect(() => {
     PolicyItemRequestModel.modelParameter = objectModelDTO;
+    initPresale();
     initBusinessRules();
   }, []);
+
+  const initPresale = async () => {
+    const response = await _request(`/policystandard/presale`, token, {
+      method: "POST",
+      body: JSON.stringify({
+        metadata: {},
+        productId: id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    dispatch({ type: MASS_UPDATE, payload: { item: response.data, key: "" } });
+  };
 
   const initBusinessRules = async () => {
     const response = await _request(`/policystandard/business-rules`, token, {

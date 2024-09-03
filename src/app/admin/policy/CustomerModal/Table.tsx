@@ -60,7 +60,7 @@ const columnDefs: ColDef<CustomerModel>[] = [
 ];
 
 const Table: React.FC = () => {
-  const { reset, getValues, setValue } = useFormContext<CustomerModel>();
+  const { reset, getValues, setValue, watch } = useFormContext<CustomerModel>();
 
   const [rowData, setRowData] = useState<CustomerModel[]>([]);
 
@@ -199,7 +199,9 @@ const Table: React.FC = () => {
       </div>
       <Loader loading={loading}>
         <AgGrid<CustomerModel>
-          className="h-[150px] md:h-[450px]"
+          className={`h-[150px] ${
+            watch("contactType") === "Person" ? "md:!h-[400px]" : "md:h-[450px]"
+          }`}
           rowSelection="single"
           domLayout="normal"
           onRowClicked={onRowClicked}

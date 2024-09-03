@@ -24,10 +24,6 @@ export default function Templates({
       }}
       className={"p-1"}
     >
-      {/* <RadioGroup.Label className="text-base font-semibold leading-6 text-gray-900">
-        Zgjidh paketen
-      </RadioGroup.Label> */}
-
       <div
         className={`grid ${
           withDesciption ? "grid-cols-1" : "grid-cols-2"
@@ -42,7 +38,7 @@ export default function Templates({
                 checked
                   ? `border-esig ${noRing ? "" : "ring-1 sm:ring-2 ring-esig"} `
                   : "border-gray-300",
-                "relative flex cursor-pointer rounded-lg border bg-white p-3 md:p-4 shadow-sm focus:outline-none"
+                "relative flex cursor-pointer rounded-md border bg-white p-3 md:p-4 shadow-sm focus:outline-none"
               )
             }
           >
@@ -52,7 +48,7 @@ export default function Templates({
                   <span className="flex flex-col">
                     <RadioGroup.Label
                       as="span"
-                      className="block text-sm font-medium text-gray-900 truncate w-32 md:w-36"
+                      className="block text-sm font-medium text-gray-900 truncate w-full"
                     >
                       {mailingList.title}
                     </RadioGroup.Label>
@@ -81,7 +77,7 @@ export default function Templates({
                   className={classNames(
                     active ? " " : "",
                     checked ? "border-esig border-2" : "border-transparent",
-                    "pointer-events-none absolute -inset-px rounded-lg"
+                    "pointer-events-none absolute -inset-px rounded-md"
                   )}
                   aria-hidden="true"
                 />
