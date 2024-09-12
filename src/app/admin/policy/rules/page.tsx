@@ -9,34 +9,30 @@ import { request } from "@/request";
 import Image from "next/image";
 import Modal from "../components/Modal";
 import Input from "../components/Input";
+import Geri from "./Geri";
+import { ITooltipParams } from "ag-grid-community";
+
+const Tooltip: React.FC<{ value: string }> = ({ value }) => {
+  console.log(value);
+  return (
+    <div>
+      <span>{value}</span>
+    </div>
+  );
+};
 
 const Rules = () => {
   const [entities, setEntities] = useState<string[][]>([]);
-  const [rowData, setRowData] = useState([]);
+  const [rowData, setRowData] = useState({});
   const [selected, setSelected] = useState<string[]>([]);
   const [open, setOpen] = useState<boolean>(false);
+  const [erin, setErin] = useState({});
 
   useEffect(() => {
     init();
   }, []);
 
-  const getRowData = async (arg: string) => {
-    const rowdata = await fetch(
-      `https://apigerit.esig.al/sales/rules?param1=${arg}`,
-      {
-        method: "GET",
-      }
-    );
-    const x = await rowdata.json();
-
-    setRowData(x.value.objects);
-  };
-
   const init = async (arg: string = "", _index: number = 0) => {
-    if (!!arg) {
-      getRowData(arg);
-    }
-
     const modifiedEntity = _index + 1;
 
     const getParams = () => {
@@ -61,10 +57,10 @@ const Rules = () => {
 
         setSelected(updatedSelectedValue);
 
-        return updatedSelectedValue.map((value) => {
+        return updatedSelectedValue.map((value, i) => {
           return {
-            objectType: value,
-            objectId: "",
+            selectedType: value,
+            selectedId: erin?.[i] || "",
           };
         });
       }
@@ -72,21 +68,19 @@ const Rules = () => {
       return [];
     };
 
-    const response = await request("/sales/rules/next-type", {
+    const response = await request("/common/rules/definitions", {
       method: "POST",
-      body: {
-        currentTypes: [...getParams()],
-      },
+      body: getParams(),
     });
 
     if (modifiedEntity < entities.length) {
       const updated = entities.map((entity, index) => {
-        if (response.value.nextTypes.length === 0 && index > _index) {
+        if (response.nextTypes.length === 0 && index > _index) {
           return [];
         }
 
         if (_index + 1 === index) {
-          return response.value.nextTypes;
+          return response.nextTypes;
         }
 
         return entity;
@@ -95,9 +89,23 @@ const Rules = () => {
       return setEntities(updated.filter((x) => x.length > 0));
     }
 
-    if (response.value.nextTypes.length === 0) return;
+    if (response.nextTypes.length === 0) return;
 
-    setEntities([...entities, response.value.nextTypes]);
+    setEntities([...entities, response.nextTypes]);
+
+    const ome = response.currentObjects.map((x) => {
+      return {
+        ...x,
+        for: "Agency",
+        overwrite: ["Product", "ProductTemplate"],
+        value__: "TRUE",
+      };
+    });
+
+    setRowData({
+      ...rowData,
+      [_index]: ome.filter((x) => x.originalType === arg),
+    });
   };
 
   return (
@@ -116,6 +124,17 @@ const Rules = () => {
                       value: x,
                     };
                   })}
+                  icon={
+                    <div
+                      className={`w-3 h-3 rounded-full  ml-2 ${
+                        index === 0
+                          ? "bg-sky-400"
+                          : index === 1
+                          ? "bg-orange-400"
+                          : "bg-green-400"
+                      }`}
+                    ></div>
+                  }
                   label="Entiteti"
                   onChange={(e) => {
                     init(e.target.value, index);
@@ -124,35 +143,164 @@ const Rules = () => {
               );
             })}
           </div>
+          <div className="grid grid-cols-4 gap-4 mt-5">
+            {entities.map((x, i: number) => {
+              if (!selected[i]) return null;
+              return (
+                <Geri
+                  ger={erin[i]}
+                  options={rowData[i]}
+                  icon={
+                    <div
+                      className={`w-3 h-3 rounded-full  ml-2 ${
+                        i === 0
+                          ? "bg-sky-400"
+                          : i === 1
+                          ? "bg-orange-400"
+                          : "bg-green-400"
+                      }`}
+                    ></div>
+                  }
+                  onChange={(e) => {
+                    setErin({
+                      ...erin,
+                      [i]: e,
+                    });
+                  }}
+                  label={selected[i]}
+                />
+              );
+            })}
+          </div>
+          <br />
           <AgGrid
             className="h-[150px] md:h-[370px]"
             rowSelection="single"
             domLayout="normal"
-            rowData={rowData}
+            rowData={rowData[0]}
             columnDefs={
               [
                 {
-                  headerName: "Celesi",
-                  field: "key",
+                  headerName: "Emri",
+                  field: "key ",
+                  minWidth: 300,
+                  cellRenderer: ({ data, ...other }) => {
+                    if (other.rowIndex === 0) {
+                      return (
+                        <div className="flex flex-col truncate justify-center h-full">
+                          <span className="font-medium leading-8">
+                            can.Sell-product
+                          </span>
+                          <div className="leading-6 h-20 truncate break-words">
+                            Lorem Ipsum is simply dummy text of the printing and
+                            typesetting <br /> industry. Lorem Ipsum has been
+                            the industry's standard dummy text ever <br /> since
+                            the 1500s, when an unknown printer took a galley of
+                            type and scrambled it to make a type
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div className="flex flex-col truncate justify-center h-full">
+                        <span className="font-medium leading-8">
+                          can.Adjust-premium-product
+                        </span>
+                        <div className="leading-6 h-20 truncate break-words">
+                          Lorem Ipsum is simply dummy text of the printing and
+                          typesetting <br /> industry. Lorem Ipsum has been the
+                          industry's standard dummy text ever
+                        </div>
+                      </div>
+                    );
+                  },
                 },
                 {
-                  headerName: "Pershkrimi",
-                  field: "description",
-                },
-                {
-                  headerName: "For",
+                  headerName: "Zgjedhja",
                   field: "for",
-                  // cellRenderer: ({ value }) => {
-                  //   return (
-                  //     <div className="flex items-center   h-full">
-                  //       <Checkbox checked={value}></Checkbox>
-                  //     </div>
-                  //   );
-                  // },
+                  tooltipComponent: "customTooltip",
+                  tooltipValueGetter: (params: ITooltipParams) => {
+                    return (
+                      <div className="bg-white border p-4 rounded-md border-gray-400 flex flex-col gap-5 max-w-xs">
+                        <span>
+                          <span className="font-bold">1. Minikasco</span>Lorem
+                          Ipsum is simply dummy text of the printing and
+                          typesetting industry. Lorem Ipsum
+                        </span>
+
+                        <span>
+                          <span className="font-bold">2. Skerdi Jareci</span>Lorem
+                          Ipsum is simply dummy text of the printing and
+                          typesetting industry. Lorem Ipsum
+                        </span>
+
+                      </div>
+                    );
+                  },
+                  cellRenderer: ({ value, rowIndex }) => {
+                    if (rowIndex === 0) {
+                      return (
+                        <div className="flex flex-col gap-5 h-full justify-center">
+                          <span className="leading-none border-b-4 font-medium w-max pb-0 border-sky-400">
+                            Minikasko
+                          </span>
+                          <span className="leading-none border-b-4 font-medium w-max pb-0 border-orange-400">
+                            Erin Hoxha
+                          </span>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div className="flex flex-col gap-3 h-full justify-center">
+                        <span className="leading-none border-b-4 font-medium w-max pb-0 border-sky-400">
+                          Minikasko
+                        </span>
+                      </div>
+                    );
+                  },
                 },
                 {
-                  headerName: "Numri i rregullave",
-                  field: "number",
+                  headerName: "Mund te mbishkruhet nga",
+                  field: "overwrite",
+                  cellRenderer: ({ value, rowIndex }) => {
+                    return (
+                      <div className="flex items-center  cursor-pointer h-full">
+                        {value.map((x, i) => {
+                          if (i === 0) {
+                            return (
+                              <>
+                                <span className="text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-green-400 bg-green-100 text-green-800">
+                                  {x}
+                                </span>
+                                +
+                              </>
+                            );
+                          }
+                          return (
+                            <span className="ml-2   text-xs font-medium me-2 px-2.5 py-0.5 rounded   border border-orange-400 bg-orange-100 text-orange-800">
+                              {x}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    );
+                  },
+                },
+                {
+                  headerName: "Vlera aktuale",
+                  field: "value",
+                  cellRenderer: () => {
+                    return (
+                      <div className="flex items-center justify-center h-full">
+                        <Checkbox checked={true} />
+                      </div>
+                    );
+                  },
+                },
+                {
+                  headerName: "Te gjitha vlerat",
+                  field: "all",
                   cellRenderer: ({ value, rowIndex }) => {
                     return (
                       <div
@@ -163,7 +311,7 @@ const Rules = () => {
                       >
                         <Image
                           className="cursor-pointer"
-                          src="/svg/edit.svg"
+                          src="/svg/eye.svg"
                           alt="edit"
                           width={"0"}
                           height={"0"}
@@ -175,20 +323,18 @@ const Rules = () => {
                     );
                   },
                 },
-                // {
-                //   headerName: "Niveli",
-                //   field: "overriders",
-                //   cellRenderer: ({ value, data }) => {
-                //     if (value.length === 0) return;
-                //     return [data.for, ...value]?.join(" > ");
-                //   },
-                // },
               ] as ColDef[]
             }
             defaultColDef={{
               resizable: false,
               flex: 1,
             }}
+            rowHeight={120}
+            tooltipShowDelay={500}
+            components={{
+              customTooltip: Tooltip,
+            }}
+            tooltipMouseTrack 
           />
         </div>
       </FormProvider>
@@ -205,11 +351,11 @@ const Rules = () => {
       >
         <div className="flex flex-col gap-4 my-4">
           <span className="font-semibold text-esig text-lg">
-           1. Can Adjust Premium
+            1. Can Adjust Premium
           </span>
           <div className="flex items-center gap-5">
             <span className="font-semibold w-full">
-             2. Niveli: TPL / Varianti 3 / Ilir Dosti
+              2. Niveli: TPL / Varianti 3 / Ilir Dosti
             </span>
             {/* <Input label="Vlera e re" /> */}
             <Checkbox checked={false} />
@@ -253,7 +399,7 @@ const Rules = () => {
               ] as ColDef[]
             }
             defaultColDef={{
-              resizable: false,
+              resizable: true,
               flex: 1,
             }}
           />

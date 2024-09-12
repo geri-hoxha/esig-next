@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
 import CardsRadioGroup, { IItemProps } from "../../components/CardsRadioGroup";
@@ -9,6 +9,10 @@ import { useCoreContext } from "../../context";
 const Templates = () => {
   const { data } = useCoreContext();
 
+  useEffect(() => {
+    getProductTemplates();
+  }, []);
+
   const [open, setOpen] = useState<boolean>(false);
 
   const [items, setItems] = useState<IItemProps[]>([]);
@@ -17,8 +21,6 @@ const Templates = () => {
 
   const openModal = () => {
     setOpen(true);
-
-    getProductTemplates();
   };
 
   const getProductTemplates = async () => {
@@ -44,6 +46,10 @@ const Templates = () => {
     setItems(response.data);
   };
 
+  const onChange = (e: string) => {
+    setSelected(e);
+  };
+
   return (
     <>
       <Button onClick={openModal} variant="edit">
@@ -58,11 +64,13 @@ const Templates = () => {
         }, [])}
         destroyOnClose
       >
-        <CardsRadioGroup
-          items={items}
-          selected={selected}
-          onChange={setSelected}
-        />
+        <div className="scrollArea max-h-48 overflow-y-auto pr-2 py-1">
+          <CardsRadioGroup
+            items={items}
+            selected={selected}
+            onChange={onChange}
+          />
+        </div>
       </Modal>
     </>
   );
